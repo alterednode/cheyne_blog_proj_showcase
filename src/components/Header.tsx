@@ -9,8 +9,8 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="w-full border-b border-gray-200 bg-white p-4">
-      <nav className="mx-auto max-w-5xl flex items-center justify-between">
+    <header className="w-full border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
+      <nav className="mx-auto max-w-5xl flex items-center justify-between text-black dark:text-white">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold">
           <Image src={logo} alt="Logo" width={32} height={32} />
           cheyne.dev
