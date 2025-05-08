@@ -1,20 +1,20 @@
-type Props = {
-  src: string
-  title: string
-  height?: number
-}
+type IframeProps = {
+  src: string;
+  title: string;
+  height?: number;
+};
 
-export default function Iframe({ src, title, height = 500 }: Props) {
+export default function Iframe({ src, title, height = 600 }: IframeProps) {
   return (
-    <div className="w-full border rounded overflow-hidden my-6">
+    <div className="w-full max-w-5xl mx-auto my-8">
       <iframe
         src={src}
         title={title}
-        width="100%"
+        className="w-full"
         height={height}
-        className="border-none"
         allowFullScreen
+        style={{ border: 'none' }}
       />
     </div>
-  )
+  );
 }
