@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import { PostMeta } from '@/types/content';
+import ContentCard from './ContentCard';
 
 type Props = {
   apiPath: string;
@@ -11,7 +11,7 @@ type Props = {
 
 export default function InfinitePostList({ apiPath, basePath }: Props) {
   const [posts, setPosts] = useState<PostMeta[]>([]);
-  const [page, setPage] = useState(1); // page 1 = first page
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
@@ -38,7 +38,7 @@ export default function InfinitePostList({ apiPath, basePath }: Props) {
     };
 
     load();
-  }, [page,hasMore,loading, apiPath]);
+  }, [page, hasMore, loading, apiPath]);
 
   useEffect(() => {
     if (!hasMore || loading) return;
@@ -60,19 +60,25 @@ export default function InfinitePostList({ apiPath, basePath }: Props) {
     };
   }, [hasMore, loading]);
 
-  return (
-    <div className="space-y-6">
-      {posts.map((post) => (
-        <div key={post.slug}>
-          <Link href={`${basePath}/${post.slug}`} className="text-xl font-semibold text-blue-700 underline">
-            {post.title}
-          </Link>
-          <p className="text-sm text-gray-600">{new Date(post.date).toLocaleDateString()}</p>
-        </div>
-      ))}
+  const type = basePath.slice(1) as 'blog' | 'project';
 
-      {loading && <p>Loading...</p>}
-      {!hasMore && <p className="text-gray-400">No more posts.</p>}
+  return (
+    <div className="space-y-8">
+      <ul className="space-y-6">
+        {posts.map((post) => (
+          <ContentCard key={post.slug} post={post} type={type} />
+        ))}
+      </ul>
+
+      {loading && (
+        <div className="flex justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)]" />
+        </div>
+      )}
+      
+      {!hasMore && posts.length > 0 && (
+        <p className="text-center text-[var(--muted)] py-8">No more posts to load.</p>
+      )}
 
       <div ref={loadMoreRef} className="h-10" />
     </div>
