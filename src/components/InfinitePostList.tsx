@@ -11,23 +11,28 @@ type Props = {
 
 export default function InfinitePostList({ apiPath, basePath }: Props) {
   const [posts, setPosts] = useState<PostMeta[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1); // page 1 = first page
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const observer = useRef<IntersectionObserver | null>(null);
-
   const perPage = 5;
 
   useEffect(() => {
     const load = async () => {
+      if (loading || !hasMore) return;
       setLoading(true);
-      const url = `${apiPath}/?page=${page}&perPage=${perPage}`;
-      const res = await fetch(url);
+      const res = await fetch(`${apiPath}/?page=${page}&perPage=${perPage}`);
       const json = await res.json();
 
-      setPosts((prev) => [...prev, ...json.data]);
+      setPosts((prev) => {
+        const newPosts = json.data.filter(
+          (newPost: PostMeta) => !prev.some((p) => p.slug === newPost.slug)
+        );
+        return [...prev, ...newPosts];
+      });
+
       if (json.data.length < perPage) setHasMore(false);
       setLoading(false);
     };
