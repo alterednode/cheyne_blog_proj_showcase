@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import Link from 'next/link';
 import type { PostMeta } from '@/types/content';
 import ContentCard from '@/components/ContentCard';
 
@@ -31,9 +32,12 @@ export default function HomePage() {
         <div className="space-y-8">
           <div className="flex items-center justify-between">
             <h2 className="text-3xl font-bold">Latest Blog Posts</h2>
-            <a href="/blog" className="text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
+            <Link
+              href="/blog"
+              className="text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors"
+            >
               View all →
-            </a>
+            </Link>
           </div>
           <ul className="space-y-6">
             {blog.map((post) => (
@@ -46,9 +50,12 @@ export default function HomePage() {
         <div className="space-y-8">
           <div className="flex items-center justify-between">
             <h2 className="text-3xl font-bold">Recent Projects</h2>
-            <a href="/project" className="text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors">
+            <Link
+              href="/project"
+              className="text-[var(--primary)] hover:text-[var(--primary-hover)] transition-colors"
+            >
               View all →
-            </a>
+            </Link>
           </div>
           <ul className="space-y-6">
             {project.map((post) => (
