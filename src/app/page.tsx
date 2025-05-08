@@ -16,9 +16,10 @@ export default function HomePage() {
     <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
       {/* Intro */}
       <section className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">Hi, I'm Onyx Cheyne</h1>
+        <h1 className="text-4xl font-bold"><p>Hi, I&apos;m Onyx Cheyne</p>
+        </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          I’m a developer and writer who shares thoughts and projects here on this site.
+          I&apos;m a developer and writer who shares thoughts and projects here on this site.
           From technical dives to creative builds, this is where I show my work.
         </p>
       </section>

@@ -38,7 +38,7 @@ export default function InfinitePostList({ apiPath, basePath }: Props) {
     };
 
     load();
-  }, [page, apiPath]);
+  }, [page,hasMore,loading, apiPath]);
 
   useEffect(() => {
     if (!hasMore || loading) return;
