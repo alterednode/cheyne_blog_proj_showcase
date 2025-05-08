@@ -6,13 +6,13 @@
     <title>Unity WebGL Player | Ultimate_Tic_Tac_Toe_Client</title>
   </head>
   <body style="text-align: center">
-    <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: #231F20"></canvas>
+    <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: url('Build/UltTicTacToeWebBuild.jpg') center / cover"></canvas>
     <script src="Build/UltTicTacToeWebBuild.loader.js"></script>
     <script>
       createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "Build/UltTicTacToeWebBuild.data.br",
-        frameworkUrl: "Build/UltTicTacToeWebBuild.framework.js.br",
-        codeUrl: "Build/UltTicTacToeWebBuild.wasm.br",
+        dataUrl: "Build/UltTicTacToeWebBuild.data",
+        frameworkUrl: "Build/UltTicTacToeWebBuild.framework.js",
+        codeUrl: "Build/UltTicTacToeWebBuild.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Ultimate_Tic_Tac_Toe",
         productName: "Ultimate_Tic_Tac_Toe_Client",
