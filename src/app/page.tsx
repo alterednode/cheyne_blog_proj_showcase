@@ -21,7 +21,7 @@ export default function HomePage() {
           Hi, I&apos;m Onyx Cheyne
         </h1>
         <p className="text-xl text-[var(--muted)] max-w-2xl mx-auto leading-relaxed">
-          I&apos;m a developer interested in how all the stuff that runs our internet works, and game design. Here you can find some of the things I've made, and some posts about things that interest me.
+          I&apos;m a developer interested in how all the stuff that runs our internet works, and game design. Here you can find some of the things I&apos;ve made, and some posts about things that interest me.
         </p>
       </section>
 

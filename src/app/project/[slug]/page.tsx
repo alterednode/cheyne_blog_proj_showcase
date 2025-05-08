@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { compileMDX } from 'next-mdx-remote/rsc';
+import Iframe from '@/components/Iframe';
 
 type Params = { slug: string };
 
@@ -22,15 +23,20 @@ export default async function ProjectPostPage({ params }: { params: Promise<Para
   }>({
     source: mdx,
     options: { parseFrontmatter: true },
+    components: { Iframe },
   });
 
   return (
-    <article className="prose mx-auto p-6">
-      <h1>{frontmatter.title}</h1>
-      <p className="text-sm text-gray-500 mb-6">
-        {new Date(frontmatter.date).toLocaleDateString()}
-      </p>
-      {content}
-    </article>
+    <div className="w-full flex justify-center px-4 sm:px-6">
+      <article className="prose prose-2xl dark:prose-invert max-w-3xl w-full py-12">
+        <header className="mb-8 text-center">
+          <h1 className="text-4xl font-bold">{frontmatter.title}</h1>
+          <p className="text-sm text-muted-foreground mt-2">
+            {new Date(frontmatter.date).toLocaleDateString()}
+          </p>
+        </header>
+        {content}
+      </article>
+    </div>
   );
 }

@@ -41,6 +41,45 @@ body {
   }
 }
 
+@layer base {
+  .prose h1 {
+    @apply text-4xl font-bold mt-0 mb-6;
+  }
+
+  .prose h2 {
+    @apply text-3xl font-semibold mt-10 mb-4;
+  }
+
+  .prose h3 {
+    @apply text-2xl font-semibold mt-8 mb-3;
+  }
+
+  .prose p {
+    @apply text-base leading-relaxed my-4;
+    color: var(--foreground);
+  }
+
+  .prose img {
+    @apply rounded-lg shadow-md my-6;
+  }
+
+  .prose a {
+    @apply text-[color:var(--primary)] hover:text-[color:var(--primary-hover)] underline;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 pl-4 italic text-[color:var(--muted)];
+  }
+
+  .prose code {
+    @apply bg-[color:var(--card-border)] px-1 py-0.5 rounded text-sm font-mono;
+  }
+
+  .dark .prose code {
+    @apply bg-[color:var(--card-border)];
+  }
+}
+
 /* Smooth transitions for theme changes */
 * {
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
