@@ -4,7 +4,7 @@ import Link from 'next/link';
 import type { PostMeta } from '@/types/content';
 
 function loadContent(type: 'blog' | 'project'): PostMeta[] {
-  const filePath = path.join(process.cwd(), 'public', 'content-data', `${type}.json`);
+  const filePath = path.join(process.cwd(), 'public', 'generated-content-data', `${type}.json`);
   return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as PostMeta[];
 }
 

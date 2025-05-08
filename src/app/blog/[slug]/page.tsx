@@ -2,18 +2,18 @@ import fs from 'fs/promises';
 import path from 'path';
 import { compileMDX } from 'next-mdx-remote/rsc';
 
-type Params = {
-  slug: string;
-};
+type Params = { slug: string };
 
-export default async function BlogPostPage({ params }: { params: Params }) {
-  const filePath = path.join(process.cwd(), 'content', 'blog', `${params.slug}.mdx`);
+export default async function BlogPostPage({ params }: { params: Promise<Params> }) {
+  const { slug } = await params;
+
+  const filePath = path.join(process.cwd(), 'content', 'blog', `${slug}.mdx`);
 
   let mdx = '';
   try {
     mdx = await fs.readFile(filePath, 'utf-8');
   } catch {
-    throw new Error(`Post not found: ${params.slug}`);
+    throw new Error(`Post not found: ${slug}`);
   }
 
   const { content, frontmatter } = await compileMDX<{

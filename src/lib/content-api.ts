@@ -7,7 +7,7 @@ export async function getPaginatedContent(req: NextRequest, type: 'blog' | 'proj
   const page = parseInt(searchParams.get('page') || '1');
   const perPage = parseInt(searchParams.get('perPage') || '5');
 
-  const filePath = path.join(process.cwd(), 'public', 'content-data', `${type}.json`);
+  const filePath = path.join(process.cwd(), 'public', 'generated-content-data', `${type}.json`);
   if (!fs.existsSync(filePath)) {
     return NextResponse.json({ error: 'Content not found' }, { status: 404 });
   }

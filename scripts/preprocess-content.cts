@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { getAllContent } = require('../src/lib/content');
 
-const outDir = path.join(process.cwd(), 'public', 'content-data');
+const outDir = path.join(process.cwd(), 'public', 'generated-content-data');
 fs.mkdirSync(outDir, { recursive: true });
 
 const blog = getAllContent('blog');
