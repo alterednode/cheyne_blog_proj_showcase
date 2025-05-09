@@ -1,19 +1,29 @@
+'use client';
+
+import React from 'react';
+
 type IframeProps = {
   src: string;
   title: string;
-  height?: number;
+  width?: string | number;
+  height?: string | number;
+  allowFullScreen?: boolean;
 };
 
-export default function Iframe({ src, title, height = 600 }: IframeProps) {
+export default function Iframe({
+  src,
+  title,
+  width = '100%',
+  height = '600px',
+  allowFullScreen = true,
+}: IframeProps) {
   return (
-    <div className="w-full max-w-5xl mx-auto my-8">
+    <div className="relative w-full h-0 pb-[56.25%] mb-8">
       <iframe
         src={src}
         title={title}
-        className="w-full"
-        height={height}
-        allowFullScreen
-        style={{ border: 'none' }}
+        allowFullScreen={allowFullScreen}
+        className="absolute top-0 left-0 w-full h-full rounded-lg border border-gray-300 dark:border-gray-700 shadow-md"
       />
     </div>
   );
