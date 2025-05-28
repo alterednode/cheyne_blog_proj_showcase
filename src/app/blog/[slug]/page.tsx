@@ -2,7 +2,6 @@ import fs from 'fs/promises';
 import path from 'path';
 import { compileMDX } from 'next-mdx-remote/rsc';
 import Iframe from '@/components/Iframe';
-import UnitConverter from '@/components/UnitConverter';
 
 type Params = { slug: string };
 
@@ -28,7 +27,6 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
     options: { parseFrontmatter: true },
     components: {
       Iframe,
-      UnitConverter,
     },
   });
 
