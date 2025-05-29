@@ -2,7 +2,7 @@ import type { Unit } from './types';
 
 let cachedUnits: Unit[] | null = null;
 
-export async function loadUnits(): Promise<Unit[]> {
+export async function getUnitArray(): Promise<Unit[]> {
   if (typeof window === 'undefined') {
     throw new Error('loadUnits() must be called client-side only');
   }
@@ -18,7 +18,7 @@ export async function loadUnits(): Promise<Unit[]> {
 }
 
 export async function getUnitByNameOrAlias(name: string): Promise<Unit | null> {
-  const units = await loadUnits();
+  const units = await getUnitArray();
   const normalized = name.toLowerCase();
   return units.find(unit =>
     unit.name.toLowerCase() === normalized ||
