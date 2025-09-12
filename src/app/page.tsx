@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
 import type { PostMeta } from '@/types/content';
-import ContentCard from '@/components/ContentCard';
+import ContentCard from '@/components/base-site-stuff/ContentCard';
 
 function loadContent(type: 'blog' | 'project'): PostMeta[] {
   const filePath = path.join(process.cwd(), 'public', 'generated-content-data', `${type}.json`);
@@ -21,7 +21,7 @@ export default function HomePage() {
           Hi, I&apos;m Onyx Cheyne
         </h1>
         <p className="text-xl text-[var(--muted)] max-w-2xl mx-auto leading-relaxed">
-          I&apos;m a developer interested in how all the stuff that runs our internet works, and game design. Here you can find some of the things I&apos;ve made, and some posts about things that interest me.
+          I&apos;m a developer interested in making intruiging programming projects, game design, and convoluted code. Here you can find some of the things I&apos;ve made, and some posts about things that interest me.
         </p>
       </section>
 
