@@ -1,0 +1,36 @@
+---
+title: Shiki Test Post
+date: 2025-12-12
+description: A test post demonstrating Shiki features.
+---
+
+# Shiki Test Post
+
+This is a test post to show off what Shiki can do and to test formatting.
+
+## Line Numbers
+```ts showLineNumbers
+const a = 1;
+const b = 2;
+console.log(a + b);
+```
+
+## Highlighted Line Ranges
+```ts {2-3}
+const a = 1;
+const b = 2;
+console.log(a + b);
+```
+
+## Focused Line(s)
+```ts {1,3}
+const a = 1;
+const b = 2;
+console.log(a + b);
+```
+
+## Word Highlight
+```ts
+// [!code word:console]
+console.log("highlight the token console");
+```

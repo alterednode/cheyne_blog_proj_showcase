@@ -1,0 +1,115 @@
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import type { Metadata } from "next";
+import { getPublishedPosts, getPostBySlug } from "@/app/lib/content/query";
+import { PostHeader } from "@/app/components/posts/PostHeader";
+import { Prose } from "@/app/components/mdx/Prose";
+import { renderMdx } from "@/app/lib/mdx/render";
+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const posts = getPublishedPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "Post Not Found",
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.description,
+    ...(post.canonical && {
+      alternates: {
+        canonical: post.canonical,
+      },
+    }),
+  };
+}
+
+export default async function PostPage({ params }: PageProps) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  const { hero, repo, live, stack } = post;
+
+  const renderedContent = await renderMdx(post.rawMdx); // Resolve the promise here
+
+  return (
+    <main className="max-w-4xl mx-auto px-4 py-8">
+      <PostHeader post={post} />
+
+      {hero && (
+        <div className="mb-8 relative aspect-video overflow-hidden rounded-lg">
+          <Image
+            src={hero}
+            alt={post.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
+
+      {(repo || live) && (
+        <div className="mb-8 flex gap-4">
+          {repo && (
+            <a
+              href={repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+            >
+              Repository
+            </a>
+          )}
+          {live && (
+            <a
+              href={live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500"
+            >
+              Live Demo
+            </a>
+          )}
+        </div>
+      )}
+
+      {stack && stack.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            Tech Stack
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {stack.map((tech) => (
+              <span
+                key={tech}
+                className="rounded bg-gray-100 px-2 py-1 text-sm text-gray-700"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Prose>{renderedContent}</Prose>
+    </main>
+  );
+}
