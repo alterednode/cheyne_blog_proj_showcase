@@ -13,7 +13,7 @@ export const PostFrontmatterSchema = z.object({
   date: dateString, // ISO date string
 
   // Optional fields
-  status: z.enum(["draft", "published"]).default("published"),
+  status: z.enum(["draft", "published"]).default("draft"),
   tags: z.array(z.string()).optional(),
   updated: dateString.optional(),
   hero: z.string().optional(),
@@ -25,6 +25,7 @@ export const PostFrontmatterSchema = z.object({
   canonical: z.string().optional(),
   series: z.string().optional(),
   slug: z.string().optional(),
+  state: z.enum(["in-progress", "completed", "paused"]).optional(),
 });
 
 export type PostFrontmatter = z.infer<typeof PostFrontmatterSchema>;
