@@ -2,9 +2,9 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { getPublishedPosts, getPostBySlug } from "@/app/lib/content/query";
-import { PostHeader } from "@/app/components/posts/PostHeader";
-import { Prose } from "@/app/components/mdx/Prose";
-import { renderMdx } from "@/app/lib/mdx/render";
+import { PostHeader } from "@app/components/posts/PostHeader";
+import { Prose } from "@components/posts/mdx/Prose";
+import { renderMdx } from "@app/lib/mdx/render";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
