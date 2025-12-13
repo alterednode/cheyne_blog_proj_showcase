@@ -82,15 +82,6 @@ body {
     Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-::selection {
-  background: color-mix(in oklab, var(--accent) 28%, transparent);
-  color: var(--foreground);
-}
-
-::-moz-selection {
-  background: color-mix(in oklab, var(--accent) 28%, transparent);
-  color: var(--foreground);
-}
 
 /* Styles for code blocks */
 pre[data-theme] {
@@ -103,7 +94,7 @@ code[data-line-numbers] {
   counter-reset: line;
 }
 
-code[data-line-numbers] > [data-line]::before {
+code[data-line-numbers]>[data-line]::before {
   counter-increment: line;
   content: counter(line);
   display: inline-block;

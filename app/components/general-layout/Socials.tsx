@@ -106,12 +106,12 @@ export default function Socials({
               rel={isExternal ? "noreferrer noopener" : undefined}
               className={
                 display === "icons"
-                  ? "inline-flex h-10 w-10 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors hover:bg-primary/90"
-                  : "inline-flex items-center justify-center gap-2 rounded-md bg-primary px-3 py-2 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/90"
+                  ? "inline-flex h-10 w-10 items-center justify-center rounded-md bg-gradient-to-br from-primary to-secondary border-2 border-primary/30 text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/30 hover:scale-110"
+                  : "inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-primary to-secondary px-3 py-2 text-sm font-bold text-primary-foreground transition-all hover:shadow-lg hover:shadow-primary/30"
               }
             >
               {display === "icons" ? (
-                <Icon className="text-accent" size={iconSize} />
+                <Icon className="text-accent-foreground" size={iconSize} />
               ) : (
                 label
               )}

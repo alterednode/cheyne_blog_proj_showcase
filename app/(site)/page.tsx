@@ -23,9 +23,9 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <main className="max-w-6xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
-          <div className="rounded-2xl border border-border bg-card/80 p-6 shadow-sm">
+          <div className="rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card via-card to-primary/5 p-6 shadow-lg shadow-primary/10">
             <div className="flex gap-4 items-start">
-              <div className="relative h-24 w-24 overflow-hidden rounded-full border border-border">
+              <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-primary/40 shadow-lg shadow-primary/20">
                 <Image
                   src="/c-wrench/tiny no bkg.png"
                   alt="Placeholder headshot"
@@ -36,8 +36,8 @@ export default function Home() {
                 />
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Backend Dev</p>
-                <h1 className="text-2xl font-semibold">Onyx Cheyne</h1>
+                <p className="text-xs uppercase tracking-[0.3em] text-accent font-bold">Backend Dev</p>
+                <h1 className="text-2xl font-semibold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Onyx Cheyne</h1>
                 <p className="text-sm text-muted-foreground">Seattle / Kelowna</p>
               </div>
             </div>
@@ -47,7 +47,7 @@ export default function Home() {
               next tinkering project.
             </p>
             <div className="mt-6 space-y-2">
-              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Contact</p>
+              <p className="text-xs uppercase tracking-[0.3em] text-secondary font-semibold">Contact</p>
               <Socials
                 display="icons"
                 platforms={["github", "linkedin", "email"]}
@@ -56,19 +56,19 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="rounded-2xl border-2 border-secondary/30 bg-gradient-to-br from-card via-card to-secondary/5 p-6 shadow-lg shadow-secondary/10">
             <div className="flex items-end justify-between gap-4 text-muted-foreground">
               <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">
+                <p className="text-xs uppercase tracking-[0.4em] text-accent font-bold">
                   Featured writing
                 </p>
-                <h2 className="text-2xl font-semibold text-foreground">
+                <h2 className="text-2xl font-semibold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
                   Selected posts
                 </h2>
               </div>
               <Link
                 href="/posts"
-                className="text-xs font-semibold text-muted-foreground transition hover:text-foreground"
+                className="text-xs font-semibold text-accent hover:text-primary transition-colors"
               >
                 View all posts
               </Link>
@@ -85,8 +85,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-          <h3 className="text-lg font-semibold text-foreground">What I am thinking about now</h3>
+        <section className="rounded-2xl border-2 border-accent/30 bg-gradient-to-r from-card via-accent/5 to-card p-8 shadow-lg shadow-accent/10">
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">What I am thinking about now</h3>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             Designing better digital tools is less about the pixels and more about how the system feels. I spend a
             lot of time sketching process, tooling around with code, and experimenting with frictionless systems.
@@ -96,10 +96,10 @@ export default function Home() {
 
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold">Recent posts</h3>
+            <h3 className="text-xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Recent posts</h3>
             <Link
               href="/posts"
-              className="text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+              className="text-sm font-semibold text-accent hover:text-primary transition-colors"
             >
               Browse archive
             </Link>
@@ -117,12 +117,12 @@ export default function Home() {
 
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold">Recent projects</h3>
+            <h3 className="text-xl font-semibold bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">Recent projects</h3>
             <Link
               href="https://github.com/alterednode"
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+              className="text-sm font-semibold text-accent hover:text-primary transition-colors"
             >
               View code
             </Link>
@@ -131,9 +131,9 @@ export default function Home() {
             {recentProjectPosts.map((project) => (
               <article
                 key={project.title}
-                className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-sm"
+                className="flex flex-col gap-3 rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-card to-primary/5 p-5 shadow-lg shadow-primary/5 hover:border-primary/40 hover:shadow-primary/20 transition-all duration-300"
               >
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-muted-foreground">
+                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-accent font-semibold">
                   <span>{project.date}</span>
                   <span>{project.stack}</span>
                 </div>
@@ -143,7 +143,7 @@ export default function Home() {
                   href={project.live || "#"}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm font-semibold text-muted-foreground transition hover:text-foreground"
+                  className="text-sm font-semibold text-primary hover:text-secondary transition-colors"
                 >
                   Open project →
                 </Link>
