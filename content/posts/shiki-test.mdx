@@ -6,7 +6,7 @@ type: blog
 status: published
 ---
 
-# Shiki Test Post
+## Shiki Test Post
 
 This is a test post to show off what Shiki can do and to test formatting.
 
@@ -36,3 +36,5 @@ console.log(a + b);
 // [!code word:console]
 console.log("highlight the token console");
 ```
+This was broken via switching to next's builtin MDX package, and wanting to keep turbopack.
+I had to get rid of the transformers when converting to only using the **next.config.mjs**
