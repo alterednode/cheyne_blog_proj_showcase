@@ -75,7 +75,7 @@ export default async function PostPage({ params }: PageProps) {
               href={repo}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+              className="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground hover:bg-secondary/90"
             >
               Repository
             </a>
@@ -85,7 +85,7 @@ export default async function PostPage({ params }: PageProps) {
               href={live}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
               Live Demo
             </a>
@@ -95,14 +95,14 @@ export default async function PostPage({ params }: PageProps) {
 
       {stack && stack.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">
             Tech Stack
           </h2>
           <div className="flex flex-wrap gap-2">
             {stack.map((tech) => (
               <span
                 key={tech}
-                className="rounded bg-gray-100 px-2 py-1 text-sm text-gray-700"
+                className="rounded bg-muted px-2 py-1 text-sm text-muted-foreground"
               >
                 {tech}
               </span>

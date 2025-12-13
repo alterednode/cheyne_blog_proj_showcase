@@ -8,11 +8,11 @@ export function PostHeader({ post }: PostHeaderProps) {
   const { title, description, date, updated, tags, hideDate } = post;
 
   return (
-    <header className="mb-8 border-b pb-6">
+    <header className="mb-8 border-b border-border pb-6">
       <h1 className="text-3xl font-bold mb-2">{title}</h1>
-      <p className="text-gray-600 text-lg mb-4">{description}</p>
+      <p className="text-muted-foreground text-lg mb-4">{description}</p>
       
-      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
         {!hideDate && (
           <time dateTime={date}>
             {new Date(date).toLocaleDateString("en-US", {
@@ -24,7 +24,7 @@ export function PostHeader({ post }: PostHeaderProps) {
         )}
         
         {updated && (
-          <span className="text-gray-400">
+          <span className="text-muted-foreground">
             Updated:{" "}
             <time dateTime={updated}>
               {new Date(updated).toLocaleDateString("en-US", {
@@ -42,7 +42,7 @@ export function PostHeader({ post }: PostHeaderProps) {
           {tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600"
+              className="rounded-full border border-secondary/35 bg-secondary/10 px-3 py-1 text-xs font-medium text-foreground"
             >
               {tag}
             </span>

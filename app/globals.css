@@ -1,28 +1,95 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base palette (easy to swap later) */
+  --text: #010e08;
+  --background: #f1fef9;
+  --primary: #1ef192;
+  --secondary: #87daf8;
+  --accent: #5193f5;
+
+  /* Semantic tokens (UI uses these, not raw palette names) */
+  --foreground: var(--text);
+
+  /* Derived neutrals (keeps CSS small, stays consistent when palette changes) */
+  --muted: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
+  --muted-foreground: color-mix(in oklab, var(--foreground) 65%, var(--background) 35%);
+  --border: color-mix(in oklab, var(--foreground) 15%, var(--background) 85%);
+  --ring: var(--accent);
+
+  /* Surfaces */
+  --card: color-mix(in oklab, var(--background) 94%, var(--foreground) 6%);
+  --card-foreground: var(--foreground);
+
+  /* “On color” text tokens for buttons/badges */
+  --primary-foreground: var(--text);
+  --secondary-foreground: var(--text);
+  --accent-foreground: var(--background);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --text: #f1fef8;
+    --background: #010e09;
+    --primary: #0ee182;
+    --secondary: #075a78;
+    --accent: #0a4bae;
+
+    /* on-color text in dark mode */
+    --primary-foreground: var(--background);
+    --secondary-foreground: var(--text);
+    --accent-foreground: var(--text);
   }
+}
+
+/* Optional manual override (e.g., set <html class="dark">) */
+:root.dark {
+  --text: #f1fef8;
+  --background: #010e09;
+  --primary: #0ee182;
+  --secondary: #075a78;
+  --accent: #0a4bae;
+
+  --primary-foreground: var(--background);
+  --secondary-foreground: var(--text);
+  --accent-foreground: var(--text);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 28%, transparent);
+  color: var(--foreground);
+}
+
+::-moz-selection {
+  background: color-mix(in oklab, var(--accent) 28%, transparent);
+  color: var(--foreground);
 }
 
 /* Styles for code blocks */
@@ -43,12 +110,12 @@ code[data-line-numbers] > [data-line]::before {
   width: 2rem;
   text-align: right;
   margin-right: 1rem;
-  color: #888;
+  color: var(--muted-foreground);
   user-select: none;
 }
 
 [data-highlighted-line] {
-  background-color: rgba(255, 255, 0, 0.2);
+  background-color: color-mix(in oklab, var(--primary) 18%, transparent);
 }
 
 pre.has-focused .line:not(.focused) {
@@ -56,6 +123,6 @@ pre.has-focused .line:not(.focused) {
 }
 
 .highlighted-word {
-  background-color: rgba(0, 255, 255, 0.2);
+  background-color: color-mix(in oklab, var(--secondary) 18%, transparent);
   border-radius: 0.25rem;
 }

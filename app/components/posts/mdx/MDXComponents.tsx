@@ -57,7 +57,7 @@ export const mdxComponents: MDXComponents = {
   h2: ({ children, ...props }) => (
     <LinkedHeading
       as="h2"
-      headingClassName="mt-10 scroll-m-20 border-b border-gray-200 pb-2 text-2xl font-semibold tracking-tight"
+      headingClassName="mt-10 scroll-m-20 border-b border-border pb-2 text-2xl font-semibold tracking-tight"
       {...props}
     >
       {children}
@@ -86,7 +86,7 @@ export const mdxComponents: MDXComponents = {
       href={href}
       target={href?.startsWith("http") ? "_blank" : undefined}
       rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="text-blue-600 hover:text-blue-800 underline underline-offset-2"
+      className="text-accent underline underline-offset-2 hover:text-secondary"
       {...props}
     >
       {children}
