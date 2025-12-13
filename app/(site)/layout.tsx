@@ -1,7 +1,7 @@
 // app/(site)/layout.tsx
 import type { ReactNode } from "react";
-import SiteHeader from "../components/SiteHeader";
-import SiteFooter from "../components/SiteFooter";
+import SiteHeader from "@components/general-layout/SiteHeader";
+import SiteFooter from "@components/general-layout/SiteFooter";
 
 
 export default function SiteLayout({ children }: { children: ReactNode }) {

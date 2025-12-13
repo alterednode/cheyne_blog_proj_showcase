@@ -1,3 +1,4 @@
+import { features } from "process";
 import { z } from "zod";
 
 // Helper to coerce Date objects to ISO strings (gray-matter parses YAML dates as Date objects)
@@ -11,7 +12,7 @@ export const PostFrontmatterSchema = z.object({
   title: z.string(),
   description: z.string(),
   date: dateString, // ISO date string
-
+  type: z.enum(["blog", "project"]),
   // Optional fields
   status: z.enum(["draft", "published"]).default("draft"),
   tags: z.array(z.string()).optional(),
@@ -26,6 +27,7 @@ export const PostFrontmatterSchema = z.object({
   series: z.string().optional(),
   slug: z.string().optional(),
   state: z.enum(["in-progress", "completed", "paused"]).optional(),
+  featured: z.number().optional(),
 });
 
 export type PostFrontmatter = z.infer<typeof PostFrontmatterSchema>;

@@ -1,7 +1,7 @@
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import { transformerNotationFocus, transformerNotationWordHighlight } from "@shikijs/transformers";
-import { mdxComponents } from "@/app/components/mdx/MDXComponents";
+import { mdxComponents } from "@/app/components/posts/mdx/MDXComponents";
 const options = {
   defaultLang: "plaintext",
   theme: "github-dark-dimmed",

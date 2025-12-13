@@ -6,7 +6,7 @@ export interface ContentFrontmatter {
   publishedAt: string; // ISO date format (YYYY-MM-DD)
   description: string;
   tags?: string[];
-  featured?: boolean;
+  featured?: number;
   draft?: boolean;
   coverImage?: string;
   // Blog-specific (optional)

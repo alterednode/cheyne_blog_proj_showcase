@@ -12,6 +12,7 @@ const styles = {
   error: "bg-red-50 border-red-200 text-red-800",
 };
 
+//TODO: improve the look of this component
 const icons = {
   info: "ℹ️",
   warn: "⚠️",
