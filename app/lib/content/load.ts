@@ -17,7 +17,7 @@ export function loadAllPosts(): Post[] {
     const filePath = path.join(POSTS_DIR, filename);
     const fileContent = fs.readFileSync(filePath, "utf-8");
 
-    const { data, content } = matter(fileContent);
+    const { data } = matter(fileContent);
 
     // Validate frontmatter with Zod
     const result = PostFrontmatterSchema.safeParse(data);
@@ -38,7 +38,7 @@ export function loadAllPosts(): Post[] {
 
     return {
       slug,
-      rawMdx: content,
+      sourceFile: filename,
       ...frontmatter,
     };
   });

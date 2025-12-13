@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { getPublishedPosts, getPostBySlug } from "@/app/lib/content/query";
 import { PostHeader } from "@app/components/posts/PostHeader";
 import { Prose } from "@components/posts/mdx/Prose";
-import { renderMdx } from "@app/lib/mdx/render";
+import { mdxComponents } from "@/app/components/posts/mdx/MDXComponents";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -48,7 +48,9 @@ export default async function PostPage({ params }: PageProps) {
 
   const { hero, repo, live, stack } = post;
 
-  const renderedContent = await renderMdx(post.rawMdx); // Resolve the promise here
+  const { default: MdxContent } = await import(
+    `@/content/posts/${post.sourceFile}`
+  );
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
@@ -109,7 +111,9 @@ export default async function PostPage({ params }: PageProps) {
         </div>
       )}
 
-      <Prose>{renderedContent}</Prose>
+      <Prose>
+        <MdxContent components={mdxComponents} />
+      </Prose>
     </main>
   );
 }

@@ -1,4 +1,3 @@
-import { features } from "process";
 import { z } from "zod";
 
 // Helper to coerce Date objects to ISO strings (gray-matter parses YAML dates as Date objects)
@@ -34,5 +33,5 @@ export type PostFrontmatter = z.infer<typeof PostFrontmatterSchema>;
 
 export type Post = {
   slug: string;
-  rawMdx: string;
+  sourceFile: string;
 } & PostFrontmatter;
