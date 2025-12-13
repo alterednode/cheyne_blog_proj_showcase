@@ -7,7 +7,7 @@ export default function SiteHeader() {
       <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 transition-shadow hover:shadow-lg hover:shadow-neutral-500 rounded-md p-1">
           <Image
-            src="/c-wrench/c-wrench.svg"
+            src="/c-wrench/c-wrench bkg.svg"
             alt="cheyne.dev"
             width={40}
             height={40}
