@@ -8,7 +8,9 @@ export default function NotFound() {
     // to enable pages like /dashboard (not real at the moment) to have their own layout without header/footer
     <div>
       <SiteHeader />
-      <NotFoundPageComponent />
+      <main>
+        <NotFoundPageComponent />
+      </main>
       <SiteFooter />
     </div>
   );

@@ -53,7 +53,7 @@ export default async function PostPage({ params }: PageProps) {
   );
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8 text-foreground">
+    <div className="max-w-4xl mx-auto px-4 py-8 text-foreground">
       <PostHeader post={post} />
 
       {hero && (
@@ -114,6 +114,6 @@ export default async function PostPage({ params }: PageProps) {
       <Prose>
         <MdxContent components={mdxComponents} />
       </Prose>
-    </main>
+    </div>
   );
 }

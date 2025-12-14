@@ -1,9 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-
-import SiteHeader from "@components/general-layout/SiteHeader";
-import SiteFooter from "@components/general-layout/SiteFooter";
 import { PostCard } from "@components/posts/PostCard";
 import { getFeaturedPosts, getPublishedPosts, getRecentPosts, } from "@lib/content/query";
 import Socials from "@components/general-layout/Socials";
@@ -21,7 +18,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="max-w-6xl mx-auto px-4 py-10 space-y-12">
+      <div className="max-w-6xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
           <div className="rounded-2xl border-2 border-border/80 bg-gradient-to-br from-card via-card to-muted p-6 text-card-foreground shadow-lg shadow-accent/5">
             <div className="flex items-center gap-4">
@@ -93,7 +90,7 @@ export default function Home() {
 
           </p>
         </section>
-      </main>
+      </div>
     </div>
   );
 }
