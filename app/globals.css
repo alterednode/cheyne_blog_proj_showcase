@@ -4,8 +4,8 @@
   /* Base palette (easy to swap later) */
   --text: #010e08;
   --background: #f1fef9;
-  --primary: #1ef192;
-  --secondary: #87daf8;
+  --primary: #009b22;
+  --secondary: #24c5ff;
   --accent: #5193f5;
 
   /* Semantic tokens (UI uses these, not raw palette names) */
@@ -51,7 +51,7 @@
   :root {
     --text: #f1fef8;
     --background: #010e09;
-    --primary: #0ee182;
+    --primary: #00c76d;
     --secondary: #075a78;
     --accent: #0a4bae;
 

@@ -48,7 +48,7 @@ export const mdxComponents: MDXComponents = {
   h1: ({ children, ...props }) => (
     <LinkedHeading
       as="h1"
-      headingClassName="mt-10 scroll-m-20 text-4xl font-bold tracking-tight"
+      headingClassName="mt-10 scroll-m-20 text-4xl font-bold"
       {...props}
     >
       {children}
@@ -57,7 +57,7 @@ export const mdxComponents: MDXComponents = {
   h2: ({ children, ...props }) => (
     <LinkedHeading
       as="h2"
-      headingClassName="mt-10 scroll-m-20 border-b border-border pb-2 text-2xl font-semibold tracking-tight"
+      headingClassName="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold"
       {...props}
     >
       {children}
@@ -66,7 +66,7 @@ export const mdxComponents: MDXComponents = {
   h3: ({ children, ...props }) => (
     <LinkedHeading
       as="h3"
-      headingClassName="mt-8 scroll-m-20 text-xl font-semibold tracking-tight"
+      headingClassName="mt-8 scroll-m-20 text-xl font-semibold"
       {...props}
     >
       {children}
@@ -75,7 +75,7 @@ export const mdxComponents: MDXComponents = {
   h4: ({ children, ...props }) => (
     <LinkedHeading
       as="h4"
-      headingClassName="mt-8 scroll-m-20 text-lg font-semibold tracking-tight"
+      headingClassName="mt-8 scroll-m-20 text-lg font-semibold"
       {...props}
     >
       {children}
@@ -86,7 +86,7 @@ export const mdxComponents: MDXComponents = {
       href={href}
       target={href?.startsWith("http") ? "_blank" : undefined}
       rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="text-accent underline underline-offset-2 hover:text-secondary"
+      className="underline underline-offset-2"
       {...props}
     >
       {children}
