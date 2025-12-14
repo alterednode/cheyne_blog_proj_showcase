@@ -3,11 +3,12 @@ import Link from "next/link";
 
 export default function SiteHeader() {
   return (
-    <header className="border-b-2 shadow-lg">
+    <header className="relative border-b-2 border-border bg-gradient-to-b from-background to-muted/20 text-foreground shadow-lg">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent opacity-70" />
       <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
         <Link
           href="/"
-          className="flex items-center gap-3 rounded-md p-1 transition-all hover:shadow-xl"
+          className="flex items-center gap-3 rounded-md p-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Image
             src="/c-wrench/c-wrench bkg.svg"
@@ -25,13 +26,13 @@ export default function SiteHeader() {
         <nav className="flex gap-4 text-sm font-bold">
           <a
             href="/"
-            className="text-md transition-all hover:scale-110"
+            className="text-md text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             Home
           </a>
           <a
             href="/posts"
-            className="text-md transition-all hover:scale-110"
+            className="text-md text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             Posts
           </a>

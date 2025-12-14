@@ -20,12 +20,12 @@ export default function Home() {
   const recentProjectPosts = getRecentPosts(3, "project");
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       <main className="max-w-6xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
-          <div className="rounded-2xl border-2 p-6 shadow-lg">
+          <div className="rounded-2xl border-2 border-border/80 bg-gradient-to-br from-card via-card to-muted p-6 text-card-foreground shadow-lg shadow-accent/5">
             <div className="flex items-center gap-4">
-              <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 shadow-lg">
+              <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-border shadow-lg">
                 <Image
                   src="/c-wrench/tiny no bkg.png"
                   alt="Placeholder headshot"
@@ -37,8 +37,8 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] font-bold">Developer</p>
-                <h1 className="text-2xl font-semibold">Onyx Cheyne</h1>
-                <p className="text-sm">
+                <h1 className="text-2xl font-semibold text-primary">Onyx Cheyne</h1>
+                <p className="text-sm text-muted-foreground">
                   <span>Seattle, WA</span><br />
                   <span>Kelowna, BC</span>
                 </p>
@@ -57,8 +57,8 @@ export default function Home() {
                 Feel free to reach out if you'd like to connect!
               </p>
             </div>
-            <div className="mt-6 space-y-2">
-              <p className="text-xs uppercase tracking-[0.2em] font-semibold">Reach out</p>
+            <div className="mt-6 space-y-2 bg-accent/10 p-4 rounded-md border-2 border-accent/25">
+              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">Reach out</p>
               <Socials
                 display="icons"
                 platforms={["github", "linkedin", "email"]}
@@ -67,7 +67,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rounded-2xl border-2 p-6 shadow-lg">
+          <div className="rounded-2xl border-2 border-border/80 bg-gradient-to-br from-card via-card to-muted p-6 text-card-foreground shadow-lg shadow-accent/5">
             <div className="flex items-end justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-semibold">
@@ -77,7 +77,7 @@ export default function Home() {
             </div>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {featuredPosts.length === 0 ? (
-                <p className="text-sm">I forgot to feature any posts!!!!.</p>
+                <p className="text-sm text-muted-foreground">I forgot to feature any posts!!!!.</p>
               ) : (
                 featuredPosts.map((post) => (
                   <PostCard key={post.slug} post={post} />
@@ -87,7 +87,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-2xl border-2 p-8 shadow-lg">
+        <section className="rounded-2xl border-2 border-border/80 bg-gradient-to-br from-card via-card to-muted p-8 text-card-foreground shadow-lg shadow-accent/5">
           <h3 className="text-lg font-semibold">About Me</h3>
           <p className="mt-4 text-sm leading-relaxed">
 

@@ -53,11 +53,11 @@ export default async function PostPage({ params }: PageProps) {
   );
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
+    <main className="max-w-4xl mx-auto px-4 py-8 text-foreground">
       <PostHeader post={post} />
 
       {hero && (
-        <div className="mb-8 relative aspect-video overflow-hidden rounded-lg border-2 shadow-lg">
+        <div className="mb-8 relative aspect-video overflow-hidden rounded-lg border-2 border-border bg-card shadow-lg">
           <Image
             src={hero}
             alt={post.title}
@@ -75,7 +75,7 @@ export default async function PostPage({ params }: PageProps) {
               href={repo}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border-2 px-4 py-2 text-sm font-medium hover:shadow-lg transition-all duration-300"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Repository
             </a>
@@ -85,7 +85,7 @@ export default async function PostPage({ params }: PageProps) {
               href={live}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border-2 px-4 py-2 text-sm font-medium hover:shadow-lg transition-all duration-300"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Live Demo
             </a>
@@ -102,7 +102,7 @@ export default async function PostPage({ params }: PageProps) {
             {stack.map((tech) => (
               <span
                 key={tech}
-                className="rounded border-2 px-2 py-1 text-sm font-medium hover:shadow-md transition-all"
+                className="rounded border-2 border-border bg-muted px-2 py-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:border-accent/40"
               >
                 {tech}
               </span>

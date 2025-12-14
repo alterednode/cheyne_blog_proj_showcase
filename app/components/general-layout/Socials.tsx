@@ -106,8 +106,8 @@ export default function Socials({
               rel={isExternal ? "noreferrer noopener" : undefined}
               className={
                 display === "icons"
-                  ? "inline-flex h-10 w-10 items-center justify-center rounded-md border-2 transition-all hover:shadow-lg hover:scale-110"
-                  : "inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-bold transition-all hover:shadow-lg"
+                  ? "inline-flex h-10 w-10 items-center justify-center rounded-md border-2 border-primary bg-primary/70 text-foreground transition-colors hover:bg-accent/90 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  : "inline-flex items-center justify-center gap-2 rounded-md border-2 border-border bg-card px-3 py-2 text-sm font-bold text-foreground transition-colors hover:bg-muted hover:text-foreground hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               }
             >
               {display === "icons" ? (

@@ -6,7 +6,7 @@ interface ProseProps {
 
 export function Prose({ children }: ProseProps) {
   return (
-    <div className="max-w-[72ch] mx-auto space-y-6 leading-relaxed">
+    <div className="max-w-[72ch] mx-auto space-y-6 leading-relaxed text-foreground">
       {children}
     </div>
   );

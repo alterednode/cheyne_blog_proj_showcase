@@ -2,11 +2,11 @@
 
 :root {
   /* Base palette (easy to swap later) */
-  --text: #010e08;
-  --background: #f1fef9;
-  --primary: #009b22;
-  --secondary: #24c5ff;
-  --accent: #5193f5;
+  --text: #0b1d02;
+  --background: #f7fef1;
+  --primary: #77b356;
+  --secondary: #848bf6;
+  --accent: #ab41f1;
 
   /* Semantic tokens (UI uses these, not raw palette names) */
   --foreground: var(--text);
@@ -49,31 +49,37 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #f1fef8;
-    --background: #010e09;
-    --primary: #00c76d;
-    --secondary: #075a78;
-    --accent: #0a4bae;
+  --text: #ebfde2;
+  --background: #070e01;
+  --primary: #6ca94c;
+  --secondary: #09117b;
+  --accent: #780ebe;
 
     /* on-color text in dark mode */
     --primary-foreground: var(--background);
     --secondary-foreground: var(--text);
     --accent-foreground: var(--text);
+
+      /* Semantic tokens (UI uses these, not raw palette names) */
+  --foreground: var(--text);
+
+  /* Derived neutrals (keeps CSS small, stays consistent when palette changes) */
+  --muted: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
+  --muted-foreground: color-mix(in oklab, var(--foreground) 65%, var(--background) 35%);
+  --border: color-mix(in oklab, var(--foreground) 15%, var(--background) 85%);
+  --ring: var(--accent);
+
+  /* Surfaces */
+  --card: color-mix(in oklab, var(--background) 94%, var(--foreground) 6%);
+  --card-foreground: var(--foreground);
+
+  /* “On color” text tokens for buttons/badges */
+  --primary-foreground: var(--text);
+  --secondary-foreground: var(--text);
+  --accent-foreground: var(--background);
   }
 }
 
-/* Optional manual override (e.g., set <html class="dark">) */
-:root.dark {
-  --text: #f1fef8;
-  --background: #010e09;
-  --primary: #0ee182;
-  --secondary: #075a78;
-  --accent: #0a4bae;
-
-  --primary-foreground: var(--background);
-  --secondary-foreground: var(--text);
-  --accent-foreground: var(--text);
-}
 
 body {
   background: var(--background);
