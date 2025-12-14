@@ -1,18 +1,18 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
-import { PostCard } from "@components/posts/PostCard";
-import { getFeaturedPosts, getPublishedPosts, getRecentPosts, } from "@lib/content/query";
-import Socials from "@components/general-layout/Socials";
+import { getFeaturedPosts, getRecentPosts, } from "@lib/content/query";
+import Socials from "@/app/components/standard/Socials";
+import { Card } from "@/app/components/standard/Card";
+import { PostGrid } from "@components/posts/PostGrid";
 
 export const metadata: Metadata = {
-  title: "Cheyne — portfolio and journal",
+  title: "Onyx Cheyne",
   description:
-    "Portfolio, projects, and writing from Cheyne; a blend of engineering, design, and on-going curiosity.",
+    "Blog and project showcase of Onyx Cheyne, a computer science student at UBC Okanagan.",
 };
 
 export default function Home() {
-  const featuredPosts = getFeaturedPosts().slice(0, 4);
+  const featuredPosts = getFeaturedPosts().slice(0, 2);
   const recentBlogPosts = getRecentPosts(3, "blog");
   const recentProjectPosts = getRecentPosts(3, "project");
 
@@ -20,7 +20,7 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
-          <div className="rounded-2xl border-2 border-border/80 bg-gradient-to-br from-card via-card to-muted p-6 text-card-foreground shadow-lg shadow-accent/5">
+          <Card className="p-6">
             <div className="flex items-center gap-4">
               <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-border shadow-lg">
                 <Image
@@ -43,15 +43,15 @@ export default function Home() {
             </div>
             <div className="mt-6 text-sm leading-relaxed max-w-md">
               <p >
-                Hi there! I'm Onyx, a Comp Sci student at UBC Okangan. I have a passion for making things, whether that's full-stack appliactions, games, or hardware projects.
+                Hi there! I&apos;m Onyx, a Comp Sci student at UBC Okangan. I have a passion for making things, whether that&apos;s full-stack appliactions, games, or hardware projects.
               </p>
               <br />
               <p>
-                I like learning new technologies and improving my skills, and I'm documenting my journey here.
+                I like learning new technologies and improving my skills, and I&apos;m documenting my journey here.
               </p>
               <br />
               <p>
-                Feel free to reach out if you'd like to connect!
+                Feel free to reach out if you&apos;d like to connect!
               </p>
             </div>
             <div className="mt-6 space-y-2 bg-accent/10 p-4 rounded-md border-2 border-accent/25">
@@ -62,34 +62,24 @@ export default function Home() {
                 className="flex-wrap"
               />
             </div>
-          </div>
+          </Card>
 
-          <div className="rounded-2xl border-2 border-border/80 bg-gradient-to-br from-card via-card to-muted p-6 text-card-foreground shadow-lg shadow-accent/5">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-semibold">
-                  Featured
-                </h2>
-              </div>
-            </div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              {featuredPosts.length === 0 ? (
-                <p className="text-sm text-muted-foreground">I forgot to feature any posts!!!!.</p>
-              ) : (
-                featuredPosts.map((post) => (
-                  <PostCard key={post.slug} post={post} />
-                ))
-              )}
-            </div>
-          </div>
+          <Card className="p-6">
+            <PostGrid
+              title="Featured"
+              posts={featuredPosts}
+              showHeroImage
+              emptyMessage="I forgot to feature any posts!!!!."
+            />
+          </Card>
         </section>
 
-        <section className="rounded-2xl border-2 border-border/80 bg-gradient-to-br from-card via-card to-muted p-8 text-card-foreground shadow-lg shadow-accent/5">
+        <Card className="p-8">
           <h3 className="text-lg font-semibold">About Me</h3>
           <p className="mt-4 text-sm leading-relaxed">
 
           </p>
-        </section>
+        </Card>
       </div>
     </div>
   );
