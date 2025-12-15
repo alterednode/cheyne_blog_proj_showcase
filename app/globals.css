@@ -49,11 +49,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-  --text: #ebfde2;
-  --background: #0f140d;
-  --primary: #6ca94c;
-  --secondary: #09117b;
-  --accent: #780ebe;
+    --text: #f3e5f3;
+    --background: #1f061f;
+    --primary: #de80e7;
+    --secondary: #288319;
+    --accent: #4cddca;
 
     /* on-color text in dark mode */
     --primary-foreground: var(--background);
@@ -107,19 +107,14 @@ code[data-line-numbers]>[data-line]::before {
   width: 2rem;
   text-align: right;
   margin-right: 1rem;
-  color: var(--muted-foreground);
+  color: var(--text-muted);
   user-select: none;
 }
 
 [data-highlighted-line] {
-  background-color: color-mix(in oklab, var(--primary) 18%, transparent);
+  background-color: color-mix(in oklab, var(--accent) 25%, transparent);
 }
 
 pre.has-focused .line:not(.focused) {
   opacity: 0.5;
-}
-
-.highlighted-word {
-  background-color: color-mix(in oklab, var(--secondary) 18%, transparent);
-  border-radius: 0.25rem;
 }
