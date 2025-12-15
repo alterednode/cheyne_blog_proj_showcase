@@ -1,6 +1,6 @@
 ---
-title: This site
-description: A showcase of what my site can do
+title: This Site
+description: The technologies tools, and decisions behind building this site.
 date: 2024-12-15
 hero: /website_screenshot.png
 tags:
@@ -23,7 +23,7 @@ I don't particularly plan on working in frontend development professionally, but
 That's why I built this site from "scratch": to learn more about modern web development practices and tools.  
 I also, as mentioned, wanted a place to showcase my projects.
 
-## The basics
+## The Basics
 
 The site is built with [Next.js](https://nextjs.org/), which is a React framework for building server-rendered and statically generated web applications.  
 I'm using the React App Router so I can create dynamic routes for my posts and fetch the MDX content at build time using Next.js's static generation features.
@@ -46,7 +46,7 @@ I'm also using [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pret
 All of this is stored on GitHub and deployed via [Vercel](https://vercel.com/) for easy updates and hosting.  
 Any time there is a change on the main branch, Vercel automatically rebuilds and redeploys the site.
 
-## MDX React components
+## MDX React Components
 
 This component takes a few props and renders a small “meter”.
 
@@ -71,7 +71,7 @@ I created another component that tracks your scroll progress on the page and pas
 
 <ScrollTracker />
 
-### Interactive props playground
+### Interactive Props Playground
 
 This card is a client component; it has controls that update the props live.
 
@@ -88,7 +88,7 @@ I fixed that by creating a set of custom colors in my Tailwind config and then u
 I define a primary color, a secondary color, and an accent color, and then use those colors in my components and styles.  
 There are also derived colors for backgrounds, borders, and text to ensure everything looks cohesive, along with a matching set of dark mode colors.
 
-## Code block highlighting
+## Code Block Highlighting
 
 Here is a code block with syntax highlighting, line numbers, and highlighted lines.
 

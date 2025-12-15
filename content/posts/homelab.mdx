@@ -26,7 +26,7 @@ I did still have to run around with my laptop and an Ethernet cable to figure ou
 
 But the problems started well before that.
 
-## The BIOS is gone
+## The BIOS is Gone
 
 This was not a fun discovery.
 
@@ -45,7 +45,7 @@ Nonetheless, after about an hour of fighting with it, I managed to get Debian in
 
 …which did not like my Realtek networking controller.
 
-## Networking woes
+## Networking Woes
 
 After spending some time trying to get third-party drivers working, I resorted to using Ubuntu Server, which cost me another hour of blindly navigating the BIOS while attempting to change the default boot order to boot from USB again.
 
@@ -55,11 +55,11 @@ I set up SSH, connected from my laptop, and started configuring things. I wanted
 
 After an hour of trying to figure out why I couldn't access the server from outside my network, messing about with the router firewall, DNS and more, I discovered that Telus had us behind CGNAT, meaning port forwarding wouldn't work no matter what I did on the router.
 
-## A brief look at Cloudflare Tunnels
+## A Brief Look at Cloudflare Tunnels
 
 I considered using Cloudflare Tunnels to work around this, but ultimately decided against it. I planned to host a few game servers, and running those through Cloudflare Tunnels would not work without even more complicated setups—such as requiring my friends to install mods just to connect, even for something like Minecraft.
 
-## Oracle Cloud to the rescue
+## Oracle Cloud to the Rescue
 
 A while ago, I discovered Oracle Cloud's free tier, and the massive amount of resources they provide for free if you use their ARM instances, along with a generous bandwidth allowance.
 
@@ -71,7 +71,7 @@ This way, when I access my domain, the request goes to the Oracle Cloud instance
 
 As a bonus, this setup also means my home server is not directly exposed to the internet, adding an extra layer of security.
 
-## Current setup and future plans
+## Current Setup and Future Plans
 
 Currently, I'm running a few services on my homelab server, all in Docker containers:
 
