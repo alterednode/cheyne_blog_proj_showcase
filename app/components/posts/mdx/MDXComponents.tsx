@@ -90,7 +90,7 @@ export const mdxComponents: MDXComponents = {
       href={href}
       target={href?.startsWith("http") ? "_blank" : undefined}
       rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:text-primary hover:decoration-primary/60"
+      className="text-accent hover:text-primary transition-all hover:scale-50"
       {...props}
     >
       {children}
