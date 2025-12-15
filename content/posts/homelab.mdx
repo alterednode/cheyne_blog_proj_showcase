@@ -1,6 +1,6 @@
 ---
 title: My Homelab
-description: Is it still a homelab if everything is routed through oracle cloud?
+description: Is it still a homelab if everything is routed through Oracle Cloud?
 date: 2024-12-15
 tags:
   - programming
@@ -9,19 +9,20 @@ live: https://cheyne.dev
 stack:
   - Not
   - Finished
-  - Listing 
+  - Listing
   - Them
 status: published
 state: in-progress
 featured: 2
 type: project
+hero: /posts/homelab/messy-desk-cropped.jpg
 ---
 
-I've been wanting to setup some sort of homelab / server for a while, especially after I upgraded my gaming computer and had essentially a whole second computer left over.
+I've been wanting to set up some sort of homelab / server for a while, especially after I upgraded my gaming computer and essentially had a whole second computer left over.
 
-My apartment does thankfully have some ethernet cables in the walls runing to a few points in the apartment so thankfully I didn't have to attempt to stuff the server in the closet with all our clothes or run an insane cable.
+My apartment thankfully has some Ethernet cables in the walls running to a few points throughout the unit, so I didn't have to attempt to stuff the server in a closet full of clothes or run an absurdly long cable.
 
-I did still have to run around with my laptop and an ethernet cable to see which cable went where in the apartment though.
+I did still have to run around with my laptop and an Ethernet cable to figure out which cable went where in the apartment, though.
 
 But the problems started well before that.
 
@@ -29,50 +30,54 @@ But the problems started well before that.
 
 This was not a fun discovery.
 
-![A photo of the messy desk with the computer on top, an NVME drive held in place with a bottle of allergy meds](/posts/homelab/messy-desk-cropped.jpg)
+![A photo of the messy desk with the computer on top, an NVMe drive held in place with a bottle of allergy meds](/posts/homelab/messy-desk-cropped.jpg)
 
-I'd setup the computer on top of my extremely messy desk, put an NVME drive in with a bottle of allergy meds to keep it in place, prepared a live debian USB and attempted to boot.
+I'd set up the computer on top of my extremely messy desk, put an NVMe drive in place with a bottle of allergy meds to hold it down, prepared a live Debian USB, and attempted to boot.
 
-![Video of the bios being just completely messed up](/posts/homelab/BIOS-broken-vid.gif)
+![Video of the BIOS being completely messed up](/posts/homelab/BIOS-broken-vid.gif)
 
-This is not what I'd expected to see.
+This is not what I expected to see.
 
-I attempted to figure out why this was happening, reset the CMOS, tried all the ram in different slots one at a time, but nothing worked.
+I attempted to figure out why this was happening: resetting the CMOS, tried all the RAM in different slots one at a time, but nothing worked.
 
-Ocasionally the BIOS would load somewhat correctly, but it was extremely unstable and would crash or freeze constantly.
-Nonetheless, I managed to get Debian installed after an hour of fighting with it.
+Occasionally the BIOS would load somewhat correctly, but it was extremely unstable and would constantly crash or freeze.  
+Nonetheless, after about an hour of fighting with it, I managed to get Debian installed.
 
-...which did not like my realtek networking controller.
+…which did not like my Realtek networking controller.
 
 ## Networking woes
 
-After spending a little bit trying to get third party drivers working, I resorted to using Ubuntu Server, which cost me another hour of blindly navigating the BIOS, attempting to change the default boot order to boot from a USB again.
+After spending some time trying to get third-party drivers working, I resorted to using Ubuntu Server, which cost me another hour of blindly navigating the BIOS while attempting to change the default boot order to boot from USB again.
 
-Thankfully that installed fine, I went through the setup and had an internet connection.
+Thankfully, that installed fine. I went through the setup and had an internet connection.
 
-I setup SSH, connected from my laptop, and started setting things up.
-I wanted to setup traefik as a reverse proxy to route traffic to different services, and logged into my telus router to setup port forwarding.
+I set up SSH, connected from my laptop, and started configuring things. I wanted to set up Traefik as a reverse proxy to route traffic to different services, and logged into my Telus router to configure port forwarding.
 
-After an hour of trying to figure out why I coudln't access the server from outside my network, I discovered that telus had us behind CGNAT, meaning port forwarding wouldn't work no matter what I did on the router.
+After an hour of trying to figure out why I couldn't access the server from outside my network, messing about with the router firewall, DNS and more, I discovered that Telus had us behind CGNAT, meaning port forwarding wouldn't work no matter what I did on the router.
 
-## A breif look at cloudflare tunnels
+## A brief look at Cloudflare Tunnels
 
-I thought about using cloudflare tunnels to get around this, but ultimately decided against it since I'd probably be hosting a few game servers and to run those through cloudflare tunnels wouldn't work without even more complicated setups, including stuff like making my friends run various mods to even connect just for Minecraft.
+I considered using Cloudflare Tunnels to work around this, but ultimately decided against it. I planned to host a few game servers, and running those through Cloudflare Tunnels would not work without even more complicated setups—such as requiring my friends to install mods just to connect, even for something like Minecraft.
 
 ## Oracle Cloud to the rescue
 
-A while ago I'd discovered Oracle Cloud's free tier, and the massive amount of resources they give you for free if you use their ARM instances. 
+A while ago, I discovered Oracle Cloud's free tier, and the massive amount of resources they provide for free if you use their ARM instances, along with a generous bandwidth allowance.
 
-It works pretty well for running minecraft servers, but I figured I could just use it as a jump box to my homelab server.
-So I removed my instance with a few minecraft servers on it, and created a new ARM instance and setup tailscale and traefik there.
+It works quite well for running Minecraft servers, but I figured I could also use it as an entry point for my homelab server. I removed my existing instance that was hosting a few Minecraft servers and created a new ARM instance, then set up Tailscale and Traefik on it.
 
-Tailscale essentailly acts as a VPN, allowing me to connect to my home server from the oracle cloud instance without needing to open any ports on my router.
-From there, I setup traefik to route traffic to my home server over tailscale, and setup DNS records in cloudflare to point to the oracle cloud instance.
-This way, when I access my domain, it goes to the oracle cloud instance, which then routes the traffic over tailscale to my home server.
+Tailscale essentially acts as a VPN, allowing me to connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server over Tailscale and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
 
-As a bonus, this setup also means that my home server is not as exposed to the internet, adding an extra layer of security.
+This way, when I access my domain, the request goes to the Oracle Cloud instance, which then routes the traffic over Tailscale to my home server.
 
-## Current setup
+As a bonus, this setup also means my home server is not directly exposed to the internet, adding an extra layer of security.
 
+## Current setup and future plans
 
+Currently, I'm running a few services on my homelab server, all in Docker containers:
 
+- A Minecraft server for me and my friends
+- WordPress for hosting an in-development site for a community centre
+- n8n for automating tasks
+- Jellyfin for media streaming
+
+I'm planning to set up monitoring on top of Traefik, as well as possibly add a few more game servers in the future.
