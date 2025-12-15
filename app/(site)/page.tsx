@@ -49,7 +49,7 @@ export default function Home() {
             </div>
             <div className="mt-6 text-md leading-relaxed ">
               <p >
-                Hi there! I&apos;m Onyx, a Comp Sci student at UBC Okangan. I have a passion for making things, whether that&apos;s full-stack appliactions, games, or hardware projects.
+                Hi there! I&apos;m Onyx, a Computer Science student at UBC Okanagan. I have a passion for making things, whether that&apos;s full-stack appliactions, games, or hardware projects.
               </p>
               <br />
               <p>
