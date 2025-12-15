@@ -4,6 +4,7 @@ import { getFeaturedPosts, getRecentPosts, } from "@lib/content/query";
 import Socials from "@/app/components/standard/Socials";
 import { Card } from "@/app/components/standard/Card";
 import { PostGrid } from "@components/posts/PostGrid";
+import InProgress from "../components/posts/mdx/InProgress";
 
 export const metadata: Metadata = {
   title: "Onyx Cheyne",
@@ -18,6 +19,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <InProgress title="Site Under Construction">
+        Sorry for the mess! I'm still working on making this look how I want, so bear with me as I hammer things into place.
+        <br />
+        Additional posts are also on the way!
+      </InProgress>
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
           <Card className="p-6">
