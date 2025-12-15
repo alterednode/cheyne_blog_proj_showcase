@@ -20,36 +20,34 @@ featured: 1
 type: project
 ---
 
-## Overview
+This site is a place for me to showcase project's I've worked on, write about things that interest me, and mess around with new web technologies.
 
-This project showcases the full capabilities of the post system, including:
+It's built with [Next.js](https://nextjs.org/) and [Tailwind CSS](https://tailwindcss.com/), and uses [MDX](https://mdxjs.com/) for content creation. This allows me to write blog posts and project pages using a combination of Markdown and React components, giving me the flexibility to do things like this:
 
-- Hero images
-- Repository and live demo links
-- Tech stack display
-- Tags
+## MDX react components
 
-<Callout type="success">
-  All the frontmatter fields are working correctly!
-</Callout>
+This component takes a few props and renders a little “meter”.
 
-## Stylistic Choices
-I'm not and don't really plan on being a frontend developer, but as I am quite critical of UI / UX, I wanted to make sure my site was up to scratch.
-The colours were chosen with realtimecolors.com, 
-
-
-## Technical Details
-
-The project uses modern web technologies:
-
-```typescript
-const config = {
-  framework: "Next.js",
-  styling: "Tailwind CSS",
-  language: "TypeScript",
-};
+I've also wrapped it in one of my standard **Card** components to give it a nice border, and then added some padding for spacing.
+```tsx
+// this is just a code block, more on them later
+<Card className="p-6">
+<MDXMeter label="Build progress" value={62} tone="secondary" />
+</Card>
 ```
+<Card className="p-6">
+<MDXMeter label="Build progress" value={62} tone="secondary" />
+</Card>
+I created another component that tracks your scroll progress on the page, and passes that value to the meter component to make a reading progress bar.
+```tsx
+<ScrollTracker />
+```
+<ScrollTracker />
 
-## Conclusion
 
-This demonstrates how project showcases can be created alongside regular blog posts using the same unified system.
+## Interactive props playground
+
+This card is a client component: it has controls that update the props live.
+
+<MDXMeterPlayground defaultLabel="Reading progress" defaultValue={38} defaultTone="accent" />
+You can change the label, value, and tone of the meter using the controls above, and see the changes reflected in real-time.

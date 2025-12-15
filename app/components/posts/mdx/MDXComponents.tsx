@@ -1,5 +1,9 @@
+import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { Callout } from "./Callout";
+import { MDXMeter, MDXMeterPlayground } from "./this-site/MDXPropDemoCard";
+import * as StandardComponents from "@components/standard";
+import { ScrollTracker } from "./this-site/ScrollTracker";
 
 function textFromNode(node: unknown): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -26,7 +30,7 @@ function slugifyHeading(children: unknown): string {
 }
 
 function LinkedHeading(
-  props: React.ComponentPropsWithoutRef<"h2"> & {
+  props: ComponentPropsWithoutRef<"h2"> & {
     as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
     headingClassName?: string;
   }
@@ -93,4 +97,10 @@ export const mdxComponents: MDXComponents = {
     </a>
   ),
   Callout,
+  MDXMeter,
+  MDXMeterPlayground,
+  ScrollTracker,
+  Card: StandardComponents.Card,
+  Socials: StandardComponents.Socials,
+
 };
