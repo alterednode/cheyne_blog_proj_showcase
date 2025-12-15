@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const featuredPosts = getFeaturedPosts().slice(0, 2);
+  const featuredPosts = getFeaturedPosts();
   const recentBlogPosts = getRecentPosts(3, "blog");
   const recentProjectPosts = getRecentPosts(3, "project");
 
@@ -41,7 +41,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mt-6 text-sm leading-relaxed max-w-md">
+            <div className="mt-6 text-md leading-relaxed ">
               <p >
                 Hi there! I&apos;m Onyx, a Comp Sci student at UBC Okangan. I have a passion for making things, whether that&apos;s full-stack appliactions, games, or hardware projects.
               </p>
@@ -57,16 +57,14 @@ export default function Home() {
             <div className="mt-6 space-y-2 bg-accent/10 p-4 rounded-md border-2 border-accent/25">
               <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">Reach out!</p>
               <Socials
-                display="icons"
-                platforms={["github", "linkedin", "email"]}
+                display="both"
                 className="flex-wrap"
               />
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 h-120 min-h-full overflow-y-auto no-scrollbar">
             <PostGrid
-              title="Featured"
               posts={featuredPosts}
               showHeroImage
               emptyMessage="I forgot to feature any posts!!!!."

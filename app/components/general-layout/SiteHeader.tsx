@@ -22,7 +22,7 @@ export default function SiteHeader() {
           </div>
         </Link>
 
-        <nav className="flex gap-4 text-sm font-bold">
+        <nav className="flex gap-4 text-md font-bold">
           <a
             href="/"
             className="text-md text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"

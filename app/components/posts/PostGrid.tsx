@@ -19,14 +19,14 @@ export function PostGrid({
   return (
     <div className={className}>
       {title ? (
-        <div className="flex items-end justify-between gap-4">
+        <div className="flex items-end justify-between gap-4 mb-6">
           <div>
             <h2 className="text-2xl font-semibold">{title}</h2>
           </div>
         </div>
       ) : null}
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         {posts.length === 0 ? (
           <p className="text-sm text-muted-foreground">{emptyMessage}</p>
         ) : (

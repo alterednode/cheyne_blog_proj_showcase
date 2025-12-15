@@ -22,7 +22,7 @@ export type SocialPlatform =
 
 export type SocialLinks = Partial<Record<SocialPlatform, string>>;
 
-export type SocialsDisplay = "icons" | "names";
+export type SocialsDisplay = "icons" | "names" | "both";
 
 type SocialMeta = {
   label: string;
@@ -43,7 +43,6 @@ const SOCIAL_META: Record<SocialPlatform, SocialMeta> = {
 
 export const DEFAULT_SOCIAL_LINKS: SocialLinks = {
   github: "https://github.com/alterednode",
-  x: "https://twitter.com",
   linkedin: "https://www.linkedin.com/in/onyx-cheyne-415570245/",
   email: "mailto:onyx@cheyne.dev",
 };
@@ -76,7 +75,9 @@ export default function Socials({
 }: SocialsProps) {
   const resolvedLinks = links ?? DEFAULT_SOCIAL_LINKS;
   const orderedPlatforms: SocialPlatform[] =
-    platforms ?? DEFAULT_PLATFORM_ORDER.filter((platform) => Boolean(resolvedLinks[platform]));
+    platforms && platforms.length > 0
+      ? platforms
+      : DEFAULT_PLATFORM_ORDER.filter((platform) => Boolean(resolvedLinks[platform]));
 
   const items = orderedPlatforms
     .map((platform) => {
@@ -96,6 +97,9 @@ export default function Socials({
         const isMailto = platform === "email" && href.startsWith("mailto:");
         const isExternal = external || (!isMailto && /^https?:\/\//.test(href));
 
+        const colorClasses =
+          "rounded-md border-2 border-primary bg-primary/70 text-foreground transition-colors hover:bg-accent/90 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
         return (
           <li key={platform}>
             <a
@@ -106,12 +110,19 @@ export default function Socials({
               rel={isExternal ? "noreferrer noopener" : undefined}
               className={
                 display === "icons"
-                  ? "inline-flex h-10 w-10 items-center justify-center rounded-md border-2 border-primary bg-primary/70 text-foreground transition-colors hover:bg-accent/90 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  : "inline-flex items-center justify-center gap-2 rounded-md border-2 border-border bg-card px-3 py-2 text-sm font-bold text-foreground transition-colors hover:bg-muted hover:text-foreground hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  ? `inline-flex h-10 w-10 items-center justify-center ${colorClasses}`
+                  : display === "both"
+                  ? `inline-flex items-center justify-center gap-2 px-3 py-2 ${colorClasses}`
+                  : `inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold ${colorClasses}`
               }
             >
               {display === "icons" ? (
                 <Icon size={iconSize} />
+              ) : display === "both" ? (
+                <>
+                  <Icon size={iconSize} />
+                  <span className="font-bold">{label}</span>
+                </>
               ) : (
                 label
               )}
