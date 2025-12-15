@@ -5,7 +5,7 @@ import { getPublishedPosts, getPostBySlug } from "@/app/lib/content/query";
 import { PostHeader } from "@app/components/posts/PostHeader";
 import { Prose } from "@components/posts/mdx/Prose";
 import { mdxComponents } from "@/app/components/posts/mdx/MDXComponents";
-import InProgress from "@/app/components/posts/mdx/InProgress";
+import InProgress from "@/app/components/standard/InProgress";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -58,7 +58,9 @@ export default async function PostPage({ params }: PageProps) {
     <div className="max-w-4xl mx-auto px-4 py-8 text-foreground">
       {state === "in-progress" && (
         <div className="mb-8">
-          <InProgress />
+          <InProgress>
+            I'm still working on this post. Some parts might be incomplete or subject to change. Check back later for the finished article! 
+            </InProgress>
         </div>
       )}
       <PostHeader post={post} />

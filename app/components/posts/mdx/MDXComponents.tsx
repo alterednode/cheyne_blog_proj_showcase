@@ -1,10 +1,11 @@
 import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { Callout } from "./Callout";
-import InProgress from "./InProgress";
+import InProgress from "../../standard/InProgress";
 import { MDXMeter, MDXMeterPlayground } from "./this-site/MDXPropDemoCard";
 import * as StandardComponents from "@components/standard";
 import { ScrollTracker } from "./this-site/ScrollTracker";
+import Image from "next/image";
 
 function textFromNode(node: unknown): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -104,5 +105,6 @@ export const mdxComponents: MDXComponents = {
   ScrollTracker,
   Card: StandardComponents.Card,
   Socials: StandardComponents.Socials,
+  Image,
 
 };

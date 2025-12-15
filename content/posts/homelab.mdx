@@ -16,3 +16,63 @@ state: in-progress
 featured: 2
 type: project
 ---
+
+I've been wanting to setup some sort of homelab / server for a while, especially after I upgraded my gaming computer and had essentially a whole second computer left over.
+
+My apartment does thankfully have some ethernet cables in the walls runing to a few points in the apartment so thankfully I didn't have to attempt to stuff the server in the closet with all our clothes or run an insane cable.
+
+I did still have to run around with my laptop and an ethernet cable to see which cable went where in the apartment though.
+
+But the problems started well before that.
+
+## The BIOS is gone
+
+This was not a fun discovery.
+
+![A photo of the messy desk with the computer on top, an NVME drive held in place with a bottle of allergy meds](/posts/homelab/messy-desk-cropped.jpg)
+
+I'd setup the computer on top of my extremely messy desk, put an NVME drive in with a bottle of allergy meds to keep it in place, prepared a live debian USB and attempted to boot.
+
+![Video of the bios being just completely messed up](/posts/homelab/BIOS-broken-vid.gif)
+
+This is not what I'd expected to see.
+
+I attempted to figure out why this was happening, reset the CMOS, tried all the ram in different slots one at a time, but nothing worked.
+
+Ocasionally the BIOS would load somewhat correctly, but it was extremely unstable and would crash or freeze constantly.
+Nonetheless, I managed to get Debian installed after an hour of fighting with it.
+
+...which did not like my realtek networking controller.
+
+## Networking woes
+
+After spending a little bit trying to get third party drivers working, I resorted to using Ubuntu Server, which cost me another hour of blindly navigating the BIOS, attempting to change the default boot order to boot from a USB again.
+
+Thankfully that installed fine, I went through the setup and had an internet connection.
+
+I setup SSH, connected from my laptop, and started setting things up.
+I wanted to setup traefik as a reverse proxy to route traffic to different services, and logged into my telus router to setup port forwarding.
+
+After an hour of trying to figure out why I coudln't access the server from outside my network, I discovered that telus had us behind CGNAT, meaning port forwarding wouldn't work no matter what I did on the router.
+
+## A breif look at cloudflare tunnels
+
+I thought about using cloudflare tunnels to get around this, but ultimately decided against it since I'd probably be hosting a few game servers and to run those through cloudflare tunnels wouldn't work without even more complicated setups, including stuff like making my friends run various mods to even connect just for Minecraft.
+
+## Oracle Cloud to the rescue
+
+A while ago I'd discovered Oracle Cloud's free tier, and the massive amount of resources they give you for free if you use their ARM instances. 
+
+It works pretty well for running minecraft servers, but I figured I could just use it as a jump box to my homelab server.
+So I removed my instance with a few minecraft servers on it, and created a new ARM instance and setup tailscale and traefik there.
+
+Tailscale essentailly acts as a VPN, allowing me to connect to my home server from the oracle cloud instance without needing to open any ports on my router.
+From there, I setup traefik to route traffic to my home server over tailscale, and setup DNS records in cloudflare to point to the oracle cloud instance.
+This way, when I access my domain, it goes to the oracle cloud instance, which then routes the traffic over tailscale to my home server.
+
+As a bonus, this setup also means that my home server is not as exposed to the internet, adding an extra layer of security.
+
+## Current setup
+
+
+

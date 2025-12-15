@@ -4,7 +4,7 @@ import { getFeaturedPosts, getRecentPosts, } from "@lib/content/query";
 import Socials from "@/app/components/standard/Socials";
 import { Card } from "@/app/components/standard/Card";
 import { PostGrid } from "@components/posts/PostGrid";
-import InProgress from "../components/posts/mdx/InProgress";
+import InProgress from "../components/standard/InProgress";
 
 export const metadata: Metadata = {
   title: "Onyx Cheyne",
