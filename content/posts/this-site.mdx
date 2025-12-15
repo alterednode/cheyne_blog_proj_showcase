@@ -17,95 +17,103 @@ featured: 1
 type: project
 ---
 
-This site is a place for me to showcase project's I've worked on, write about things that interest me, and mess around with new web technologies.
+This site is a place for me to showcase projects I've worked on, write about things that interest me, and mess around with new web technologies.
 
-I don't partiularially plan on working on frontend development professionally, but I don't want to be completely out of touch with it either.
-Thats why I built this site from "scratch", to learn more about modern web development practices and tools.
-I also, as mentioned, wanted somewhere to at least showcase my projects.
+I don't particularly plan on working in frontend development professionally, but I don't want to be completely out of touch with it either.  
+That's why I built this site from "scratch": to learn more about modern web development practices and tools.  
+I also, as mentioned, wanted a place to showcase my projects.
 
 ## The basics
 
-The site is built with [Next.js](https://nextjs.org/), which is a React framework for building server-rendered and statically generated web applications.
-I'm using the react app router, so I can create dynamic routes for my posts, and fetch the MDX content at build time using Next.js's static generation features.
+The site is built with [Next.js](https://nextjs.org/), which is a React framework for building server-rendered and statically generated web applications.  
+I'm using the React App Router so I can create dynamic routes for my posts and fetch the MDX content at build time using Next.js's static generation features.
 
-For styling, I'm using Tailwind CSS, which allows me to write utility-first CSS classes directly in my JSX.
-It overwhelmed me at first delcaring so much css everywhere, but that is when I noticed I was underusing components.
-Once I started creating reusable components for common UI patterns, it made the code much cleaner and easier to maintain.
+For styling, I'm using Tailwind CSS, which allows me to write utility-first CSS classes directly in my JSX.  
+It overwhelmed me at first, declaring so much CSS everywhere, but that's when I noticed I was underusing components.  
+Once I started creating reusable components for common UI patterns, the code became much cleaner and easier to maintain.
 
-I'm also using Next.js's new **@next/mdx** package to handle the MDX files as pages and content.
+I'm also using Next.js's **@next/mdx** package to handle MDX files as pages and content.
 
-Markdown is porcessed via the [remark](https://remark.js.org/) and [rehype](https://rehypejs.github.io/) ecosystems, allowing me to use plugins to extend the functionality.
+Markdown is processed via the [remark](https://remark.js.org/) and [rehype](https://rehypejs.github.io/) ecosystems, which allow me to use plugins to extend functionality.
 
-At the moment, I'm using [remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) to parse YAML frontmatter in my MDX files which I use for metadata like title, date, tags, and so on.
-It lets me extract that data easily when rendering the pages, and use it to display the hero image, format the date, and list tags.
+At the moment, I'm using [remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) to parse YAML frontmatter in my MDX files, which I use for metadata like title, date, tags, and so on.  
+This lets me easily extract that data when rendering pages and use it to display the hero image, format the date, and list tags.
 
-The other remark plugin I'm using is [remark-gfm](https://github.com/remarkjs/remark-gfm) to support GitHub Flavored Markdown. It handles stuff like tables, task lists, and strikethroughs.
+Another remark plugin I'm using is [remark-gfm](https://github.com/remarkjs/remark-gfm) to support GitHub Flavored Markdown. It handles things like tables, task lists, and strikethroughs.
 
-I'm also using [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code) for syntax highlighting in code blocks, which gives me nice looking code snippets with line numbers and highlighting.
+I'm also using [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code) for syntax highlighting in code blocks, which gives me nicely formatted code snippets with line numbers and highlighted lines.
 
-All of this is stored on github, and deployed via [Vercel](https://vercel.com/) for easy updates and hosting.
-Anytime there is a change on the main branch, Vercel automatically rebuilds and redeploys the site.
+All of this is stored on GitHub and deployed via [Vercel](https://vercel.com/) for easy updates and hosting.  
+Any time there is a change on the main branch, Vercel automatically rebuilds and redeploys the site.
 
-## MDX react components
+## MDX React components
 
-This component takes a few props and renders a little “meter”.
+This component takes a few props and renders a small “meter”.
 
-I've also wrapped it in one of my standard **Card** components to give it a nice border, and then added some padding for spacing.
+I've wrapped it in one of my standard **Card** components to give it a border, and then added some padding for spacing.
+
 ```tsx
 // this is just a code block, more on them later
 <Card className="p-6">
-<MDXMeter label="Build progress" value={62} tone="secondary" />
+  <MDXMeter label="Build progress" value={62} tone="secondary" />
 </Card>
 ```
+
 <Card className="p-6">
-<MDXMeter label="Build progress" value={62} tone="secondary" />
+  <MDXMeter label="Build progress" value={62} tone="secondary" />
 </Card>
-I created another component that tracks your scroll progress on the page, and passes that value to the meter component to make a reading progress bar.
+
+I created another component that tracks your scroll progress on the page and passes that value to the meter component to create a reading progress bar.
+
 ```tsx
 <ScrollTracker />
 ```
-<ScrollTracker />
 
+<ScrollTracker />
 
 ### Interactive props playground
 
-This card is a client component: it has controls that update the props live.
+This card is a client component; it has controls that update the props live.
 
 <MDXMeterPlayground defaultLabel="Reading progress" defaultValue={38} defaultTone="accent" />
-You can change the label, value, and tone of the meter using the controls above, and see the changes reflected in real-time.
+
+You can change the label, value, and tone of the meter using the controls above and see the changes reflected in real time.
 
 ## Tailwind CSS
 
-I'm trying out Tailwind CSS for the first time on this project, and so far I'm finding it pretty interesting.
-A lot of LLM - driven code tried to manually set colors all over the place, which made it hard to maintain a consistent design.
-I fixed that by creating a set of custom colors in my Tailwind config, and then using those colors throughout the site.
+I'm trying out Tailwind CSS for the first time on this project, and so far I'm finding it pretty interesting.  
+I found myself manually setting colors all over the place, which made it hard to maintain a consistent design.  
+I fixed that by creating a set of custom colors in my Tailwind config and then using those colors throughout the site.
 
-I define a primary color, a secondary color, and an accent color, and then use those colors in my components and styles.
-There's also derived colors for backgrounds, borders, and text, to make sure everything looks cohesive, as well as a matching set of dark mode colors.
- 
+I define a primary color, a secondary color, and an accent color, and then use those colors in my components and styles.  
+There are also derived colors for backgrounds, borders, and text to ensure everything looks cohesive, along with a matching set of dark mode colors.
 
 ## Code block highlighting
 
-Here is a code block with syntax highlighting, line numbers, and a highlighted line.
+Here is a code block with syntax highlighting, line numbers, and highlighted lines.
 
-```py  showLineNumbers {1-2, 4}
+```py showLineNumbers {1-2,4}
 print("This is a code block with syntax highlighting.")
-print("It is able to highlight specific lines")
+print("It is able to highlight specific lines.")
 print("Like lines 1 to 2 in this example.")
 print("Or even just a single line.")
 print("It can also show line numbers, as seen on the left.")
 ```
 
-This is achieved using the **rehype-pretty-code** plugin, which allows for a lot of customization in how code blocks are rendered.
+This is achieved using the **rehype-pretty-code** plugin, which allows for extensive customization of how code blocks are rendered.
 
-The highlighted lines are specified in the code block's meta string, using curly braces.
-The line numbers are enabled with the `showLineNumbers` option.
-````mdx showLineNumbers {2}
-```py  showLineNumbers {1}
+The highlighted lines are specified in the code block's meta string using curly braces.  
+Line numbers are enabled with the `showLineNumbers` option.
+
+````mdx
+```py showLineNumbers {1}
 print("This is a code block with syntax highlighting.")
 ```
 ````
+```py showLineNumbers {1}
+print("This is a code block with syntax highlighting.")
+```
 
 I can customize the colors and styles of the code blocks using CSS variables defined in my global stylesheet.
 
-For example, the highlighted line background color is set to a mix of the accent color and transparency, to make it stand out without being too harsh on the eyes. 
+For example, the highlighted line background color is set to a mix of the accent color and transparency so it stands out without being too harsh on the eyes.
