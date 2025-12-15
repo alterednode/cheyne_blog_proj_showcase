@@ -9,7 +9,7 @@ const withMDX = createMDX({
   options: {
     // Turbopack requires plugins/options to be serializable.
     // Use plugin names (strings) instead of importing functions.
-    remarkPlugins: [["remark-frontmatter", ["yaml"]]],
+    remarkPlugins: [["remark-frontmatter", ["yaml"]], "remark-gfm"],
     rehypePlugins: [
       [
         "rehype-pretty-code",

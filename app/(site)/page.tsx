@@ -51,11 +51,11 @@ export default function Home() {
               </p>
               <br />
               <p>
-                Feel free to reach out if you&apos;d like to connect!
+                Feel free to contact me if you&apos;d like to connect!
               </p>
             </div>
             <div className="mt-6 space-y-2 bg-accent/10 p-4 rounded-md border-2 border-accent/25">
-              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">Reach out</p>
+              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">Reach out!</p>
               <Socials
                 display="icons"
                 platforms={["github", "linkedin", "email"]}

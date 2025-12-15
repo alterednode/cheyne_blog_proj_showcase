@@ -22,7 +22,31 @@ type: project
 
 This site is a place for me to showcase project's I've worked on, write about things that interest me, and mess around with new web technologies.
 
-It's built with [Next.js](https://nextjs.org/) and [Tailwind CSS](https://tailwindcss.com/), and uses [MDX](https://mdxjs.com/) for content creation. This allows me to write blog posts and project pages using a combination of Markdown and React components, giving me the flexibility to do things like this:
+I don't partiularially plan on working on frontend development professionally, but I am fairly critical of poor UI and UX, so having a personal site where I can experiment and practice is important to me.
+Thats why I built this site from "scratch", to learn more about modern web development practices and tools.
+
+## The basics
+
+The site is built with [Next.js](https://nextjs.org/), which is a React framework for building server-rendered and statically generated web applications.
+I'm using the react app router, so I can create dynamic routes for my posts, and fetch the MDX content at build time using Next.js's static generation features.
+
+For styling, I'm using Tailwind CSS, which allows me to write utility-first CSS classes directly in my JSX.
+It overwhelmed me at first delcaring so much css everywhere, but that is when I noticed I was underusing components.
+Once I started creating reusable components for common UI patterns, it made the code much cleaner and easier to maintain.
+
+I'm also using Next.js's new **@next/mdx** package to handle the MDX files as pages and content.
+
+Markdown is porcessed via the [remark](https://remark.js.org/) and [rehype](https://rehypejs.github.io/) ecosystems, allowing me to use plugins to extend the functionality.
+
+At the moment, I'm using [remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) to parse YAML frontmatter in my MDX files which I use for metadata like title, date, tags, and so on.
+It lets me extract that data easily when rendering the pages, and use it to display the hero image, format the date, and list tags.
+
+The other remark plugin I'm using is [remark-gfm](https://github.com/remarkjs/remark-gfm) to support GitHub Flavored Markdown. It handles stuff like tables, task lists, and strikethroughs.
+
+I'm also using [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code) for syntax highlighting in code blocks, which gives me nice looking code snippets with line numbers and highlighting.
+
+All of this is stored on github, and deployed via [Vercel](https://vercel.com/) for easy updates and hosting.
+Anytime there is a change on the main branch, Vercel automatically rebuilds and redeploys the site.
 
 ## MDX react components
 
@@ -45,9 +69,10 @@ I created another component that tracks your scroll progress on the page, and pa
 <ScrollTracker />
 
 
-## Interactive props playground
+### Interactive props playground
 
 This card is a client component: it has controls that update the props live.
 
 <MDXMeterPlayground defaultLabel="Reading progress" defaultValue={38} defaultTone="accent" />
 You can change the label, value, and tone of the meter using the controls above, and see the changes reflected in real-time.
+
