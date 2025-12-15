@@ -9,7 +9,7 @@ export function PostHeader({ post }: PostHeaderProps) {
 
   return (
     <header className="mb-8 border-b-2 border-border pb-6">
-      <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">{title}</h1>
+      <h1 className="text-3xl font-bold mb-2 bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">{title}</h1>
       <p className="text-lg mb-4 text-muted-foreground">{description}</p>
       
       <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">

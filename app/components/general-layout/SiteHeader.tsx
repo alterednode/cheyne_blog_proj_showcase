@@ -3,8 +3,8 @@ import Link from "next/link";
 
 export default function SiteHeader() {
   return (
-    <header className="relative border-b-2 border-border bg-gradient-to-b from-background to-muted/20 text-foreground shadow-lg">
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent opacity-70" />
+    <header className="relative border-b-2 border-border bg-linear-to-b from-background to-muted/20 text-foreground shadow-lg">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-primary via-secondary to-accent opacity-70" />
       <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
         <Link
           href="/"
