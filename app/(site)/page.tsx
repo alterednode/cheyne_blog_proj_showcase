@@ -57,8 +57,7 @@ export default function Home() {
             <div className="mt-6 space-y-2 bg-accent/10 p-4 rounded-md border-2 border-accent/25">
               <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">Reach out!</p>
               <Socials
-                display="icons"
-                platforms={["github", "linkedin", "email"]}
+                display="both"
                 className="flex-wrap"
               />
             </div>
