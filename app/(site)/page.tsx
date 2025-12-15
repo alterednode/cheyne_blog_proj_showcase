@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const featuredPosts = getFeaturedPosts().slice(0, 2);
+  const featuredPosts = getFeaturedPosts();
   const recentBlogPosts = getRecentPosts(3, "blog");
   const recentProjectPosts = getRecentPosts(3, "project");
 
@@ -63,9 +63,8 @@ export default function Home() {
             </div>
           </Card>
 
-          <Card className="p-6">
+          <Card className="p-6 h-120 min-h-full overflow-y-auto no-scrollbar">
             <PostGrid
-              title="Featured"
               posts={featuredPosts}
               showHeroImage
               emptyMessage="I forgot to feature any posts!!!!."

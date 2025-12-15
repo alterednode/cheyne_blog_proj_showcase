@@ -118,3 +118,7 @@ code[data-line-numbers]>[data-line]::before {
 pre.has-focused .line:not(.focused) {
   opacity: 0.5;
 }
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
