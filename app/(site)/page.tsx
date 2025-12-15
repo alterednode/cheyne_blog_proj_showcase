@@ -41,7 +41,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mt-6 text-sm leading-relaxed max-w-md">
+            <div className="mt-6 text-md leading-relaxed ">
               <p >
                 Hi there! I&apos;m Onyx, a Comp Sci student at UBC Okangan. I have a passion for making things, whether that&apos;s full-stack appliactions, games, or hardware projects.
               </p>
