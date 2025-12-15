@@ -5,6 +5,7 @@ import { getPublishedPosts, getPostBySlug } from "@/app/lib/content/query";
 import { PostHeader } from "@app/components/posts/PostHeader";
 import { Prose } from "@components/posts/mdx/Prose";
 import { mdxComponents } from "@/app/components/posts/mdx/MDXComponents";
+import InProgress from "@/app/components/posts/mdx/InProgress";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -46,14 +47,20 @@ export default async function PostPage({ params }: PageProps) {
     notFound();
   }
 
-  const { hero, repo, live, stack } = post;
+  const { hero, repo, live, stack, state } = post;
 
   const { default: MdxContent } = await import(
     `@/content/posts/${post.sourceFile}`
   );
 
   return (
+    
     <div className="max-w-4xl mx-auto px-4 py-8 text-foreground">
+      {state === "in-progress" && (
+        <div className="mb-8">
+          <InProgress />
+        </div>
+      )}
       <PostHeader post={post} />
 
       {hero && (

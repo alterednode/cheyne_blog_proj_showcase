@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { Callout } from "./Callout";
+import InProgress from "./InProgress";
 import { MDXMeter, MDXMeterPlayground } from "./this-site/MDXPropDemoCard";
 import * as StandardComponents from "@components/standard";
 import { ScrollTracker } from "./this-site/ScrollTracker";
@@ -97,6 +98,7 @@ export const mdxComponents: MDXComponents = {
     </a>
   ),
   Callout,
+  InProgress,
   MDXMeter,
   MDXMeterPlayground,
   ScrollTracker,
