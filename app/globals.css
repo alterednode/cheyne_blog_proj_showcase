@@ -49,15 +49,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #f3e5f3;
+    --text: #f7eef7;
     --background: #1f061f;
-    --primary: #de80e7;
-    --secondary: #288319;
-    --accent: #4cddca;
+    --primary: #cb3bd8;
+    --secondary: #11ffdf;
+    --accent: #288319;
 
     /* on-color text in dark mode */
     --primary-foreground: var(--background);
-    --secondary-foreground: var(--text);
+    --secondary-foreground: var(--background);
     --accent-foreground: var(--text);
 
       /* Semantic tokens (UI uses these, not raw palette names) */
@@ -74,9 +74,9 @@
   --card-foreground: var(--foreground);
 
   /* “On color” text tokens for buttons/badges */
-  --primary-foreground: var(--text);
-  --secondary-foreground: var(--text);
-  --accent-foreground: var(--background);
+  --primary-foreground: var(--background);
+  --secondary-foreground: var(--background);
+  --accent-foreground: var(--text);
   }
 }
 

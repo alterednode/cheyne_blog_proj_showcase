@@ -22,8 +22,9 @@ type: project
 
 This site is a place for me to showcase project's I've worked on, write about things that interest me, and mess around with new web technologies.
 
-I don't partiularially plan on working on frontend development professionally, but I am fairly critical of poor UI and UX, so having a personal site where I can experiment and practice is important to me.
+I don't partiularially plan on working on frontend development professionally, but I don't want to be completely out of touch with it either.
 Thats why I built this site from "scratch", to learn more about modern web development practices and tools.
+I also, as mentioned, wanted somewhere to at least showcase my projects.
 
 ## The basics
 
@@ -76,3 +77,49 @@ This card is a client component: it has controls that update the props live.
 <MDXMeterPlayground defaultLabel="Reading progress" defaultValue={38} defaultTone="accent" />
 You can change the label, value, and tone of the meter using the controls above, and see the changes reflected in real-time.
 
+## Tailwind CSS
+
+I'm trying out Tailwind CSS for the first time on this project, and so far I'm finding it pretty interesting.
+A lot of LLM - driven code tried to manually set colors all over the place, which made it hard to maintain a consistent design.
+I fixed that by creating a set of custom colors in my Tailwind config, and then using those colors throughout the site.
+
+I define a primary color, a secondary color, and an accent color, and then use those colors in my components and styles.
+There's also derived colors for backgrounds, borders, and text, to make sure everything looks cohesive, as well as a matching set of dark mode colors.
+ 
+
+## Code block highlighting
+
+Here is a code block with syntax highlighting, line numbers, and a highlighted line.
+
+```py  showLineNumbers {1-2, 4}
+print("This is a code block with syntax highlighting.")
+print("It is able to highlight specific lines")
+print("Like lines 1 to 2 in this example.")
+print("Or even just a single line.")
+print("It can also show line numbers, as seen on the left.")
+```
+
+This is achieved using the **rehype-pretty-code** plugin, which allows for a lot of customization in how code blocks are rendered.
+
+The highlighted lines are specified in the code block's meta string, using curly braces.
+The line numbers are enabled with the `showLineNumbers` option.
+````mdx showLineNumbers {2}
+```py  showLineNumbers {1}
+print("This is a code block with syntax highlighting.")
+```
+````
+
+I can customize the colors and styles of the code blocks using CSS variables defined in my global stylesheet.
+
+For example, the highlighted line background color is set to a mix of the accent color and transparency, to make it stand out without being too harsh on the eyes. 
+
+And the line numbers use the mixed in muted text color for a subtle appearance.
+```mdx
+<Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card className="p-6">
+Big Card
+</Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card>
+```
+
+<Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card><Card className="p-6">
+Big Card
+</Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card></Card>
