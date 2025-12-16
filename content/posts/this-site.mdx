@@ -1,6 +1,6 @@
 ---
 title: This Site
-description: The technologies tools, and decisions behind building this site.
+description: The technologies, tools, and decisions behind building this site.
 date: 2024-12-15
 hero: /website_screenshot.png
 tags:
@@ -12,7 +12,6 @@ stack:
   - Next.js
   - Tailwind CSS
 status: published
-state: in-progress
 featured: 1
 type: project
 ---
@@ -21,7 +20,7 @@ This site is a place for me to showcase projects I've worked on, write about thi
 
 I don't particularly plan on working in frontend development professionally, but I don't want to be completely out of touch with it either.  
 That's why I built this site from "scratch": to learn more about modern web development practices and tools.  
-I also, as mentioned, wanted a place to showcase my projects.
+I also wanted a dedicated place to showcase my projects beyond pinning the repositories on GitHub.
 
 ## The Basics
 
@@ -29,22 +28,50 @@ The site is built with [Next.js](https://nextjs.org/), which is a React framewor
 I'm using the React App Router so I can create dynamic routes for my posts and fetch the MDX content at build time using Next.js's static generation features.
 
 For styling, I'm using Tailwind CSS, which allows me to write utility-first CSS classes directly in my JSX.  
-It overwhelmed me at first, declaring so much CSS everywhere, but that's when I noticed I was underusing components.  
+It overwhelmed me at first, declaring so much CSS everywhere, but that's when I noticed I was underusing components.
+
 Once I started creating reusable components for common UI patterns, the code became much cleaner and easier to maintain.
 
 I'm also using Next.js's **@next/mdx** package to handle MDX files as pages and content.
 
 Markdown is processed via the [remark](https://remark.js.org/) and [rehype](https://rehypejs.github.io/) ecosystems, which allow me to use plugins to extend functionality.
 
-At the moment, I'm using [remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) to parse YAML frontmatter in my MDX files, which I use for metadata like title, date, tags, and so on.  
+At the moment, I'm using [remark-frontmatter](https://github.com/remarkjs/remark-frontmatter) to parse YAML frontmatter in my MDX files.  
 This lets me easily extract that data when rendering pages and use it to display the hero image, format the date, and list tags.
 
 Another remark plugin I'm using is [remark-gfm](https://github.com/remarkjs/remark-gfm) to support GitHub Flavored Markdown. It handles things like tables, task lists, and strikethroughs.
 
 I'm also using [rehype-pretty-code](https://github.com/rehype-pretty/rehype-pretty-code) for syntax highlighting in code blocks, which gives me nicely formatted code snippets with line numbers and highlighted lines.
 
-All of this is stored on GitHub and deployed via [Vercel](https://vercel.com/) for easy updates and hosting.  
-Any time there is a change on the main branch, Vercel automatically rebuilds and redeploys the site.
+All of this is stored on GitHub and deployed via [Vercel](https://vercel.com/) for easy updates and hosting. Any time there is a change on the main branch, Vercel automatically rebuilds and redeploys the site.
+
+
+## Content Structure
+
+The content for the site is stored in a `content/posts` directory, with each post as its own MDX file.
+
+Each MDX file contains frontmatter metadata at the top, which is parsed and used to render the post page.
+Here is an example of the frontmatter for one of my posts:
+
+```mdx
+---
+title: My Homelab
+description: Is it still a homelab if everything is routed through Oracle Cloud?
+date: 2024-12-15
+tags:
+  - programming
+  - server
+type: project
+hero: /posts/homelab/messy-desk-cropped.jpg
+---
+```
+
+The frontmatter is processed using the `remark-frontmatter` plugin, and converted into a JavaScript object that I can use in my React components.
+Everything above the first actual text paragraph of this post is based on information from the frontmatter.
+
+With this setup, I can easily add new posts by creating new MDX files in the `content/posts` directory, and the site will automatically pick them up and render them correctly when built.
+
+This makes it easy to manage content and keep everything organized, and lets me have rich, interactive posts using MDX, while still having the benefits of static site generation for performance and SEO.
 
 ## MDX React Components
 
@@ -79,6 +106,21 @@ This card is a client component; it has controls that update the props live.
 
 You can change the label, value, and tone of the meter using the controls above and see the changes reflected in real time.
 
+## Server vs Client Components
+
+I'd briefly mentioned how the MDX posts are rendered as static pages at build time using Next.js's server components, but with MDX, I can also include client components within my posts.
+
+For example, the `MDXMeterPlayground` and `ScrollTracker` components used above are client components that allow for interactivity within the static MDX content.
+
+This is pretty typical for app router projects made of pages that are mostly server components but include some client components for interactivity.
+
+However, I didn't realize I could do this with MDX the first time I tried it, and went down a whole rabbit hole of running an API route that could fetch the MDX files which were then rendered on the client side.
+
+But that was a few years ago now.
+
+This approach keeps the default rendering path static and server-side, while limiting client-side JavaScript to components that genuinely require interactivity.
+
+
 ## Tailwind CSS
 
 I'm trying out Tailwind CSS for the first time on this project, and so far I'm finding it pretty interesting.  
@@ -88,7 +130,17 @@ I fixed that by creating a set of custom colors in my Tailwind config and then u
 I define a primary color, a secondary color, and an accent color, and then use those colors in my components and styles.  
 There are also derived colors for backgrounds, borders, and text to ensure everything looks cohesive, along with a matching set of dark mode colors.
 
+One place this pipeline really shines is code block rendering.
+
 ## Code Block Highlighting
+
+As this is a site which primarily exists for me to write about things that I've programmed, I wanted to have nice code blocks with syntax highlighting.
+
+I'm already using **rehype-pretty-code** to handle syntax highlighting, but I needed to also provide some custom CSS to avoid it looking like this:
+
+![Ugly Code Block](/posts/this-site/unformatted-code.png)
+
+The syntax highlighting is fine, but the lack of line numbers, highlighted lines, and overall formatting made it look pretty bland and boxy.
 
 Here is a code block with syntax highlighting, line numbers, and highlighted lines.
 
@@ -117,3 +169,15 @@ print("This is a code block with syntax highlighting.")
 I can customize the colors and styles of the code blocks using CSS variables defined in my global stylesheet.
 
 For example, the highlighted line background color is set to a mix of the accent color and transparency so it stands out without being too harsh on the eyes.
+
+I also have custom formatting for the inline code elements `like this` to make them visually distinct from regular text, and match the larger code blocks.
+
+## What's Next?
+
+The basics of this site are pretty much where I want them as of the time of writing for the purpose of being able to create these posts, but I plan on adding more.
+
+To start, I'm planning on adding a page with a few browser-based tools I've made, and a space for me to put some of the games I've made that can be played with HTML5.
+I'd also like some persistent functionality for user interaction, like likes or polls with a database running on [My Homelab](https://cheyne.dev/posts/homelab).
+
+Beyond that, I might look into setting up a CMS to make content management easier, and use [ISR](https://nextjs.org/docs/app/guides/incremental-static-regeneration) to allow for more frequent content updates without needing to rebuild the entire site.
+
