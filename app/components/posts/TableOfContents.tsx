@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import type { Heading } from "@/app/lib/content/schema";
-import Link from "next/link";
+import { SmoothScrollLink } from "@components/standard";
 
 interface TableOfContentsProps {
   headings: Heading[];
@@ -16,16 +16,6 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     height: number;
     visible: boolean;
   }>({ top: 0, height: 0, visible: false });
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-      // Update URL hash without triggering a scroll
-      window.history.pushState(null, "", `#${id}`);
-    }
-  };
 
   useEffect(() => {
     const updateActiveId = () => {
@@ -143,9 +133,8 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
         {headings.map((heading) => (
           <li key={heading.id}>
-            <Link
+            <SmoothScrollLink
               href={`#${heading.id}`}
-              onClick={(e) => handleClick(e, heading.id)}
               className={`block transition-colors duration-200 ease-out hover:text-foreground relative ${
                 activeId === heading.id
                   ? "text-primary font-semibold"
@@ -155,7 +144,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
               <span style={{ display: "inline-block", marginLeft: `${(heading.level - 2) * 1}rem` }}>
                 {heading.text}
               </span>
-            </Link>
+            </SmoothScrollLink>
           </li>
         ))}
       </ul>

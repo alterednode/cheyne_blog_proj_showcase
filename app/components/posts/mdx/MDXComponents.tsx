@@ -43,9 +43,12 @@ function LinkedHeading(
 
   return (
     <Tag id={finalId} className={headingClassName} {...rest}>
-      <a href={`#${finalId}`} className="no-underline hover:underline">
+      <StandardComponents.SmoothScrollLink
+        href={`#${finalId}`}
+        className="no-underline hover:underline"
+      >
         {children}
-      </a>
+      </StandardComponents.SmoothScrollLink>
     </Tag>
   );
 }
