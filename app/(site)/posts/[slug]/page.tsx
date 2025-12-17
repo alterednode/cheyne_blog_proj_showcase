@@ -47,19 +47,29 @@ export default async function PostPage({ params }: PageProps) {
     notFound();
   }
 
-  const { hero, repo, live, stack, state } = post;
+  const { state } = post;
 
   const { default: MdxContent } = await import(
     `@/content/posts/${post.sourceFile}`
   );
 
   return (
-    
-    <div className="max-w-4xl mx-auto px-4 py-8 text-foreground">
-      <PostHeader post={post} />
-      <Prose>
-        <MdxContent components={mdxComponents} />
-      </Prose>
+    <div>
+      {
+        state === "in-progress" ? (
+          <InProgress>
+            I'm still working on this post. Some parts might be incomplete or subject to
+            change. Check back later for the finished article!
+          </InProgress>
+        ) : null}
+      <div className="max-w-4xl mx-auto px-4 py-8 text-foreground">
+        <PostHeader post={post} />
+        <Prose>
+          <MdxContent components={mdxComponents} />
+        </Prose>
+
+      </div>
+
     </div>
   );
 }
