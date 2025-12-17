@@ -41,6 +41,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
       const windowHeight = window.innerHeight;
       const midpoint = windowHeight / 2;
       
+      if (setActiveIdToLastIfFooterVisible(windowHeight, headingElements)) {
+        return;
+      }
+
       // Find the heading whose midpoint has most recently crossed the viewport midpoint
       // (heading midpoint is above the viewport midpoint)
       let nextActiveId = headingElements[0]?.id || "";
@@ -71,6 +75,27 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
     return () => window.removeEventListener("scroll", updateActiveId);
   }, [headings]);
+
+  function setActiveIdToLastIfFooterVisible(
+    windowHeight: number,
+    headingElements: { id: string; element: HTMLElement | null }[]
+  ): boolean {
+    if (headingElements.length === 0) return false;
+
+    // If user is at (or very near) the bottom of the page, highlight the last heading
+    const scrollY = window.scrollY || window.pageYOffset;
+    const docHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    // compute footer height if present (fall back to 5px)
+    const footer = document.querySelector("footer");
+    const spacingFromBottom = footer ? footer.getBoundingClientRect().height : 5;
+
+    if (windowHeight + scrollY >= docHeight - spacingFromBottom) {
+      setActiveId(headingElements[headingElements.length - 1].id);
+      return true;
+    }
+
+    return false;
+  }
 
   // Position the single indicator to the active TOC link
   useEffect(() => {
