@@ -20,13 +20,14 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <InProgress title="Site Under Construction">
-        Sorry for the mess! I'm still working on making this look how I want, so bear with me as I hammer things into place.
+        Sorry for the mess! I&apos;m still working on making this look how I want, so bear with me as I hammer things into place.
         <br />
         Additional posts are also on the way!
         <br />
         As well as a headshot photo...
       </InProgress>
-      <div className="max-w-6xl mx-auto px-4 py-10 space-y-12">
+
+      <div className="mx-auto max-w-6xl px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
           <Card className="p-6">
             <div className="flex items-center gap-4">
@@ -40,38 +41,43 @@ export default function Home() {
                   priority
                 />
               </div>
+
               <div>
-                <p className="text-xs uppercase tracking-[0.3em] font-bold">Developer</p>
+                <p className="text-xs uppercase tracking-[0.3em] font-bold text-muted-foreground">
+                  Developer
+                </p>
                 <h1 className="text-2xl font-semibold text-primary">Onyx Cheyne</h1>
                 <p className="text-sm text-muted-foreground">
-                  <span>Seattle, WA</span><br />
+                  <span>Seattle, WA</span>
+                  <br />
                   <span>Kelowna, BC</span>
                 </p>
               </div>
             </div>
-            <div className="mt-6 text-md leading-relaxed ">
-              <p >
-                Hi there! I&apos;m Onyx, a Computer Science student at UBC Okanagan. I have a passion for making things, whether that&apos;s full-stack appliactions, games, or hardware projects.
+
+            <div className="mt-6 text-sm leading-relaxed text-foreground space-y-4">
+              <p>
+                Hi there! I&apos;m Onyx, a Computer Science student at UBC Okanagan. I have a passion for making things, whether that&apos;s full-stack applications, games, or hardware projects.
               </p>
-              <br />
               <p>
                 I like learning new technologies and improving my skills, and I&apos;m documenting my journey here.
               </p>
-              <br />
               <p>
                 Feel free to contact me if you&apos;d like to connect!
               </p>
             </div>
-            <div className="mt-6 space-y-2 bg-accent/10 p-4 rounded-md border-2 border-accent/25">
-              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">Reach out!</p>
-              <Socials
-                display="both"
-                className="flex-wrap"
-              />
+
+            {/* Accent callout */}
+            <div className="mt-6 rounded-lg border border-accent/35 bg-accent/10 p-4 space-y-2">
+              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">
+                Reach out!
+              </p>
+              <Socials display="both" className="flex-wrap" />
             </div>
           </Card>
+          
 
-          <Card className="p-6 h-120 min-h-full overflow-y-auto no-scrollbar">
+          <Card className="p-6 min-h-full overflow-y-auto no-scrollbar">
             <PostGrid
               posts={featuredPosts}
               showHeroImage
@@ -82,8 +88,8 @@ export default function Home() {
 
         <Card className="p-8">
           <h3 className="text-lg font-semibold">About Me</h3>
-          <p className="mt-4 text-sm leading-relaxed">
-
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            {/* content */}
           </p>
         </Card>
       </div>

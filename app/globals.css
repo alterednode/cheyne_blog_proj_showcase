@@ -1,85 +1,103 @@
 @import "tailwindcss";
 
 :root {
-  /* Base palette (easy to swap later) */
-  --text: #0b1d02;
-  --background: #f7fef1;
-  --primary: #77b356;
-  --secondary: #848bf6;
-  --accent: #ab41f1;
+  /* -------------------------
+     Palette inputs (swap these)
+     ------------------------- */
+    --text: #060c03;
+  --background: #f5fcf1;
 
-  /* Semantic tokens (UI uses these, not raw palette names) */
-  --foreground: var(--text);
 
-  /* Derived neutrals (keeps CSS small, stays consistent when palette changes) */
-  --muted: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
-  --muted-foreground: color-mix(in oklab, var(--foreground) 65%, var(--background) 35%);
-  --border: color-mix(in oklab, var(--foreground) 15%, var(--background) 85%);
-  --ring: var(--accent);
+  /* Semantic “brand” colors (used by Tailwind: primary/secondary/accent) */
 
-  /* Surfaces */
-  --card: color-mix(in oklab, var(--background) 94%, var(--foreground) 6%);
-  --card-foreground: var(--foreground);
+  --primary: #53a328;
+  --secondary: #b68ae6;
+  --accent: #dd629f;
 
-  /* “On color” text tokens for buttons/badges */
+  /* “On-color” text tokens */
   --primary-foreground: var(--text);
   --secondary-foreground: var(--text);
   --accent-foreground: var(--background);
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-border: var(--border);
-  --color-ring: var(--ring);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  /* -------------------------
+     Semantic base tokens
+     ------------------------- */
+  --foreground: var(--text);
+  --ring: var(--primary); /* default to primary for focus; swap to accent if desired */
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* -------------------------
+     Derived neutrals (anchored to bg/fg)
+     ------------------------- */
+  --muted: color-mix(in oklab, var(--background) 90%, var(--foreground) 10%);
+  --muted-foreground: color-mix(
+    in oklab,
+    var(--foreground) 62%,
+    var(--background) 38%
+  );
+
+  /* Border was too faint; 22% improves separation on light backgrounds */
+  --border: color-mix(in oklab, var(--foreground) 22%, var(--background) 78%);
+
+  /* -------------------------
+     Surfaces
+     ------------------------- */
+  --card: color-mix(in oklab, var(--background) 96%, var(--foreground) 4%);
+  --card-foreground: var(--foreground);
+
+  /* Optional extra surfaces used by the styleguide / code blocks */
+  --surface-2: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
+  --surface-3: color-mix(in oklab, var(--background) 88%, var(--foreground) 12%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Palette inputs */
     --text: #f7eef7;
     --background: #1f061f;
-    --primary: #cb3bd8;
-    --secondary: #11ffdf;
-    --accent: #288319;
 
-    /* on-color text in dark mode */
+    --primary: #cb3bd8;
+    --secondary: #288319;
+    --accent: #11ffdf;
+
+    /* On-colors (keep readable) */
     --primary-foreground: var(--background);
     --secondary-foreground: var(--background);
-    --accent-foreground: var(--text);
+    --accent-foreground: var(--background);
 
-      /* Semantic tokens (UI uses these, not raw palette names) */
-  --foreground: var(--text);
+    /* Re-derive via bg/fg automatically */
+    --foreground: var(--text);
 
-  /* Derived neutrals (keeps CSS small, stays consistent when palette changes) */
-  --muted: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
-  --muted-foreground: color-mix(in oklab, var(--foreground) 65%, var(--background) 35%);
-  --border: color-mix(in oklab, var(--foreground) 15%, var(--background) 85%);
-  --ring: var(--accent);
-
-  /* Surfaces */
-  --card: color-mix(in oklab, var(--background) 94%, var(--foreground) 6%);
-  --card-foreground: var(--foreground);
-
-  /* “On color” text tokens for buttons/badges */
-  --primary-foreground: var(--background);
-  --secondary-foreground: var(--background);
-  --accent-foreground: var(--text);
+    /* Ring stays primary by default; override if you prefer accent rings */
+    --ring: var(--primary);
   }
 }
 
+/* Tailwind v4 token exposure */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
 
 body {
   background: var(--background);
@@ -96,6 +114,7 @@ body {
   line-height: 1.25;
   padding: 0.15em 0.35em;
   border-radius: 0.375rem;
+
   background: color-mix(in oklab, var(--muted) 85%, transparent);
   border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
   color: color-mix(in oklab, var(--foreground) 92%, var(--background) 8%);
@@ -108,26 +127,30 @@ body {
   color: inherit;
 }
 
-
-/* Styles for code blocks */
+/* Code blocks */
 pre[data-theme] {
   padding: 1rem;
   border-radius: 0.5rem;
   overflow-x: auto;
+
+  /* Keep consistent with theme */
+  background: var(--surface-2);
+  border: 1px solid var(--border);
 }
 
+/* Line numbers */
 code[data-line-numbers] {
   counter-reset: line;
 }
 
-code[data-line-numbers]>[data-line]::before {
+code[data-line-numbers] > [data-line]::before {
   counter-increment: line;
   content: counter(line);
   display: inline-block;
   width: 2rem;
   text-align: right;
   margin-right: 1rem;
-  color: var(--text-muted);
+  color: var(--muted-foreground); /* FIX: was undefined --text-muted */
   user-select: none;
 }
 
