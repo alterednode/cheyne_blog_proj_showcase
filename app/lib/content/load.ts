@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { PostFrontmatterSchema, type Post } from "./schema";
+import { extractHeadings } from "./headings";
 
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 
@@ -17,7 +18,7 @@ export function loadAllPosts(): Post[] {
     const filePath = path.join(POSTS_DIR, filename);
     const fileContent = fs.readFileSync(filePath, "utf-8");
 
-    const { data } = matter(fileContent);
+    const { data, content } = matter(fileContent);
 
     // Validate frontmatter with Zod
     const result = PostFrontmatterSchema.safeParse(data);
@@ -36,9 +37,13 @@ export function loadAllPosts(): Post[] {
     // Derive slug from frontmatter or filename
     const slug = frontmatter.slug ?? filename.replace(/\.mdx$/, "");
 
+    // Extract headings if toc is enabled
+    const headings = extractHeadings(content);
+
     return {
       slug,
       sourceFile: filename,
+      headings,
       ...frontmatter,
     };
   });

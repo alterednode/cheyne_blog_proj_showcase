@@ -20,7 +20,8 @@ export const PostFrontmatterSchema = z.object({
   repo: z.string().optional(),
   live: z.string().optional(),
   stack: z.array(z.string()).optional(),
-  toc: z.boolean().optional(),
+  displayToc: z.boolean().default(true),
+  tocIntroHeader: z.string().optional(),
   hideDate: z.boolean().optional(),
   canonical: z.string().optional(),
   series: z.string().optional(),
@@ -31,7 +32,14 @@ export const PostFrontmatterSchema = z.object({
 
 export type PostFrontmatter = z.infer<typeof PostFrontmatterSchema>;
 
+export interface Heading {
+  id: string;
+  level: number;
+  text: string;
+}
+
 export type Post = {
   slug: string;
   sourceFile: string;
+  headings?: Heading[];
 } & PostFrontmatter;
