@@ -14,117 +14,111 @@ export function PostHeader({ post }: PostHeaderProps) {
   const updatedDateTime = updated ?? null;
 
   return (
-<header className="mb-10">
-  <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8">
-    <div className="pointer-events-none absolute -top-24 left-1/2 h-56 w-xl -translate-x-1/2 rounded-full bg-linear-to-r from-primary/25 via-secondary/20 to-accent/25 blur-3xl" />
+    <header className="mb-10">
 
-    <div className="relative">
-      <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
-        <span className="bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-          {title}
-        </span>
-      </h1>
-      <p className="mt-3 max-w-prose text-base text-muted-foreground md:text-lg">
-        {description}
-      </p>
-
-      {(formattedDate || formattedUpdated) && (
-        <div className="mt-5 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          {formattedDate ? (
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/60 px-3 py-1">
-              <span className="text-xs font-semibold uppercase tracking-wide">Published</span>
-              <time dateTime={date} className="font-medium text-foreground">
-                {formattedDate}
-              </time>
-            </span>
-          ) : null}
-          {formattedUpdated && updatedDateTime ? (
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/60 px-3 py-1">
-              <span className="text-xs font-semibold uppercase tracking-wide">Updated</span>
-              <time dateTime={updatedDateTime} className="font-medium text-foreground">
-                {formattedUpdated}
-              </time>
-            </span>
-          ) : null}
-        </div>
-      )}
-
-
-
-      {(tags && tags.length > 0) || (stack && stack.length > 0) ? (
-        <div className="mt-6 space-y-3">
-          {tags && tags.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center rounded-full border border-border bg-muted/60 px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:border-accent/35 hover:bg-muted hover:text-foreground"
-                >
-                  {tag}
+        <div className="relative">
+          <h1 className="text-4xl md:text-5xl">
+            {title}
+          </h1>
+          <p className="mt-3 max-w-prose text-base text-muted-foreground md:text-lg">
+            {description}
+          </p>
+          {(formattedDate || formattedUpdated) && (
+            <div className="mt-5 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+              {formattedDate ? (
+                <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/60 px-3 py-1">
+                  <span className="text-xs font-semibold uppercase tracking-wide">Published</span>
+                  <time dateTime={date} className="font-medium text-foreground">
+                    {formattedDate}
+                  </time>
                 </span>
-              ))}
+              ) : null}
+              {formattedUpdated && updatedDateTime ? (
+                <span className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/60 px-3 py-1">
+                  <span className="text-xs font-semibold uppercase tracking-wide">Updated</span>
+                  <time dateTime={updatedDateTime} className="font-medium text-foreground">
+                    {formattedUpdated}
+                  </time>
+                </span>
+              ) : null}
+            </div>
+          )}
+
+
+
+          {(tags && tags.length > 0) || (stack && stack.length > 0) ? (
+            <div className="mt-6 space-y-3">
+              {tags && tags.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center rounded-full border border-border bg-muted/60 px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:border-accent/35 hover:bg-muted hover:text-foreground"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+
+              {stack && stack.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="inline-flex items-center rounded-full border border-border bg-background px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary/35 hover:bg-muted hover:text-foreground"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
             </div>
           ) : null}
 
-          {stack && stack.length > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {stack.map((tech) => (
-                <span
-                  key={tech}
-                  className="inline-flex items-center rounded-full border border-border bg-background px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary/35 hover:bg-muted hover:text-foreground"
+          {repo || live ? (
+            <div className="mt-6 flex flex-wrap gap-3">
+              {repo ? (
+                <a
+                  href={repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
-                  {tech}
-                </span>
-              ))}
+                  <LinkIcon />
+                  Repository
+                </a>
+              ) : null}
+              {live ? (
+                <a
+                  href={live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-md border border-accent/35 bg-accent/10 px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-accent/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  <ExternalIcon />
+                  Live demo
+                </a>
+              ) : null}
             </div>
           ) : null}
         </div>
-      ) : null}
 
-      {repo || live ? (
-        <div className="mt-6 flex flex-wrap gap-3">
-          {repo ? (
-            <a
-              href={repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <LinkIcon />
-              Repository
-            </a>
-          ) : null}
-          {live ? (
-            <a
-              href={live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md border border-accent/35 bg-accent/10 px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-accent/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <ExternalIcon />
-              Live demo
-            </a>
-          ) : null}
+      {hero ? (
+        <div className="mt-6">
+          <div className="group relative aspect-video overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+            <Image
+              src={hero}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+              priority
+            />
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/30 via-transparent to-transparent" />
+          </div>
         </div>
       ) : null}
-    </div>
-  </div>
-
-  {hero ? (
-    <div className="mt-6">
-      <div className="group relative aspect-video overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-        <Image
-          src={hero}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-          priority
-        />
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/30 via-transparent to-transparent" />
-      </div>
-    </div>
-  ) : null}
-</header>
+    </header>
   );
 }
 
