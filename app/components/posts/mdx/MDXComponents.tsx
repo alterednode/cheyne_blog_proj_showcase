@@ -6,6 +6,7 @@ import { MDXMeter, MDXMeterPlayground } from "./this-site/MDXPropDemoCard";
 import * as StandardComponents from "@components/standard";
 import { ScrollTracker } from "./this-site/ScrollTracker";
 import Image from "next/image";
+import { slugify } from "@lib/content/slug";
 
 function textFromNode(node: unknown): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -17,20 +18,6 @@ function textFromNode(node: unknown): string {
   return "";
 }
 
-function slugifyHeading(children: unknown): string {
-  const raw = textFromNode(children)
-    .toLowerCase()
-    .trim();
-
-  const slug = raw
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-
-  return slug || "section";
-}
-
 function LinkedHeading(
   props: ComponentPropsWithoutRef<"h2"> & {
     as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -39,7 +26,7 @@ function LinkedHeading(
 ) {
   const { as = "h2", headingClassName, id, children, ...rest } = props;
   const Tag = as;
-  const finalId = id ?? slugifyHeading(children);
+  const finalId = id ?? slugify(textFromNode(children));
 
   return (
     <Tag id={finalId} className={headingClassName} {...rest}>
