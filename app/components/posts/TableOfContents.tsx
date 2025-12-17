@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Heading } from "@/app/lib/content/schema";
 import Link from "next/link";
 
@@ -10,6 +10,12 @@ interface TableOfContentsProps {
 
 export function TableOfContents({ headings }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>("");
+  const navRef = useRef<HTMLUListElement | null>(null);
+  const [indicator, setIndicator] = useState<{
+    top: number;
+    height: number;
+    visible: boolean;
+  }>({ top: 0, height: 0, visible: false });
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -66,36 +72,64 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     return () => window.removeEventListener("scroll", updateActiveId);
   }, [headings]);
 
+  // Position the single indicator to the active TOC link
+  useEffect(() => {
+    const updateIndicator = () => {
+      const nav = navRef.current;
+      if (!nav || !activeId) {
+        setIndicator((s) => ({ ...s, visible: false }));
+        return;
+      }
+
+      const link = nav.querySelector<HTMLAnchorElement>(`a[href="#${activeId}"]`);
+      if (!link) {
+        setIndicator((s) => ({ ...s, visible: false }));
+        return;
+      }
+
+      const navRect = nav.getBoundingClientRect();
+      const rect = link.getBoundingClientRect();
+      setIndicator({ top: rect.top - navRect.top, height: rect.height, visible: true });
+    };
+
+    updateIndicator();
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [activeId, headings]);
+
   return (
-    <nav >
+    <nav className="relative pl-4">
       <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-foreground">
         In This Post
       </h2>
-      <ul className="space-y-2 text-md text-foreground">
+      <ul ref={navRef} className="space-y-2 text-md text-foreground relative">
+        {/* single sliding indicator */}
+        <span
+          aria-hidden
+          style={{
+            top: indicator.visible ? `${indicator.top}px` : undefined,
+            height: indicator.visible ? `${indicator.height}px` : undefined,
+            transform: "translateX(-0.5rem)",
+          }}
+          className={`pointer-events-none absolute left-0 w-0.5 bg-primary transition-all duration-300 ease-out ${
+            indicator.visible ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
         {headings.map((heading) => (
-          <li
-            key={heading.id}
-            style={{
-              marginLeft: `${(heading.level - 2) * 1}rem`,
-            }}
-          >
+          <li key={heading.id}>
             <Link
               href={`#${heading.id}`}
               onClick={(e) => handleClick(e, heading.id)}
-              className={`block transition-all duration-300 ease-out hover:text-foreground relative ${
+              className={`block transition-colors duration-200 ease-out hover:text-foreground relative ${
                 activeId === heading.id
-                  ? "text-primary font-semibold pl-3 translate-x-1"
+                  ? "text-primary font-semibold"
                   : "text-shadow-muted-foreground"
               }`}
             >
-              <span
-                className={`absolute left-0 top-0 bottom-0 w-0.5 bg-primary transition-all duration-300 ease-out ${
-                  activeId === heading.id
-                    ? "opacity-100 scale-y-100"
-                    : "opacity-0 scale-y-50"
-                }`}
-              />
-              {heading.text}
+              <span style={{ display: "inline-block", marginLeft: `${(heading.level - 2) * 1}rem` }}>
+                {heading.text}
+              </span>
             </Link>
           </li>
         ))}
