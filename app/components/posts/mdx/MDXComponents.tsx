@@ -2,9 +2,9 @@ import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { Callout } from "./Callout";
 import InProgress from "../../standard/InProgress";
-import { MDXMeter, MDXMeterPlayground } from "./this-site/MDXPropDemoCard";
+import { MDXMeter, MDXMeterPlayground } from "./post-specific/this-site/MDXPropDemoCard";
 import * as StandardComponents from "@components/standard";
-import { ScrollTracker } from "./this-site/ScrollTracker";
+import { ScrollTracker } from "./post-specific/this-site/ScrollTracker";
 import Image from "next/image";
 import { slugify } from "@lib/content/slug";
 
