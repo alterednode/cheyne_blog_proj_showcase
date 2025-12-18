@@ -1,6 +1,6 @@
 import type { Post } from "@/app/lib/content/schema";
 import Image from "next/image";
-import { FiArrowRight, FiExternalLink, FiGithub, FiArrowUpRight } from "react-icons/fi";
+import { FiExternalLink } from "react-icons/fi";
 
 interface PostHeaderProps {
   post: Post;
@@ -38,7 +38,7 @@ export function PostHeader({ post }: PostHeaderProps) {
           <p className="max-w-prose text-base text-muted-foreground md:text-lg">{description}</p>
         </div>
 
-        {(formattedDate || formattedUpdated || repo || live) ? (
+        {(formattedDate || formattedUpdated) ? (
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             {formattedDate || formattedUpdated ? (
               <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
@@ -108,7 +108,7 @@ export function PostHeader({ post }: PostHeaderProps) {
               src={hero}
               alt={title}
               fill
-              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+              className="object-cover"
               priority
             />
             <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/30 via-transparent to-transparent" />
