@@ -5,6 +5,7 @@ import Socials from "@/app/components/standard/Socials";
 import { Card } from "@/app/components/standard/Card";
 import { PostGrid } from "@components/posts/PostGrid";
 import InProgress from "../components/standard/InProgress";
+import { CWrenchIconWithBackground } from "../components/custom-icons/c-wrench";
 
 export const metadata: Metadata = {
   title: "Onyx Cheyne",
@@ -31,16 +32,11 @@ export default function Home() {
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
           <Card className="p-6">
             <div className="flex items-center gap-4">
-              <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-border shadow-lg">
-                <Image
-                  src="/c-wrench/tiny no bkg.png"
-                  alt="Placeholder headshot"
-                  fill
-                  sizes="(max-width: 768px) 8rem, 6rem"
-                  className="object-cover"
-                  priority
+                <CWrenchIconWithBackground
+                  className="text-muted-foreground relative overflow-hidden"
+                  bgColor="var(--background)"
+                  bgStrokeColor="var(--background)"
                 />
-              </div>
 
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] font-bold text-muted-foreground">
