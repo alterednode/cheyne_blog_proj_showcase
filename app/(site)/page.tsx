@@ -20,6 +20,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/*
       <InProgress title="Site Under Construction">
         Sorry for the mess! I&apos;m still working on making this look how I want, so bear with me as I hammer things into place.
         <br />
@@ -27,6 +28,7 @@ export default function Home() {
         <br />
         As well as a headshot photo...
       </InProgress>
+      */}
 
       <div className="mx-auto max-w-6xl px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
