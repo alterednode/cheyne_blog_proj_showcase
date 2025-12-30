@@ -7,6 +7,7 @@ import { TableOfContents } from "@app/components/posts/TableOfContents";
 import { Prose } from "@components/posts/mdx/Prose";
 import { mdxComponents } from "@/app/components/posts/mdx/MDXComponents";
 import InProgress from "@/app/components/standard/InProgress";
+import Link from "next/link";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -94,7 +95,7 @@ export default async function PostPage({ params }: PageProps) {
           )}
         </div>
       </div>
-
+      <div className="text-center text-sm text-muted-foreground">Licensed under <Link href="https://github.com/alterednode/cheyne_blog_proj_showcase/blob/main/CONTENT_LICENSE.md">CC BY-NC 4.0.</Link></div>
     </div>
   );
 }
