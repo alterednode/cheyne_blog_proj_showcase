@@ -12,6 +12,7 @@ export async function GET() {
   const feedUrl = absoluteUrl("/rss.xml");
   const siteIcon = absoluteUrl("/c-wrench/tiny no bkg.png");
   const siteImage = absoluteUrl("/c-wrench/full no bkg.png");
+  const author = { name: "Onyx Cheyne", email: "onyx@cheyne.dev" };
 
   const feed = new Feed({
     id: siteUrl,
@@ -22,8 +23,8 @@ export async function GET() {
     link: siteUrl,
     feedLinks: {
       rss2: feedUrl,
-      atom: feedUrl,
     },
+    author,
     image: siteImage,
     favicon: siteIcon,
     updated:
@@ -33,6 +34,8 @@ export async function GET() {
     copyright: `All rights reserved ${new Date().getFullYear()}, Onyx Cheyne`,
   });
 
+  feed.addContributor(author);
+
   posts.forEach((post) => {
     const url = absoluteUrl(`/posts/${post.slug}`);
 
@@ -41,6 +44,7 @@ export async function GET() {
       link: url,
       title: post.title,
       description: post.description + ` <a href="${url}">Click to Read More</a>`,
+      author: [author],
       date: new Date(post.date),
       ...(post.updated && { updated: new Date(post.updated) }),
       category: post.tags?.map((tag) => ({ name: tag })),
