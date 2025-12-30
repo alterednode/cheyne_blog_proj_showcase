@@ -9,6 +9,10 @@ import { absoluteUrl, siteUrl } from "@lib/site";
 export async function GET() {
   const posts = getPublishedPosts();
 
+  const feedUrl = absoluteUrl("/rss.xml");
+  const siteIcon = absoluteUrl("/c-wrench/tiny no bkg.png");
+  const siteImage = absoluteUrl("/c-wrench/full no bkg.png");
+
   const feed = new Feed({
     id: siteUrl,
     title: "Onyx Cheyne",
@@ -17,10 +21,11 @@ export async function GET() {
     language: "en",
     link: siteUrl,
     feedLinks: {
-      rss2: absoluteUrl("/rss.xml"),
+      rss2: feedUrl,
+      atom: feedUrl,
     },
-    image: absoluteUrl("/c-wrench/full no bkg.png"),
-    favicon: absoluteUrl("/c-wrench/tiny no bkg.png"),
+    image: siteImage,
+    favicon: siteIcon,
     updated:
       posts.length > 0
         ? new Date(posts[0].updated ?? posts[0].date)
@@ -35,7 +40,7 @@ export async function GET() {
       id: url,
       link: url,
       title: post.title,
-      description: post.description,
+      description: post.description + ` <a href="${url}">Click to Read More</a>`,
       date: new Date(post.date),
       ...(post.updated && { updated: new Date(post.updated) }),
       category: post.tags?.map((tag) => ({ name: tag })),
