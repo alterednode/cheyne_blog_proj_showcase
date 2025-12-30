@@ -35,7 +35,6 @@ jobs:
             --exclude '.github/workflows/publish-template.yml' \
             --exclude 'content/' \
             --exclude 'public/content/' \
-            --exclude 'vercel.json' \
             ./ "${TEMPLATE_DIR}/"
           echo "TEMPLATE_DIR=${TEMPLATE_DIR}" >> "$GITHUB_ENV"
 
