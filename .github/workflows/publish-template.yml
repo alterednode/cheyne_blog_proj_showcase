@@ -1,0 +1,56 @@
+name: Publish template branch
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-template
+  cancel-in-progress: true
+
+env:
+  TEMPLATE_BRANCH: template
+
+jobs:
+  publish-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Build filtered tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          TEMPLATE_DIR="$(mktemp -d)"
+          rsync -av --delete \
+            --exclude '.git' \
+            --exclude '.github/workflows/publish-template.yml' \
+            --exclude 'content/' \
+            --exclude 'public/content/' \
+            --exclude 'vercel.json' \
+            ./ "${TEMPLATE_DIR}/"
+          echo "TEMPLATE_DIR=${TEMPLATE_DIR}" >> "$GITHUB_ENV"
+
+      - name: Push to template branch
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd "${TEMPLATE_DIR}"
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit --allow-empty -m "Sync template from ${GITHUB_SHA}"
+          git branch -M "${TEMPLATE_BRANCH}"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push -f origin "${TEMPLATE_BRANCH}"
