@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { absoluteUrl } from "@/app/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,6 +19,11 @@ export const metadata: Metadata = {
     "Blog and project showcase of Onyx Cheyne, a computer science student at UBC Okanagan.",
   icons: {
     icon: "/c-wrench/tiny no bkg.png",
+  },
+  alternates: {
+    types: {
+      "application/rss+xml": absoluteUrl("/rss.xml"),
+    },
   },
 };
 
