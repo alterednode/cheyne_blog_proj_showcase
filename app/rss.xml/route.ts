@@ -43,7 +43,7 @@ export async function GET() {
       id: url,
       link: url,
       title: post.title,
-      description: post.description + ` <a href="${url}">Click to Read More</a>`,
+      description: post.description + ` <strong><a href="${url}">Read More ↗</a></strong>`,
       author: [author],
       date: new Date(post.date),
       ...(post.updated && { updated: new Date(post.updated) }),
