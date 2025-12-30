@@ -22,6 +22,7 @@ export async function GET() {
     language: "en",
     link: siteUrl,
     feedLinks: {
+      rss: feedUrl,
       rss2: feedUrl,
     },
     author,
@@ -40,7 +41,6 @@ export async function GET() {
     const url = absoluteUrl(`/posts/${post.slug}`);
 
     feed.addItem({
-      id: url,
       link: url,
       title: post.title,
       description: post.description + ` <strong><a href="${url}">Read More ↗</a></strong>`,
