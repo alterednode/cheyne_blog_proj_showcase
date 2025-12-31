@@ -30,8 +30,20 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
       const windowHeight = window.innerHeight;
       const midpoint = windowHeight / 2;
-      
-      if (setActiveIdToLastIfFooterVisible(windowHeight, headingElements)) {
+
+      /*
+      Special cases for first and last headings
+      Sometimes the first or last headings are too small to ever be the closest to the midpoint,
+      so we forcibly select them if they are visible near the top or bottom of the page.
+
+      I think this is better Ux in the majority of situations, so im doing it.                  */
+      if (FirstIfIntroElementVisible(headingElements)) {
+        setActiveId(headingElements[0].id);
+        return;
+      }
+
+      if (LastIfFooterVisible(windowHeight, headingElements)) {
+        setActiveId(headingElements[headingElements.length - 1].id);
         return;
       }
 
@@ -39,12 +51,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
       // (heading midpoint is above the viewport midpoint)
       let nextActiveId = headingElements[0]?.id || "";
       let closestDistance = Infinity;
-      
+
       for (const { id, element } of headingElements) {
         if (!element) continue;
         const rect = element.getBoundingClientRect();
         const headingMidpoint = rect.top + rect.height / 2;
-        
+
         // Only consider headings that have passed the viewport midpoint
         if (headingMidpoint <= midpoint) {
           const distance = midpoint - headingMidpoint;
@@ -54,7 +66,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
           }
         }
       }
-      
+
       setActiveId(nextActiveId);
     };
 
@@ -66,13 +78,31 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     return () => window.removeEventListener("scroll", updateActiveId);
   }, [headings]);
 
-  function setActiveIdToLastIfFooterVisible(
+
+  function FirstIfIntroElementVisible(headingElements: { id: string; element: HTMLElement | null; }[]) {
+    if (headingElements.length === 0) return false;
+    const first = headingElements[0];
+    if (!first.element) return false;
+
+    // Treat zero-height invisible anchors (sentinels) as visible if they
+    // intersect the viewport or lie slightly above it (small tolerance).
+    const rect = first.element.getBoundingClientRect();
+    const tolerance = 8; // px — allows slight negative offsets like -mt-8
+    const windowHeight = window.innerHeight;
+
+    // Inclusive bounds: treat exact-boundary cases as visible
+    const firstVisible = rect.top <= windowHeight && rect.bottom >= -tolerance;
+    return firstVisible;
+  }
+
+
+  function LastIfFooterVisible(
     windowHeight: number,
     headingElements: { id: string; element: HTMLElement | null }[]
   ): boolean {
     if (headingElements.length === 0) return false;
 
-    // If user is at (or very near) the bottom of the page, highlight the last heading
+    // If user is at (or very near) the bottom of the page, return true
     const scrollY = window.scrollY || window.pageYOffset;
     const docHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
     // compute footer height if present (fall back to 5px)
@@ -80,7 +110,6 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     const spacingFromBottom = footer ? footer.getBoundingClientRect().height : 5;
 
     if (windowHeight + scrollY >= docHeight - spacingFromBottom) {
-      setActiveId(headingElements[headingElements.length - 1].id);
       return true;
     }
 
@@ -126,20 +155,20 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
             height: indicator.visible ? `${indicator.height}px` : undefined,
             transform: "translateX(-0.5rem)",
           }}
-          className={`pointer-events-none absolute left-0 w-0.5 bg-primary transition-all duration-300 ease-out ${
-            indicator.visible ? "opacity-100" : "opacity-0"
-          }`}
+          className={`pointer-events-none absolute left-0 w-0.5 bg-primary transition-all duration-300 ease-out 
+            ${indicator.visible ? "opacity-100" : "opacity-0"
+            }`}
         />
 
         {headings.map((heading) => (
           <li key={heading.id}>
             <SmoothScrollLink
               href={`#${heading.id}`}
-              className={`block transition-colors duration-200 ease-out hover:text-foreground relative ${
-                activeId === heading.id
+              className={`block transition-colors duration-200 ease-out hover:text-foreground relative 
+                ${activeId === heading.id
                   ? "text-primary font-semibold"
                   : "text-shadow-muted-foreground"
-              }`}
+                }`}
             >
               <span style={{ display: "inline-block", marginLeft: `${(heading.level - 2) * 1}rem` }}>
                 {heading.text}
@@ -151,4 +180,3 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     </nav>
   );
 }
-
