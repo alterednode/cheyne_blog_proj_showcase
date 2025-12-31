@@ -28,7 +28,7 @@ I also wanted a dedicated place to showcase my projects beyond pinning the repos
 ## The Basics
 
 The site is built with [Next.js](https://nextjs.org/), which is a React framework for building server-rendered and statically generated web applications.  
-I'm using the React App Router so I can create dynamic routes for my posts and fetch the MDX content at build time using Next.js's static generation features.
+I'm using the App Router so I can create dynamic routes for my posts and fetch the MDX content at build time using Next.js's static generation features.
 
 I'm also using Next.js's **@next/mdx** package to handle MDX files as pages and content.
 
@@ -48,7 +48,7 @@ All of this is stored on GitHub and deployed via [Vercel](https://vercel.com/) f
 
 The content for the site is stored in a `content/posts` directory, with each post as its own MDX file.
 
-Each MDX file contains frontmatter metadata at the top, which is parsed and used to render the post page.
+Each MDX file contains frontmatter metadata at the top, which is parsed and used to render the post.
 Here is an example of the frontmatter for one of my posts:
 
 ```mdx
@@ -64,7 +64,7 @@ hero: /content/posts/homelab/messy-desk-cropped.jpg
 ---
 ```
 
-The frontmatter is processed using the `remark-frontmatter` plugin, and converted into a JavaScript object that I can use in my React components.
+The frontmatter is processed using the `remark-frontmatter` plugin and converted into a JavaScript object that I can use in my React components.
 Everything above the first actual text paragraph of this post is based on information from the frontmatter.
 
 With this setup, I can easily add new posts by creating new MDX files in the `content/posts` directory, and the site will automatically pick them up and render them correctly when built.
@@ -123,7 +123,7 @@ This approach keeps the default rendering path static and server-side, while lim
 I'm trying out Tailwind CSS for the first time on this project.  
 Early on I was hand-picking colors in every component and drowning in class soup.
 
-I fixed the color issue by defining a small palette in the `globals.css`. Primary, secondary, accent, plus neutrals, and let Tailwind generate the shades for light and dark modes.  
+I fixed the color issue by defining a small palette for light and dark modes in the `globals.css` (primary, secondary, accent, neutrals) and letting Tailwind generate the various shades.  
 Everything now uses the palette and derived colors, so borders, backgrounds, and text stay consistent.
 
 The next shift was leaning more heavily on components instead of constantly rewriting the same classes. Once I wrapped common patterns (cards, buttons, meters) into reusable pieces, the markup shrank and the styling became predictable instead of a wall of class names.
@@ -178,13 +178,13 @@ I discovered RSS feeds while researching how other blogs and portfolio sites wer
 
 I used the [feed](https://www.npmjs.com/package/feed) package to generate an RSS feed at build time using the post metadata that was already being extracted from the MDX frontmatter.
 
-The feed is available at https://cheyne.dev/rss.xml and can be subscribed to in any RSS reader.
+The feed is available at https://cheyne.dev/rss.xml and can be subscribed to with any RSS reader.
 
 ### Table of Contents
 
-Before I ever really got into programming, I found it super interesting that a lot of websites could link directly to sections of a page using anchor links (e.g., `https://example.com/page#section`).
+Before I ever really got into programming, I found it super interesting that a lot of websites can link directly to sections of a page using anchor links (e.g., `https://example.com/page#section`).
 
-To add that to my posts, I made sure every heading automatically creates its own link by converting the generated HTML headings into anchor links with a custom component. Clicking a heading smoothly scrolls back to that spot, and I spent some extra time on some QOL stuff like gracefully replacing the current URL and ensuring stuff like opening links in a new tab works as expected.
+To add that to my posts, I made sure every heading automatically creates its own link by converting the generated HTML headings into anchor links with a custom component. Clicking a heading smoothly scrolls back to that spot, and I spent some extra time on some QOL stuff like gracefully replacing the current URL and ensuring stuff like opening links in a new tab work as expected.
 
 With that in place, it was pretty straightforward to generate a table of contents that scrolls you to that location.
 I ended up separately parsing the MDX content at build time with a simple regex to extract the headings for the table of contents, and made a custom slug generator to ensure the links match up between the two locations.
