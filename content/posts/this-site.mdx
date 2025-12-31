@@ -191,9 +191,8 @@ I end up seperately parsing the MDX content at build time with some simple regex
 
 The table of contents decides which entry to highlight based on which header is closest to and above the midpoint of the viewport. I found this gives the best sense of location within the document as you scroll, and it took some fiddling to get it feeling right.
 
-I still don't like how if you use the TOC to navigate to the first section it highlights the second one if the first isn't long enough to put the second below the midpoint, but it's someting im willing to live with for now.
-
-One extra thing I added was if the footer is visible, the TOC highlights the last entry regardless of scroll position.
+It has some extra cases where if it is near the top or bottom of the page and those sections are too small for them to be the one that gets selected, they are forcibly selected if visible, with some tolerance. 
+This was especially important for the first section, as it is often too small to be the one selected otherwise.
 
 ## What's Next?
 

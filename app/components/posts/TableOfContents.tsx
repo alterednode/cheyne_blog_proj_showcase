@@ -35,6 +35,21 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
         return;
       }
 
+      // If the very first heading is visible in the viewport, force-select it
+      // (wins even if other headings have passed the midpoint).
+      const first = headingElements[0];
+      if (first?.element) {
+        const firstRect = first.element.getBoundingClientRect();
+        // Treat zero-height invisible anchors (sentinels) as visible if they
+        // intersect the viewport or lie slightly above it (small tolerance).
+        const tolerance = 8; // px — allows slight negative offsets like -mt-8
+        const firstVisible = firstRect.top < windowHeight && firstRect.bottom > -tolerance;
+        if (firstVisible) {
+          setActiveId(first.id);
+          return;
+        }
+      }
+
       // Find the heading whose midpoint has most recently crossed the viewport midpoint
       // (heading midpoint is above the viewport midpoint)
       let nextActiveId = headingElements[0]?.id || "";
