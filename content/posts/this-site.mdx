@@ -109,14 +109,13 @@ I'd briefly mentioned how the MDX posts are rendered as static pages at build ti
 
 For example, the `MDXMeterPlayground` and `ScrollTracker` components used above are client components that allow for interactivity within the static MDX content.
 
-This is pretty typical for app router projects made of pages that are mostly server components but include some client components for interactivity.
+This is pretty typical for App Router projects made of pages that are mostly server components but include some client components for interactivity.
 
 However, I didn't realize I could do this with MDX the first time I tried it, and went down a whole rabbit hole of running an API route that could fetch the MDX files which were then rendered on the client side.
 
 But that was a few years ago now.
 
 This approach keeps the default rendering path static and server-side, while limiting client-side JavaScript to components that genuinely require interactivity.
-
 
 ## Tailwind CSS
 
@@ -130,9 +129,9 @@ The next shift was leaning more heavily on components instead of constantly rewr
 
 ## Code Block Highlighting
 
-As this is a site which primarily exists for me to write about things that I've programmed, I wanted to have nice code blocks with syntax highlighting.
+As this is a site that primarily exists for me to write about things that I've programmed, I wanted to have nice code blocks with syntax highlighting.
 
-I'm already using **rehype-pretty-code** to handle syntax highlighting, but I needed to also provide some custom CSS to avoid it looking like this:
+I'm already using **rehype-pretty-code** to handle syntax highlighting, but I also needed to provide some custom CSS to avoid it looking like this:
 
 ![Ugly Code Block](/content/posts/this-site/unformatted-code.png)
 
@@ -170,35 +169,33 @@ I also have custom formatting for the inline code elements `like this` to make t
 
 ## Extra Stuff
 
-On top of all the stuff needed to get the site up and running, looking and nice, and doing what I need, there are a few extra features I've added.
+On top of all the stuff needed to get the site up and running, looking nice, and doing what I need, there are a few extra features I've added.
 
 ### RSS Feed
 
-I discovered RSS feeds while researching how other blogs and portfolio sites were built, ([Josh W Comeau](https://www.joshwcomeau.com/blog/how-i-built-my-blog-v2/) was an inspiration for several parts of this site, his [book](https://www.joshwcomeau.com/effective-portfolio/) on developer portfolios was also a great resource) and thought it would be a nice addition to let people subscribe to my posts.
+I discovered RSS feeds while researching how other blogs and portfolio sites were built ([Josh W Comeau](https://www.joshwcomeau.com/blog/how-i-built-my-blog-v2/) was an inspiration for several parts of this site, and his [book](https://www.joshwcomeau.com/effective-portfolio/) on developer portfolios was also a great resource) and thought it would be a nice addition to let people subscribe to my posts.
 
-I used the [feed](https://www.npmjs.com/package/feed) package to generate an RSS feed at build time with the post metadata which was already being extracted from the MDX frontmatter.
+I used the [feed](https://www.npmjs.com/package/feed) package to generate an RSS feed at build time using the post metadata that was already being extracted from the MDX frontmatter.
 
 The feed is available at https://cheyne.dev/rss.xml and can be subscribed to in any RSS reader.
 
 ### Table of Contents
 
-Before I ever really got into programming I found it super interesting that a lot of websites could link directly to sections of a page using anchor links. (e.g., `https://example.com/page#section`)
+Before I ever really got into programming, I found it super interesting that a lot of websites could link directly to sections of a page using anchor links (e.g., `https://example.com/page#section`).
 
-To add that to my posts, I made sure every heading automatically creates its own link by converting the generated html headers to anchor links with a custom component. Clicking a heading smoothly scrolls back to that spot, and I spent some extra time on some QOL stuff like gracefully replacing the current url and ensuring stuff like opening links in a new tab work as expected.
+To add that to my posts, I made sure every heading automatically creates its own link by converting the generated HTML headings into anchor links with a custom component. Clicking a heading smoothly scrolls back to that spot, and I spent some extra time on some QOL stuff like gracefully replacing the current URL and ensuring stuff like opening links in a new tab works as expected.
 
-With that in place it was pretty straightforward to generate a table of contents that scrolls you to that location.
-I end up seperately parsing the MDX content at build time with some simple regex to extract the headings for the table of contents, and made a custom slug generator to ensure the links match up between the two locations.
+With that in place, it was pretty straightforward to generate a table of contents that scrolls you to that location.
+I ended up separately parsing the MDX content at build time with a simple regex to extract the headings for the table of contents, and made a custom slug generator to ensure the links match up between the two locations.
 
 The table of contents decides which entry to highlight based on which header is closest to and above the midpoint of the viewport. I found this gives the best sense of location within the document as you scroll, and it took some fiddling to get it feeling right.
-
-It has some extra cases where if it is near the top or bottom of the page and those sections are too small for them to be the one that gets selected, they are forcibly selected if visible, with some tolerance. 
-This was especially important for the first section, as it is often too small to be the one selected otherwise.
+When near the top or the bottom of the page, there are some extra checks to ensure the first or last section is selected appropriately in case they are too small to be the one selected otherwise.
 
 ## What's Next?
 
-The basics of this site are pretty much where I want them as of the time of writing for the purpose of being able to create these posts, but I plan on adding more.
+The basics of this site are pretty much where I want them as of the time of writing, but I plan on adding more.
 
-To start, I'm planning on adding a page with a few browser-based tools I've made, and a space for me to put some of the games I've made that can be played with HTML5.
+To start, I'm planning on adding a page with a few browser-based tools I've made, and a space to put some of the games I've made that can be played with HTML5.
 I'd also like some persistent functionality for user interaction, like likes or polls with a database running on [My Homelab](https://cheyne.dev/posts/homelab).
 
 Beyond that, I might look into setting up a CMS to make content management easier, and use [ISR](https://nextjs.org/docs/app/guides/incremental-static-regeneration) to allow for more frequent content updates without needing to rebuild the entire site.
