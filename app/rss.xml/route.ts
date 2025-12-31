@@ -32,7 +32,7 @@ export async function GET() {
       posts.length > 0
         ? new Date(posts[0].updated ?? posts[0].date)
         : undefined,
-    copyright: `All rights reserved ${new Date().getFullYear()}, Onyx Cheyne`,
+    copyright: `Content © ${new Date().getFullYear()} Onyx Cheyne — CC BY-NC 4.0 (https://github.com/alterednode/cheyne_blog_proj_showcase/blob/main/CONTENT_LICENSE.md)`,
   });
 
   feed.addContributor(author);
