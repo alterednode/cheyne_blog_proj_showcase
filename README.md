@@ -15,7 +15,7 @@ If you've forked this project, the only thing not in a route, page, or component
 
 ## Deployment and Configuration.
 
-I deploy this via Vercel; any change to the `main` branch triggers a rebuild and deploy.
+I deploy this via Vercel; any change to the `main` branch triggers a rebuild and deploy. You may want to peek at or remove `vercel.json` if deploying with them yourself.
 
 If you deploy another way, you should be fine to deploy it like a barebones Next.js site.
 
