@@ -36,7 +36,7 @@ export default function SiteHeader() {
         </nav>
       </div>
       
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-primary via-secondary to-accent opacity-70" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-primary opacity-70" />
     </header>
   );
 }
