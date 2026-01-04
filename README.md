@@ -13,7 +13,7 @@ I keep an up-to-date version of this repo with none of my posts or media on the 
 
 If you've forked this project, the only thing not in a route, page, or component that you should need to update is `app/lib/site.ts`, where I set cheyne.dev as the site URL fallback if the env variables aren't set.
 
-## Deployment and Configuration.
+## Deployment and Configuration
 
 I deploy this via Vercel; any change to the `main` branch triggers a rebuild and deploy. You may want to peek at or remove `vercel.json` if deploying with them yourself.
 
@@ -24,6 +24,12 @@ If you deploy another way, you should be fine to deploy it like a barebones Next
 If you've forked this to make your own portfolio site, posts are made with MDX. To wire new MDX components, add them to the end of `app/components/posts/mdx/MDXComponents.tsx`.
 
 The MDX files use the filename as the slug and require frontmatter. Feel free to look at my posts to see how I use it, and `app/lib/content/schema.ts` to see all the frontmatter options I've added.
+
+## Additional notes
+
+`app/dev-only/` has a layout which gives a 404 for any pages under that if next.js is not running in development mode (detectable via env var). If you have any pages that you only need for testing and don't want them to be accessable otherwise, put them there.
+
+If you don't want this behaviour, remove `app/dev-only/layout.tsx`.
 
 ## Licensing
 
