@@ -27,7 +27,7 @@ The MDX files use the filename as the slug and require frontmatter. Feel free to
 
 ## Additional notes
 
-`app/dev-only/` has a layout which gives a 404 for any pages under that if next.js is not running in development mode (detectable via env var). If you have any pages that you only need for testing and don't want them to be accessable otherwise, put them there.
+`app/dev-only/` has a layout which gives a 404 for any pages in that route if next.js is not running in development mode (detectable via env var). If you have any pages that you only need for testing and don't want them to be accessable otherwise, put them there.
 
 If you don't want this behaviour, remove `app/dev-only/layout.tsx`.
 
