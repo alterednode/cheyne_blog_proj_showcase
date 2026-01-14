@@ -31,6 +31,8 @@ The MDX files use the filename as the slug and require frontmatter. Feel free to
 
 If you don't want this behaviour, remove `app/dev-only/layout.tsx`.
 
+I have vercel's analyitics package installed and the component in the root layout. Remove it in your version if you'd like.
+
 ## Licensing
 
 - Code in this repository is licensed under the MIT License.
