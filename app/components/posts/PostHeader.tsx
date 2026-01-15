@@ -252,7 +252,7 @@ function ActionLink({
 }) {
   const variants: Record<"primary" | "secondary", string> = {
     primary: "border-primary/30 bg-primary text-primary-foreground hover:bg-primary/90",
-    secondary: "border-border bg-background text-foreground hover:bg-muted",
+    secondary: "border-border bg-muted text-foreground hover:bg-muted",
   };
 
   return (

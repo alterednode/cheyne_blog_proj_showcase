@@ -5,6 +5,7 @@ import Socials from "@/app/components/standard/Socials";
 import { Card } from "@/app/components/standard/Card";
 import { PostGrid } from "@components/posts/PostGrid";
 import InProgress from "../components/standard/InProgress";
+import { CWrenchIconWithBackground } from "../components/custom-icons/c-wrench";
 
 export const metadata: Metadata = {
   title: "Onyx Cheyne",
@@ -19,6 +20,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/*
       <InProgress title="Site Under Construction">
         Sorry for the mess! I&apos;m still working on making this look how I want, so bear with me as I hammer things into place.
         <br />
@@ -26,21 +28,17 @@ export default function Home() {
         <br />
         As well as a headshot photo...
       </InProgress>
+      */}
 
       <div className="mx-auto max-w-6xl px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
           <Card className="p-6">
             <div className="flex items-center gap-4">
-              <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-border shadow-lg">
-                <Image
-                  src="/c-wrench/tiny no bkg.png"
-                  alt="Placeholder headshot"
-                  fill
-                  sizes="(max-width: 768px) 8rem, 6rem"
-                  className="object-cover"
-                  priority
+                <CWrenchIconWithBackground
+                  className="text-muted-foreground relative overflow-hidden"
+                  bgColor="var(--background)"
+                  bgStrokeColor="var(--background)"
                 />
-              </div>
 
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] font-bold text-muted-foreground">

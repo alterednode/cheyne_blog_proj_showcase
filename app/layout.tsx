@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
 import { Geist, Geist_Mono } from "next/font/google";
+import { absoluteUrl } from "@/app/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,6 +21,11 @@ export const metadata: Metadata = {
   icons: {
     icon: "/c-wrench/tiny no bkg.png",
   },
+  alternates: {
+    types: {
+      "application/rss+xml": absoluteUrl("/rss.xml"),
+    },
+  },
 };
 
 export default function RootLayout({
@@ -33,6 +40,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground selection:bg-primary/25 selection:text-foreground`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );

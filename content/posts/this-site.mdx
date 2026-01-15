@@ -1,11 +1,13 @@
 ---
 title: This Site
 description: The technologies, tools, and decisions behind building this site.
-date: 2024-12-15
+date: 2025-12-15
+updated: 2025-12-30
 hero: /website_screenshot.png
 tags:
   - programming
 live: https://cheyne.dev
+repo: https://github.com/alterednode/cheyne_blog_proj_showcase
 stack:
   - TypeScript
   - React
@@ -26,12 +28,7 @@ I also wanted a dedicated place to showcase my projects beyond pinning the repos
 ## The Basics
 
 The site is built with [Next.js](https://nextjs.org/), which is a React framework for building server-rendered and statically generated web applications.  
-I'm using the React App Router so I can create dynamic routes for my posts and fetch the MDX content at build time using Next.js's static generation features.
-
-For styling, I'm using Tailwind CSS, which allows me to write utility-first CSS classes directly in my JSX.  
-It overwhelmed me at first, declaring so much CSS everywhere, but that's when I noticed I was underusing components.
-
-Once I started creating reusable components for common UI patterns, the code became much cleaner and easier to maintain.
+I'm using the App Router so I can create dynamic routes for my posts and fetch the MDX content at build time using Next.js's static generation features.
 
 I'm also using Next.js's **@next/mdx** package to handle MDX files as pages and content.
 
@@ -51,7 +48,7 @@ All of this is stored on GitHub and deployed via [Vercel](https://vercel.com/) f
 
 The content for the site is stored in a `content/posts` directory, with each post as its own MDX file.
 
-Each MDX file contains frontmatter metadata at the top, which is parsed and used to render the post page.
+Each MDX file contains frontmatter metadata at the top, which is parsed and used to render the post.
 Here is an example of the frontmatter for one of my posts:
 
 ```mdx
@@ -63,11 +60,11 @@ tags:
   - programming
   - server
 type: project
-hero: /posts/homelab/messy-desk-cropped.jpg
+hero: /content/posts/homelab/messy-desk-cropped.jpg
 ---
 ```
 
-The frontmatter is processed using the `remark-frontmatter` plugin, and converted into a JavaScript object that I can use in my React components.
+The frontmatter is processed using the `remark-frontmatter` plugin and converted into a JavaScript object that I can use in my React components.
 Everything above the first actual text paragraph of this post is based on information from the frontmatter.
 
 With this setup, I can easily add new posts by creating new MDX files in the `content/posts` directory, and the site will automatically pick them up and render them correctly when built.
@@ -113,7 +110,7 @@ I'd briefly mentioned how the MDX posts are rendered as static pages at build ti
 
 For example, the `MDXMeterPlayground` and `ScrollTracker` components used above are client components that allow for interactivity within the static MDX content.
 
-This is pretty typical for app router projects made of pages that are mostly server components but include some client components for interactivity.
+This is pretty typical for App Router projects made of pages that are mostly server components but include some client components for interactivity.
 
 However, I didn't realize I could do this with MDX the first time I tried it, and went down a whole rabbit hole of running an API route that could fetch the MDX files which were then rendered on the client side.
 
@@ -121,25 +118,23 @@ But that was a few years ago now.
 
 This approach keeps the default rendering path static and server-side, while limiting client-side JavaScript to components that genuinely require interactivity.
 
-
 ## Tailwind CSS
 
-I'm trying out Tailwind CSS for the first time on this project, and so far I'm finding it pretty interesting.  
-I found myself manually setting colors all over the place, which made it hard to maintain a consistent design.  
-I fixed that by creating a set of custom colors in my Tailwind config and then using those colors throughout the site.
+I'm trying out Tailwind CSS for the first time on this project.  
+Early on I was hand-picking colors in every component and drowning in class soup.
 
-I define a primary color, a secondary color, and an accent color, and then use those colors in my components and styles.  
-There are also derived colors for backgrounds, borders, and text to ensure everything looks cohesive, along with a matching set of dark mode colors.
+I fixed the color issue by defining a small palette for light and dark modes in the `globals.css` (primary, secondary, accent, neutrals) and letting Tailwind generate the various shades.  
+Everything now uses the palette and derived colors, so borders, backgrounds, and text stay consistent.
 
-One place this pipeline really shines is code block rendering.
+The next shift was leaning more heavily on components instead of constantly rewriting the same classes. Once I wrapped common patterns (cards, buttons, meters) into reusable pieces, the markup shrank and the styling became predictable instead of a wall of class names.
 
 ## Code Block Highlighting
 
-As this is a site which primarily exists for me to write about things that I've programmed, I wanted to have nice code blocks with syntax highlighting.
+As this is a site that primarily exists for me to write about things that I've programmed, I wanted to have nice code blocks with syntax highlighting.
 
-I'm already using **rehype-pretty-code** to handle syntax highlighting, but I needed to also provide some custom CSS to avoid it looking like this:
+I'm already using **rehype-pretty-code** to handle syntax highlighting, but I also needed to provide some custom CSS to avoid it looking like this:
 
-![Ugly Code Block](/posts/this-site/unformatted-code.png)
+![Ugly Code Block](/content/posts/this-site/unformatted-code.png)
 
 The syntax highlighting is fine, but the lack of line numbers, highlighted lines, and overall formatting made it look pretty bland and boxy.
 
@@ -158,9 +153,9 @@ This is achieved using the **rehype-pretty-code** plugin, which allows for exten
 The highlighted lines are specified in the code block's meta string using curly braces.  
 Line numbers are enabled with the `showLineNumbers` option.
 
-````mdx
+````mdx  {2}
 ```py showLineNumbers {1}
-print("This is a code block with syntax highlighting.")
+1 print("This is a code block with syntax highlighting.")
 ```
 ````
 ```py showLineNumbers {1}
@@ -173,12 +168,38 @@ For example, the highlighted line background color is set to a mix of the accent
 
 I also have custom formatting for the inline code elements `like this` to make them visually distinct from regular text, and match the larger code blocks.
 
+## Extra Stuff
+
+On top of all the stuff needed to get the site up and running, looking nice, and doing what I need, there are a few extra features I've added.
+
+### RSS Feed
+
+I discovered RSS feeds while researching how other blogs and portfolio sites were built ([Josh W Comeau](https://www.joshwcomeau.com/blog/how-i-built-my-blog-v2/) was an inspiration for several parts of this site, and his [book](https://www.joshwcomeau.com/effective-portfolio/) on developer portfolios was also a great resource) and thought it would be a nice addition to let people subscribe to my posts.
+
+I used the [feed](https://www.npmjs.com/package/feed) package to generate an RSS feed at build time using the post metadata that was already being extracted from the MDX frontmatter.
+
+The feed is available at https://cheyne.dev/rss.xml and can be subscribed to with any RSS reader.
+
+### Table of Contents
+
+Before I ever really got into programming, I found it super interesting that a lot of websites can link directly to sections of a page using anchor links (e.g., `https://example.com/page#section`).
+
+To add that to my posts, I made sure every heading automatically creates its own link by converting the generated HTML headings into anchor links with a custom component. Clicking a heading smoothly scrolls back to that spot, and I spent some extra time on some QOL stuff like gracefully replacing the current URL and ensuring stuff like opening links in a new tab work as expected.
+
+With that in place, it was pretty straightforward to generate a table of contents that scrolls you to that location.
+I ended up separately parsing the MDX content at build time with a simple regex to extract the headings for the table of contents, and made a custom slug generator to ensure the links match up between the two locations.
+
+The table of contents decides which entry to highlight based on which header is closest to and above the midpoint of the viewport. I found this gives the best sense of location within the document as you scroll, and it took some fiddling to get it feeling right.
+When near the top or the bottom of the page, there are some extra checks to ensure the first or last section is selected appropriately in case they are too small to be the one selected otherwise.
+
 ## What's Next?
 
-The basics of this site are pretty much where I want them as of the time of writing for the purpose of being able to create these posts, but I plan on adding more.
+The basics of this site are pretty much where I want them as of the time of writing, but I plan on adding more.
 
-To start, I'm planning on adding a page with a few browser-based tools I've made, and a space for me to put some of the games I've made that can be played with HTML5.
+To start, I'm planning on adding a page with a few browser-based tools I've made, and a space to put some of the games I've made that can be played with HTML5.
 I'd also like some persistent functionality for user interaction, like likes or polls with a database running on [My Homelab](https://cheyne.dev/posts/homelab).
 
 Beyond that, I might look into setting up a CMS to make content management easier, and use [ISR](https://nextjs.org/docs/app/guides/incremental-static-regeneration) to allow for more frequent content updates without needing to rebuild the entire site.
 
+Stay updated with my posts by subscribing to my [RSS feed](https://cheyne.dev/rss.xml)!
+If you want to see more about the code behind this site, check out the [GitHub repository](https://github.com/alterednode/cheyne_blog_proj_showcase).

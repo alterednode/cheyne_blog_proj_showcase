@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![License: MIT](https://img.shields.io/badge/Code-MIT-blue.svg)
+![Content License: CC BY-NC 4.0](https://img.shields.io/badge/Content-CC%20BY--NC%204.0-lightgrey.svg)
 
-## Getting Started
+# Personal Portfolio Site
 
-First, run the development server:
+This site is a place for me to showcase projects I've worked on, write about things that interest me, and mess around with web technologies.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+If you want to know more about how I made it, check that out [here](https://cheyne.dev/posts/this-site).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Forking
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+I keep an up-to-date version of this repo with none of my posts or media on the `template` branch. (Check out the workflow at `.github/workflows/publish-template.yml` to see how.)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+If you've forked this project, the only thing not in a route, page, or component that you should need to update is `app/lib/site.ts`, where I set cheyne.dev as the site URL fallback if the env variables aren't set.
 
-## Learn More
+## Deployment and Configuration
 
-To learn more about Next.js, take a look at the following resources:
+I deploy this via Vercel; any change to the `main` branch triggers a rebuild and deploy. You may want to peek at or remove `vercel.json` if deploying with them yourself.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you deploy another way, you should be fine to deploy it like a barebones Next.js site.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Your own content
 
-## Deploy on Vercel
+If you've forked this to make your own portfolio site, posts are made with MDX. To wire new MDX components, add them to the end of `app/components/posts/mdx/MDXComponents.tsx`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The MDX files use the filename as the slug and require frontmatter. Feel free to look at my posts to see how I use it, and `app/lib/content/schema.ts` to see all the frontmatter options I've added.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Additional notes
+
+`app/dev-only/` has a layout which gives a 404 for any pages in that route if next.js is not running in development mode (detectable via env var). If you have any pages that you only need for testing and don't want them to be accessable otherwise, put them there.
+
+If you don't want this behaviour, remove `app/dev-only/layout.tsx`.
+
+I have vercel's analyitics package installed and the component in the root layout. Remove it in your version if you'd like.
+
+## Licensing
+
+- Code in this repository is licensed under the MIT License.
+- Written content and media in `/content` and `/public/content` are licensed under
+  Creative Commons Attribution–NonCommercial 4.0.

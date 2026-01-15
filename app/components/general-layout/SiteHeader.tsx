@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import {CWrenchIcon,CWrenchIconWithBackground} from "@components/custom-icons/c-wrench"
 
 export default function SiteHeader() {
   return (
@@ -9,13 +10,10 @@ export default function SiteHeader() {
           href="/"
           className="flex items-center gap-3 rounded-md p-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <Image
-            src="/c-wrench/c-wrench bkg.svg"
-            alt="cheyne.dev"
-            width={40}
-            height={40}
-            className="rounded object-cover"
-            priority
+          <CWrenchIconWithBackground
+            className="h-10 w-10 text-foreground/70"
+            bgColor="var(--background)"
+            bgStrokeColor="var(--background)"
           />
           <div className="text-lg font-bold tracking-tight">
             cheyne.dev
@@ -38,7 +36,7 @@ export default function SiteHeader() {
         </nav>
       </div>
       
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-primary via-secondary to-accent opacity-70" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-primary opacity-70" />
     </header>
   );
 }
