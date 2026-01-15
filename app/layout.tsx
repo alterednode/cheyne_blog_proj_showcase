@@ -35,12 +35,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground selection:bg-primary/25 selection:text-foreground`}
       >
         {children}
-        <Analytics />
+        <Analytics endpoint="/va" />
       </body>
     </html>
   );
