@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next"
+import { VercelAnalytics } from "@components/telementary/VercelAnalyitics";
 import { Geist, Geist_Mono } from "next/font/google";
 import { absoluteUrl } from "@/app/lib/site";
 import "./globals.css";
@@ -39,7 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground selection:bg-primary/25 selection:text-foreground`}
       >
         {children}
-        <Analytics endpoint="/va" />
+        <VercelAnalytics />
       </body>
     </html>
   );
