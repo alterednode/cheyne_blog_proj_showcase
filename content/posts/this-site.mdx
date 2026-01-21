@@ -192,6 +192,13 @@ I ended up separately parsing the MDX content at build time with a simple regex 
 The table of contents decides which entry to highlight based on which header is closest to and above the midpoint of the viewport. I found this gives the best sense of location within the document as you scroll, and it took some fiddling to get it feeling right.
 When near the top or the bottom of the page, there are some extra checks to ensure the first or last section is selected appropriately in case they are too small to be the one selected otherwise.
 
+### "Dev only" pages
+
+There are a few pages that I added to check things like all the ways my colors can fit together, or a test page for the recolorable SVG icon I'm using for the site logo.
+
+I didn't think they were worth making public, so I added a simple environment variable check to only allow access to them when running the site in development mode.
+
+
 ## What's Next?
 
 The basics of this site are pretty much where I want them as of the time of writing, but I plan on adding more.
