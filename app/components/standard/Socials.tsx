@@ -43,7 +43,7 @@ const SOCIAL_META: Record<SocialPlatform, SocialMeta> = {
 
 export const DEFAULT_SOCIAL_LINKS: SocialLinks = {
   github: "https://github.com/alterednode",
-  linkedin: "https://www.linkedin.com/in/onyx-cheyne-415570245/",
+  linkedin: "https://linkedin.com/in/onyxcheyne/",
   email: "mailto:onyx@cheyne.dev",
 };
 
