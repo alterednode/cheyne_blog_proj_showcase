@@ -34,11 +34,11 @@ export default function Home() {
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
           <Card className="p-6">
             <div className="flex items-center gap-4">
-                <CWrenchIconWithBackground
-                  className="text-muted-foreground relative overflow-hidden"
-                  bgColor="var(--background)"
-                  bgStrokeColor="var(--background)"
-                />
+              <CWrenchIconWithBackground
+                className="text-muted-foreground relative overflow-hidden"
+                bgColor="var(--background)"
+                bgStrokeColor="var(--background)"
+              />
 
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] font-bold text-muted-foreground">
@@ -73,7 +73,7 @@ export default function Home() {
               <Socials display="both" className="flex-wrap" />
             </div>
           </Card>
-          
+
 
           <Card className="p-6 min-h-full overflow-y-auto no-scrollbar">
             <PostGrid
@@ -84,12 +84,15 @@ export default function Home() {
           </Card>
         </section>
 
+        {/* Hiding this whole thing until content is ready
         <Card className="p-8">
           <h3 className="text-lg font-semibold">About Me</h3>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            {/* content */}
+          <p className="mt-4 text-sm leading-relaxed text-foreground">
+            I am a computer science student at the University of British Columbia&apos;s Okanagan campus, currently in my third year.
+            I like to build things, whether that&apos;s full-stack 
           </p>
         </Card>
+        */}
       </div>
     </div>
   );
