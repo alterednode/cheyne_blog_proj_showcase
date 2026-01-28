@@ -9,9 +9,9 @@ export const siteMeta = {
   name: "Onyx Cheyne",
   title: "Onyx Cheyne",
   titleTemplate: "%s | Onyx Cheyne",
-  homeTitle: "Onyx Cheyne — Software Developer",
+  homeTitle: "Onyx Cheyne - Software Developer",
   description:
-    "Onyx Cheyne — software developer and computer science student at UBC Okanagan. Blog posts and project write-ups.",
+    "Onyx Cheyne - software developer and computer science student at UBC Okanagan. Blog posts and project write-ups.",
   homeDescription:
     "Onyx Cheyne is a software developer and computer science student at UBC Okanagan. Projects, blog posts, and contact info.",
   personDescription:
