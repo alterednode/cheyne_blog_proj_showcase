@@ -35,7 +35,7 @@ export default function Home() {
           <Card className="p-6">
             <div className="flex items-center gap-4">
               <CWrenchIconWithBackground
-                className="text-muted-foreground relative overflow-hidden"
+                className="text-muted-foreground relative overflow-hidden w-30"
                 bgColor="var(--background)"
                 bgStrokeColor="var(--background)"
               />
