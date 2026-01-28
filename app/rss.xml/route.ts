@@ -38,7 +38,7 @@ export async function GET() {
 
   posts.forEach((post) => {
     const url = absoluteUrl(`/posts/${post.slug}`);
-    const summary = post.summary ?? post.description;
+    const summary = post.summary;
 
     feed.addItem({
       link: url,

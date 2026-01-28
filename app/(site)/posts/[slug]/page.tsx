@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const description = post.description ?? post.summary;
+  const description = post.description;
   const ogImage = resolveImageUrl(post.hero);
   const postUrl = absoluteUrl(`/posts/${post.slug}`);
   const canonicalUrl = post.canonical ?? postUrl;
@@ -51,13 +51,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       modifiedTime: post.updated,
       authors: [siteUrl],
       tags: post.tags,
-      images: ogImage ? [{ url: ogImage, alt: post.title }] : undefined,
+      images: [{ url: ogImage, alt: post.title }],
     },
     twitter: {
-      card: ogImage ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: post.title,
       description,
-      images: ogImage ? [ogImage] : undefined,
+      images: [ogImage],
     },
     authors: [{ name: siteMeta.name, url: siteUrl }],
   };
