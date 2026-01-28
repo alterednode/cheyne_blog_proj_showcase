@@ -29,9 +29,9 @@ export function PostCard({ post, showHeroImage = false }: PostCardProps) {
           {title}
         </h2>
         {subtitle ? (
-          <p className="text-sm font-medium text-muted-foreground">{subtitle}</p>
+          <p className="text-sm font-medium text-muted-foreground">{subtitle}</p> 
         ) : null}
-        <p className="mt-3 line-clamp-2 text-sm text-foreground/90">{summary}</p>
+        <p className="mt-3 line-clamp-2 text-sm text-foreground">{summary}</p>
         <time
           dateTime={date}
           className="mt-4 inline-block text-sm font-medium text-muted-foreground"
