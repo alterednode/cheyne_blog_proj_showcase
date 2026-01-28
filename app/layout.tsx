@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { VercelAnalytics } from "@components/telementary/VercelAnalyitics";
 import { Geist, Geist_Mono } from "next/font/google";
-import { absoluteUrl } from "@/app/lib/site";
+import { absoluteUrl, siteMeta, siteUrl } from "@/app/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,16 +15,42 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Onyx Cheyne",
-  description:
-    "Blog and project showcase of Onyx Cheyne, a computer science student at UBC Okanagan.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteMeta.title,
+    template: siteMeta.titleTemplate,
+  },
+  description: siteMeta.description,
+  keywords: [...siteMeta.keywords],
+  authors: [{ name: siteMeta.name, url: siteUrl }],
+  creator: siteMeta.name,
   icons: {
-    icon: "/c-wrench/tiny no bkg.png",
+    icon: siteMeta.icon,
   },
   alternates: {
+    canonical: siteUrl,
     types: {
       "application/rss+xml": absoluteUrl("/rss.xml"),
     },
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: siteMeta.name,
+    title: siteMeta.title,
+    description: siteMeta.description,
+    images: [
+      {
+        url: siteMeta.ogImage,
+        alt: `${siteMeta.name} logo`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: siteMeta.title,
+    description: siteMeta.description,
+    images: [siteMeta.ogImage],
   },
 };
 

@@ -8,7 +8,7 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, showHeroImage = false }: PostCardProps) {
-  const { slug, title, description, date } = post;
+  const { slug, title, subtitle, summary, date } = post;
   const heroSrc = post.hero;
 
   return (
@@ -28,10 +28,13 @@ export function PostCard({ post, showHeroImage = false }: PostCardProps) {
         <h2 className="text-xl font-semibold mb-2 transition-colors group-hover:text-primary">
           {title}
         </h2>
-        <p className="mb-4 line-clamp-2 text-muted-foreground">{description}</p>
+        {subtitle ? (
+          <p className="text-sm font-medium text-muted-foreground">{subtitle}</p>
+        ) : null}
+        <p className="mt-3 line-clamp-2 text-sm text-foreground/90">{summary}</p>
         <time
           dateTime={date}
-          className="text-sm font-medium text-muted-foreground"
+          className="mt-4 inline-block text-sm font-medium text-muted-foreground"
         >
           {new Date(date).toLocaleDateString("en-US", {
             year: "numeric",

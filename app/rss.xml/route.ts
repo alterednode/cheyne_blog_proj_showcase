@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Feed } from "feed";
 import { getPublishedPosts } from "@lib/content/query";
-import { absoluteUrl, siteUrl } from "@lib/site";
+import { absoluteUrl, siteMeta, siteUrl } from "@lib/site";
 
 // as of dec 29 2025, this is intended to be fully static and does not use any dynamic params
 // but is not strictly set to that in case I make something dynamic later, I don't want to break anything
@@ -16,9 +16,8 @@ export async function GET() {
 
   const feed = new Feed({
     id: siteUrl,
-    title: "Onyx Cheyne",
-    description:
-      "Blog and project showcase of Onyx Cheyne, a computer science student at UBC Okanagan.",
+    title: siteMeta.title,
+    description: siteMeta.description,
     language: "en",
     link: siteUrl,
     feedLinks: {
@@ -39,11 +38,12 @@ export async function GET() {
 
   posts.forEach((post) => {
     const url = absoluteUrl(`/posts/${post.slug}`);
+    const summary = post.summary;
 
     feed.addItem({
       link: url,
       title: post.title,
-      description: post.description + ` <strong><a href="${url}">Read More ↗</a></strong>`,
+      description: summary + ` <strong><a href="${url}">Read More ↗</a></strong>`,
       author: [author],
       date: new Date(post.date),
       ...(post.updated && { updated: new Date(post.updated) }),

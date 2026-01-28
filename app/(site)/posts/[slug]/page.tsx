@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { getPublishedPosts, getPostBySlug } from "@/app/lib/content/query";
+import { absoluteUrl, siteMeta, siteUrl } from "@/app/lib/site";
 import { PostHeader } from "@app/components/posts/PostHeader";
 import { TableOfContents } from "@app/components/posts/TableOfContents";
 import { Prose } from "@components/posts/mdx/Prose";
@@ -30,15 +31,42 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  const description = post.description;
+  const ogImage = resolveImageUrl(post.hero);
+  const postUrl = absoluteUrl(`/posts/${post.slug}`);
+  const canonicalUrl = post.canonical ?? postUrl;
+
   return {
     title: post.title,
-    description: post.description,
-    ...(post.canonical && {
-      alternates: {
-        canonical: post.canonical,
-      },
-    }),
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      type: "article",
+      url: canonicalUrl,
+      title: post.title,
+      description,
+      publishedTime: post.date,
+      modifiedTime: post.updated,
+      authors: [siteUrl],
+      tags: post.tags,
+      images: [{ url: ogImage, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      images: [ogImage],
+    },
+    authors: [{ name: siteMeta.name, url: siteUrl }],
   };
+}
+
+function resolveImageUrl(value?: string) {
+  if (!value) return absoluteUrl("/c-wrench/full no bkg.png");
+  if (/^https?:\/\//.test(value)) return value;
+  return absoluteUrl(value);
 }
 
 export default async function PostPage({ params }: PageProps) {
