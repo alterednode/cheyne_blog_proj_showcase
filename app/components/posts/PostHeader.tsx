@@ -9,7 +9,7 @@ interface PostHeaderProps {
 export function PostHeader({ post }: PostHeaderProps) {
   const {
     title,
-    description,
+    summary,
     date,
     updated,
     tags,
@@ -22,6 +22,7 @@ export function PostHeader({ post }: PostHeaderProps) {
     status,
     type,
   } = post;
+  const displaySummary = summary;
 
   const formattedDate = hideDate ? null : formatDate(date);
   const formattedUpdated = updated ? formatDate(updated) : null;
@@ -35,7 +36,7 @@ export function PostHeader({ post }: PostHeaderProps) {
             <h1 className="text-4xl md:text-5xl">{title}</h1>
             <PostBadges type={type} status={status} state={state} />
           </div>
-          <p className="max-w-prose text-base text-muted-foreground md:text-lg">{description}</p>
+          <p className="max-w-prose text-base text-muted-foreground md:text-lg">{displaySummary}</p>
         </div>
 
         {(formattedDate || formattedUpdated) ? (

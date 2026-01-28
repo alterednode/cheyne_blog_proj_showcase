@@ -1,25 +1,68 @@
-import Image from "next/image";
 import type { Metadata } from "next";
 import { getFeaturedPosts, getRecentPosts, } from "@lib/content/query";
 import Socials from "@/app/components/standard/Socials";
+import { DEFAULT_SOCIAL_LINKS } from "@/app/components/standard/Socials";
 import { Card } from "@/app/components/standard/Card";
 import { PostGrid } from "@components/posts/PostGrid";
 import InProgress from "../components/standard/InProgress";
 import { CWrenchIconWithBackground } from "../components/custom-icons/c-wrench";
+import { siteMeta, siteUrl } from "@/app/lib/site";
 
 export const metadata: Metadata = {
-  title: "Onyx Cheyne",
-  description:
-    "Blog and project showcase of Onyx Cheyne, a computer science student at UBC Okanagan.",
+  title: {
+    absolute: siteMeta.homeTitle,
+  },
+  description: siteMeta.homeDescription,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+    title: siteMeta.homeTitle,
+    description: siteMeta.homeDescription,
+    images: [
+      {
+        url: siteMeta.ogImage,
+        alt: `${siteMeta.name} logo`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: siteMeta.homeTitle,
+    description: siteMeta.homeDescription,
+    images: [siteMeta.ogImage],
+  },
 };
 
 export default function Home() {
   const featuredPosts = getFeaturedPosts();
   const recentBlogPosts = getRecentPosts(3, "blog");
   const recentProjectPosts = getRecentPosts(3, "project");
+  const sameAsLinks = Object.values(DEFAULT_SOCIAL_LINKS).filter(
+    (link): link is string => Boolean(link) && /^https?:\/\//.test(link)
+  );
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteMeta.name,
+    url: siteUrl,
+    description: siteMeta.personDescription,
+    jobTitle: "Software Developer",
+    affiliation: {
+      "@type": "CollegeOrUniversity",
+      name: "University of British Columbia Okanagan",
+    },
+    sameAs: sameAsLinks,
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       {/*
       <InProgress title="Site Under Construction">
         Sorry for the mess! I&apos;m still working on making this look how I want, so bear with me as I hammer things into place.

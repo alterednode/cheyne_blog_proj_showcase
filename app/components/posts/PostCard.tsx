@@ -8,8 +8,9 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, showHeroImage = false }: PostCardProps) {
-  const { slug, title, description, date } = post;
+  const { slug, title, summary, date } = post;
   const heroSrc = post.hero;
+  const displaySummary = summary;
 
   return (
     <article className="group overflow-hidden rounded-lg border-2 border-border/80 bg-linear-to-br from-background via-card to-muted p-6 text-card-foreground shadow-lg shadow-accent/5 transition-colors hover:border-primary hover:shadow-primary/30 ">
@@ -28,7 +29,7 @@ export function PostCard({ post, showHeroImage = false }: PostCardProps) {
         <h2 className="text-xl font-semibold mb-2 transition-colors group-hover:text-primary">
           {title}
         </h2>
-        <p className="mb-4 line-clamp-2 text-muted-foreground">{description}</p>
+        <p className="mb-4 line-clamp-2 text-muted-foreground">{displaySummary}</p>
         <time
           dateTime={date}
           className="text-sm font-medium text-muted-foreground"
