@@ -9,7 +9,8 @@ const dateString = z.preprocess(
 export const PostFrontmatterSchema = z.object({
   // Required fields
   title: z.string(),
-  summary: z.string(), // On-page subtitle/summary
+  subtitle: z.string().optional(),
+  summary: z.string(), // On-page summary
   description: z.string(), // SEO metadata description
   date: dateString, // ISO date string
   type: z.enum(["blog", "project"]),
