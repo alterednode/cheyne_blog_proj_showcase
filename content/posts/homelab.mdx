@@ -21,9 +21,9 @@ hero: /content/posts/homelab/messy-desk-cropped.jpg
 
 I've been wanting to set up some sort of homelab / server for a while, especially after upgrading my desktop which left me with everything but a case from the old build.
 
+I had an i7-6700, a random assortment of three 8 GB RAM sticks, a 1 TB NVMe drive, a motherboard and power supply, and a cardboard box to toss it in (with some air holes near the fans).
+
 My main goal was to have a secure server that I could use to host a few game servers for myself and some friends, a file server, and some other services. I also wanted to use it as an opportunity to learn about server administration, networking, and self-hosting.
-
-
 
 ## The BIOS is Gone
 
@@ -31,24 +31,24 @@ This was not a fun discovery.
 
 ![A photo of the messy desk with the computer on top, an NVMe drive held in place with a bottle of allergy meds](/content/posts/homelab/messy-desk-cropped.jpg)
 
-I'd set up the computer on top of my extremely messy desk, put an NVMe drive in place with a bottle of allergy meds to hold it down, prepared an Ubuntu Server bootable USB, and shorted the power pins with an old key to turn it on.
+I'd set up the computer on top of my extremely messy desk, put an NVMe drive in place with a bottle of allergy meds to hold it down, prepared a bootable Ubuntu Server USB, and shorted the power pins with an old key to turn it on.
 
 ![Video of the BIOS being completely messed up](/content/posts/homelab/BIOS-broken-vid.gif)
 
 This is not what I expected to see.
 
-I attempted to figure out why this was happening: resetting the CMOS, tried all the RAM in different slots one at a time, but nothing worked.
+I attempted to figure out why this was happening: resetting the CMOS, trying all the RAM in different slots one at a time, but nothing worked.
 
 Occasionally the BIOS would load somewhat correctly, but it was extremely unstable and would constantly crash or freeze.  
 Nonetheless, after about an hour of fighting with it, I managed to get the boot order changed to boot from the USB drive.
 
 ## Networking Woes
 
-First things first, I needed a wired internet connection. Thankfully, my apartment is wired for ethernet, but every cable was unlabeled, and we more wall jacks than .
+First things first, I needed a wired internet connection. Thankfully, my apartment is wired for Ethernet, but every cable was unlabeled, and we had more wall jacks than cables at the router, so I had to do some testing to figure out which cable went where.
 
 I set up SSH (with keys, no insecure passwords here!), connected from my laptop, and started configuring things. I wanted to set up Traefik as a reverse proxy to route traffic to different services, and logged into my Telus router to configure port forwarding.
 
-After an hour of trying to figure out why I couldn't access the server from outside my network, messing about with the router firewall, DNS and more, I discovered that Telus had us behind CGNAT, meaning port forwarding wouldn't work no matter what I did on the router.
+After an hour of trying to figure out why I couldn't access the server from outside my network, messing about with the router firewall, DNS, and more, I discovered that Telus had us behind CGNAT, and that port forwarding wouldn't work no matter what I did on the router.
 
 ### A Brief Look at Cloudflare Tunnels
 
@@ -56,13 +56,11 @@ I considered using Cloudflare Tunnels to work around this, but ultimately decide
 
 ## Oracle Cloud to the Rescue
 
-A while ago, I discovered Oracle Cloud's free tier, and the massive amount of resources they provide for free if you use their ARM instances - 4vcpus, 24GB of RAM, and 200GB of block storage.
+A while ago, I discovered Oracle Cloud's free tier, and the massive amount of resources they provide for free if you use their ARM instances - 4 vCPUs, 24 GB of RAM, and 200 GB of block storage.
 
 It works quite well for running small Minecraft servers, but I figured I could also use it as an entry point for my home server. I removed my existing instance that was hosting a few Minecraft servers and created a new ARM instance, then set up Tailscale and Traefik on it.
 
-Tailscale is a mesh VPN that allows me to directly connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server with Tailscale and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
-
-
+Tailscale is a mesh VPN that allows me to directly connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server with Tailscale, and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
 
 ## Security
 
@@ -72,7 +70,7 @@ To start, the Oracle Cloud instance is running iptables to only allow incoming c
 
 On the home server I'm using the default Ubuntu firewall (ufw) to block all incoming connections except for the ports I have assigned for various services, or LAN traffic.
 
-Traefik is configured to use HTTPS with a certificate from Let's Encrypt, and I have it set up to redirect all HTTP traffic to HTTPS. 
+Traefik is configured to use HTTPS with a certificate from Let's Encrypt, and I have it set up to redirect all HTTP traffic to HTTPS.
 
 ## Container time!
 
@@ -89,11 +87,10 @@ Currently, I'm running a few services on my home server, all in Docker container
 
 - A Minecraft server for me and my friends
 - WordPress for hosting an in-development site for a community centre
-- My personal website, which I am working on migrating from vercel to my own server for fun and learning purposes
+- My personal website, which I am working on migrating from Vercel to my own server for fun and learning purposes
 
 In the future, I plan to add a few more services, such as:
 - A file server for storing and sharing files between my devices once hard drives become slightly more affordable.
-
 - Plex or Jellyfin for media streaming
 - Pterodactyl for game server management to easily manage multiple game servers and allow my friends to manage their own servers without needing access to the entire server.
 
