@@ -7,26 +7,23 @@ date: 2025-12-15
 tags:
   - programming
   - server
-live: https://cheyne.dev
+#live: https://cheyne.dev
 stack:
-  - Not
-  - Finished
-  - Listing
-  - Them
+  - Oracle Cloud
+  - Tailscale
+  - Traefik
+  - Docker
 status: published
-state: in-progress
 featured: 2
 type: project
 hero: /content/posts/homelab/messy-desk-cropped.jpg
 ---
 
-I've been wanting to set up some sort of homelab / server for a while, especially after I upgraded my gaming computer and essentially had a whole second computer left over.
+I've been wanting to set up some sort of homelab / server for a while, especially after upgrading my desktop which left me with everything but a case from the old build.
 
-My apartment thankfully has some Ethernet cables in the walls running to a few points throughout the unit, so I didn't have to attempt to stuff the server in a closet full of clothes or run an absurdly long cable.
+My main goal was to have a secure server that I could use to host a few game servers for myself and some friends, a file server, and some other services. I also wanted to use it as an opportunity to learn about server administration, networking, and self-hosting.
 
-I did still have to run around with my laptop and an Ethernet cable to figure out which cable went where in the apartment, though.
 
-But the problems started well before that.
 
 ## The BIOS is Gone
 
@@ -34,7 +31,7 @@ This was not a fun discovery.
 
 ![A photo of the messy desk with the computer on top, an NVMe drive held in place with a bottle of allergy meds](/content/posts/homelab/messy-desk-cropped.jpg)
 
-I'd set up the computer on top of my extremely messy desk, put an NVMe drive in place with a bottle of allergy meds to hold it down, prepared a live Debian USB, and attempted to boot.
+I'd set up the computer on top of my extremely messy desk, put an NVMe drive in place with a bottle of allergy meds to hold it down, prepared an Ubuntu Server bootable USB, and shorted the power pins with an old key to turn it on.
 
 ![Video of the BIOS being completely messed up](/content/posts/homelab/BIOS-broken-vid.gif)
 
@@ -43,43 +40,61 @@ This is not what I expected to see.
 I attempted to figure out why this was happening: resetting the CMOS, tried all the RAM in different slots one at a time, but nothing worked.
 
 Occasionally the BIOS would load somewhat correctly, but it was extremely unstable and would constantly crash or freeze.  
-Nonetheless, after about an hour of fighting with it, I managed to get Debian installed.
-
-…which did not like my Realtek networking controller.
+Nonetheless, after about an hour of fighting with it, I managed to get the boot order changed to boot from the USB drive.
 
 ## Networking Woes
 
-After spending some time trying to get third-party drivers working, I resorted to using Ubuntu Server, which cost me another hour of blindly navigating the BIOS while attempting to change the default boot order to boot from USB again.
+First things first, I needed a wired internet connection. Thankfully, my apartment is wired for ethernet, but every cable was unlabeled, and we more wall jacks than .
 
-Thankfully, that installed fine. I went through the setup and had an internet connection.
-
-I set up SSH, connected from my laptop, and started configuring things. I wanted to set up Traefik as a reverse proxy to route traffic to different services, and logged into my Telus router to configure port forwarding.
+I set up SSH (with keys, no insecure passwords here!), connected from my laptop, and started configuring things. I wanted to set up Traefik as a reverse proxy to route traffic to different services, and logged into my Telus router to configure port forwarding.
 
 After an hour of trying to figure out why I couldn't access the server from outside my network, messing about with the router firewall, DNS and more, I discovered that Telus had us behind CGNAT, meaning port forwarding wouldn't work no matter what I did on the router.
 
-## A Brief Look at Cloudflare Tunnels
+### A Brief Look at Cloudflare Tunnels
 
 I considered using Cloudflare Tunnels to work around this, but ultimately decided against it. I planned to host a few game servers, and running those through Cloudflare Tunnels would not work without even more complicated setups—such as requiring my friends to install mods just to connect, even for something like Minecraft.
 
 ## Oracle Cloud to the Rescue
 
-A while ago, I discovered Oracle Cloud's free tier, and the massive amount of resources they provide for free if you use their ARM instances, along with a generous bandwidth allowance.
+A while ago, I discovered Oracle Cloud's free tier, and the massive amount of resources they provide for free if you use their ARM instances - 4vcpus, 24GB of RAM, and 200GB of block storage.
 
-It works quite well for running Minecraft servers, but I figured I could also use it as an entry point for my homelab server. I removed my existing instance that was hosting a few Minecraft servers and created a new ARM instance, then set up Tailscale and Traefik on it.
+It works quite well for running small Minecraft servers, but I figured I could also use it as an entry point for my home server. I removed my existing instance that was hosting a few Minecraft servers and created a new ARM instance, then set up Tailscale and Traefik on it.
 
-Tailscale essentially acts as a VPN, allowing me to connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server over Tailscale and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
+Tailscale is a mesh VPN that allows me to directly connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server with Tailscale and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
 
-This way, when I access my domain, the request goes to the Oracle Cloud instance, which then routes the traffic over Tailscale to my home server.
 
-As a bonus, this setup also means my home server is not directly exposed to the internet, adding an extra layer of security.
+
+## Security
+
+I'm fairly security-conscious, and I wanted to make sure my homelab was secure, especially since I was exposing some services to the internet.
+
+To start, the Oracle Cloud instance is running iptables to only allow incoming connections for SSH and the ports I have assigned for various services. To add an extra layer of security to the SSH port, I have fail2ban set up to block any IPs that have too many failed login attempts.
+
+On the home server I'm using the default Ubuntu firewall (ufw) to block all incoming connections except for the ports I have assigned for various services, or LAN traffic.
+
+Traefik is configured to use HTTPS with a certificate from Let's Encrypt, and I have it set up to redirect all HTTP traffic to HTTPS. 
+
+## Container time!
+
+Everything aside from the firewalls, Tailscale, and fail2ban, I'm using Docker containers to run my services.
+
+Traefik is running in a container on the Oracle Cloud instance, and all my other services are running in containers on my home server. This makes it easy to manage and update my services, as well as keep them isolated from each other.
+
+I've really fallen in love with Docker and containerization in general. It's made it so much easier to set up and manage my services, and I can't imagine going back to running things directly on the host.
+
 
 ## Current Setup and Future Plans
 
-Currently, I'm running a few services on my homelab server, all in Docker containers:
+Currently, I'm running a few services on my home server, all in Docker containers:
 
 - A Minecraft server for me and my friends
 - WordPress for hosting an in-development site for a community centre
-- n8n for automating tasks
-- Jellyfin for media streaming
+- My personal website, which I am working on migrating from vercel to my own server for fun and learning purposes
 
-I'm planning to set up monitoring on top of Traefik, as well as possibly add a few more game servers in the future.
+In the future, I plan to add a few more services, such as:
+- A file server for storing and sharing files between my devices once hard drives become slightly more affordable.
+
+- Plex or Jellyfin for media streaming
+- Pterodactyl for game server management to easily manage multiple game servers and allow my friends to manage their own servers without needing access to the entire server.
+
+
