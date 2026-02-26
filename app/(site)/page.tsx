@@ -89,8 +89,6 @@ export default function Home() {
                 </p>
                 <h1 className="text-2xl font-semibold text-primary">Onyx Cheyne</h1>
                 <p className="text-sm text-muted-foreground">
-                  <span>Seattle, WA</span>
-                  <br />
                   <span>Kelowna, BC</span>
                 </p>
               </div>
