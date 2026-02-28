@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/* I am not a master of colours, nor graphics / design */
+
+:root {
+  /* -------------------------
+     Base Colors
+     ------------------------- */
+    --text: #060c03;
+  --background: #eef3eb;
+
+
+  /* “brand” Colours: primary/secondary/accent) */
+
+  --primary: #53a328;
+  --secondary: #b68ae6;
+  --accent: #dd629f;
+
+  /* “On-color” text tokens */
+  --primary-foreground: var(--text);
+  --secondary-foreground: var(--text);
+  --accent-foreground: var(--background);
+
+  /* -------------------------
+     Semantic base tokens
+     ------------------------- */
+  --foreground: var(--text);
+  --ring: var(--primary); /* default to primary for focus; swap to accent if desired */
+
+  /* -------------------------
+     Derived neutrals (anchored to bg/fg)
+     ------------------------- */
+  --muted: color-mix(in oklab, var(--background) 90%, var(--foreground) 10%);
+  --muted-foreground: color-mix(
+    in oklab,
+    var(--foreground) 62%,
+    var(--background) 38%
+  );
+
+    /* -------------------------
+     Border
+     ------------------------- */
+  --border: color-mix(in oklab, var(--foreground) 22%, var(--background) 78%);
+
+  /* -------------------------
+     Surfaces
+     ------------------------- */
+  --card: color-mix(in oklab, var(--background) 96%, var(--foreground) 4%);
+  --card-foreground: var(--foreground);
+
+  /* Optional extra surfaces used by the styleguide / code blocks */
+  --surface-2: color-mix(in oklab, var(--background) 92%, var(--foreground) 8%);
+  --surface-3: color-mix(in oklab, var(--background) 88%, var(--foreground) 12%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Palette inputs */
+    --text: #f7eef7;
+    --background: #1f061f;
+
+    --primary: #cb3bd8;
+    --secondary: #288319;
+    --accent: #11ffdf;
+
+    /* On-colors (keep readable) */
+    --primary-foreground: var(--background);
+    --secondary-foreground: var(--background);
+    --accent-foreground: var(--background);
+
+    /* Re-derive via bg/fg automatically */
+    --foreground: var(--text);
+
+    /* Ring stays primary by default; override if you prefer accent rings */
+    --ring: var(--primary);
+  }
+}
+
+/* Tailwind v4 token exposure */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Inline code (keep code blocks untouched via :not(pre) guard) */
+:where(:not(pre) > code) {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.95em;
+  line-height: 1.25;
+  padding: 0.15em 0.35em;
+  border-radius: 0.375rem;
+
+  background: color-mix(in oklab, var(--muted) 85%, transparent);
+  border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+  color: color-mix(in oklab, var(--foreground) 92%, var(--background) 8%);
+  white-space: break-spaces;
+  -webkit-font-smoothing: antialiased;
+  font-variant-ligatures: none;
+}
+
+:where(:not(pre) > code) a {
+  color: inherit;
+}
+
+/* Code blocks */
+pre[data-theme] {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+
+  /* Keep consistent with theme */
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+/* Line numbers */
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2rem;
+  text-align: right;
+  margin-right: 1rem;
+  color: var(--muted-foreground); /* FIX: was undefined --text-muted */
+  user-select: none;
+}
+
+[data-highlighted-line] {
+  background-color: color-mix(in oklab, var(--accent) 25%, transparent);
+}
+
+pre.has-focused .line:not(.focused) {
+  opacity: 0.5;
+}
+
+@utility no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
