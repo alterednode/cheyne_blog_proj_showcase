@@ -28,11 +28,9 @@ My main goal was to have a secure server that I could use to host a few game ser
 
 ## The BIOS is Gone
 
-This was not a fun discovery.
+This was a rough way to get started.
 
-![A photo of the messy desk with the computer on top, an NVMe drive held in place with a bottle of allergy meds](/content/posts/homelab/messy-desk-cropped.jpg)
-
-I'd set up the computer on top of my extremely messy desk, put an NVMe drive in place with a bottle of allergy meds to hold it down, prepared a bootable Ubuntu Server USB, and shorted the power pins with an old key to turn it on.
+I'd set up the computer on top of my messy desk, plopped my spare NVMe drive in place with a bottle of allergy meds to hold it down, prepared a bootable Ubuntu Server USB, and shorted the power pins with an old key to turn it on.
 
 ![Video of the BIOS being completely messed up](/content/posts/homelab/BIOS-broken-vid.gif)
 
@@ -45,7 +43,7 @@ Nonetheless, after about an hour of fighting with it, I managed to get the boot 
 
 ## Networking Woes
 
-First things first, I needed a wired internet connection. Thankfully, my apartment is wired for Ethernet, but every cable was unlabeled, and we had more wall jacks than cables at the router, so I had to do some testing to figure out which cable went where.
+Second things second, I needed a wired internet connection. Thankfully, my apartment is wired for Ethernet, but every cable was unlabeled, and we had more wall jacks than cables at the router, so I had to do some testing to figure out which cable went where.
 
 I set up SSH (with keys, no insecure passwords here!), connected from my laptop, and started configuring things. I wanted to set up Traefik as a reverse proxy to route traffic to different services, and logged into my Telus router to configure port forwarding.
 
@@ -61,7 +59,38 @@ A while ago, I discovered Oracle Cloud's free tier, and the massive amount of re
 
 It works quite well for running small Minecraft servers, but I figured I could also use it as an entry point for my home server. I removed my existing instance that was hosting a few Minecraft servers and created a new ARM instance, then set up Tailscale and Traefik on it.
 
-Tailscale is a mesh VPN that allows me to directly connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server with Tailscale, and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
+### Reverse Proxy
+
+I'd seen a lot of things about NGINX reverse proxies, but I wanted to try something a bit different, so I went with Traefik instead after seeing it talked about self hosting reddit threads and forum posts.
+
+What I found neat about it is that I just need two pretty small configuration files to get it up and running, it can automatically obtain and renew SSL certificates from Let's Encrypt once I setup DNS records in Cloudflare, and it can automatically discover new services on on the same machine and route traffic to them without needing to restart the proxy.
+
+For services on the home server I just need to tell Traefik to route traffic to the Tailscale IP address of the home server, and it takes care of the rest. Here's an example of how I could set it up to route traffic to a whoami service running on my home server:
+
+``` yml
+http:
+  routers:
+    # whoami on cheyne-core over Tailscale
+    core-whoami:
+      rule: "Host(`core.personal.cheyne.dev`)"
+      entryPoints:
+        - websecure
+      service: core-whoami-svc
+      tls:
+        certResolver: le
+  services:
+    core-whoami-svc:
+      loadBalancer:
+        servers:
+          - url: "http://tailscale-ip:port"
+```
+
+### Tailscale
+
+Tailscale is a mesh VPN that allows me to directly connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server with Tailscale based on hostnames, and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
+
+I also use it for ssh-ing into my home server when I need to manage it, and for accessing any services that I choose not to route through Traefik.
+
 
 ## Security
 
@@ -80,6 +109,8 @@ Everything aside from the firewalls, Tailscale, and fail2ban, I'm using Docker c
 Traefik is running in a container on the Oracle Cloud instance, and all my other services are running in containers on my home server. This makes it easy to manage and update my services, as well as keep them isolated from each other.
 
 I've really fallen in love with Docker and containerization in general. It's made it so much easier to set up and manage my services, and I can't imagine going back to running things directly on the host.
+
+
 
 
 ## Current Setup and Future Plans
