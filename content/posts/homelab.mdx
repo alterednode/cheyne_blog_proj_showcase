@@ -61,9 +61,9 @@ It works quite well for running small Minecraft servers, but I figured I could a
 
 ### Reverse Proxy
 
-I'd seen a lot of things about NGINX reverse proxies, but I wanted to try something a bit different, so I went with Traefik instead after seeing it talked about self hosting reddit threads and forum posts.
+I'd seen a lot of things about NGINX reverse proxies, but I wanted to try something a bit different, so I went with Traefik instead after seeing people discuss it in self-hosting Reddit threads and forum posts.
 
-What I found neat about it is that I just need two pretty small configuration files to get it up and running, it can automatically obtain and renew SSL certificates from Let's Encrypt once I setup DNS records in Cloudflare, and it can automatically discover new services on on the same machine and route traffic to them without needing to restart the proxy.
+What I found neat about it is that I just need two pretty small configuration files to get it up and running, it can automatically obtain and renew SSL certificates from Let's Encrypt once I set up DNS records in Cloudflare, and it can automatically discover new services on the same machine and route traffic to them without needing to restart the proxy.
 
 For services on the home server I just need to tell Traefik to route traffic to the Tailscale IP address of the home server, and it takes care of the rest. Here's an example of how I could set it up to route traffic to a whoami service running on my home server:
 
@@ -89,7 +89,7 @@ http:
     core-whoami-svc:
       loadBalancer:
         servers:
-          # The Tailscale URL of the home server, 
+          # The Tailscale IP of the home server, 
           # and the port the whoami service is running on
           - url: "http://tailscale-ip:port"
 ```
@@ -107,7 +107,7 @@ I'm fairly security-conscious, and I wanted to make sure my homelab was secure, 
 
 To start, the Oracle Cloud instance is running iptables to only allow incoming connections for SSH and the ports I have assigned for various services. To add an extra layer of security to the SSH port, I have fail2ban set up to block any IPs that have too many failed login attempts.
 
-On the home server I'm using the default Ubuntu firewall (ufw) to block all incoming connections except for the ports I have assigned for various services, or LAN traffic.
+On the home server I'm using the default Ubuntu firewall (ufw) to block all incoming connections except for assigned service ports and LAN traffic.
 
 Traefik is configured to use HTTPS with a certificate from Let's Encrypt, and I have it set up to redirect all HTTP traffic to HTTPS.
 
@@ -117,7 +117,7 @@ Everything aside from the firewalls, Tailscale, and fail2ban, I'm using Docker c
 
 Traefik is running in a container on the Oracle Cloud instance, and all my other services are running in containers on my home server. This makes it easy to manage and update my services, as well as keep them isolated from each other.
 
-I've really fallen in love with Docker and containerization in general. It's made it so much easier to set up and manage my services, and It's hard to imagine going back to running things directly on the host.
+I've really fallen in love with Docker and containerization in general. It's made it so much easier to set up and manage my services, and it's hard to imagine going back to running things directly on the host.
 
 ## Current Setup and Future Plans
 
@@ -128,8 +128,8 @@ Currently, I'm running a few services on my home server, all in Docker container
 - My personal website, which I am working on migrating from Vercel to my own server for fun and learning purposes
 
 In the future, I plan to add a few more services, such as:
-- A file server for storing and sharing files between my devices once hard drives become slightly more affordable.
+- A file server for storing and sharing files between my devices once hard drives become slightly more affordable
 - Plex or Jellyfin for media streaming
-- Pterodactyl for game server management to easily manage multiple game servers and allow my friends to manage their own servers without needing access to the entire server.
+- Pterodactyl for game server management to easily manage multiple game servers and allow my friends to manage their own servers without needing access to the entire server
 
 
