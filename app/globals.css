@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
+/* I am not a master of colours, nor graphics / design */
+
 :root {
   /* -------------------------
-     Palette inputs (swap these)
+     Base Colors
      ------------------------- */
     --text: #060c03;
-  --background: #f5fcf1;
+  --background: #eef3eb;
 
 
-  /* Semantic “brand” colors (used by Tailwind: primary/secondary/accent) */
+  /* “brand” Colours: primary/secondary/accent) */
 
   --primary: #53a328;
   --secondary: #b68ae6;
@@ -35,7 +37,9 @@
     var(--background) 38%
   );
 
-  /* Border was too faint; 22% improves separation on light backgrounds */
+    /* -------------------------
+     Border
+     ------------------------- */
   --border: color-mix(in oklab, var(--foreground) 22%, var(--background) 78%);
 
   /* -------------------------
