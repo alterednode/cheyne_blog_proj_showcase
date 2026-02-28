@@ -68,20 +68,29 @@ What I found neat about it is that I just need two pretty small configuration fi
 For services on the home server I just need to tell Traefik to route traffic to the Tailscale IP address of the home server, and it takes care of the rest. Here's an example of how I could set it up to route traffic to a whoami service running on my home server:
 
 ``` yml
+# Traefik configuration file (traefik.yml)
+# Example of routing traffic to a whoami service 
+# running on the home server through Tailscale
 http:
   routers:
-    # whoami on cheyne-core over Tailscale
     core-whoami:
+      # Match requests with this Host header
       rule: "Host(`core.personal.cheyne.dev`)"
+      # Listen on the HTTPS entrypoint
       entryPoints:
         - websecure
+      # Forward matched traffic to this service (listed later)
       service: core-whoami-svc
+      # Enable TLS using the Let's Encrypt resolver
       tls:
         certResolver: le
+
   services:
     core-whoami-svc:
       loadBalancer:
         servers:
+          # The Tailscale URL of the home server, 
+          # and the port the whoami service is running on
           - url: "http://tailscale-ip:port"
 ```
 
@@ -108,10 +117,7 @@ Everything aside from the firewalls, Tailscale, and fail2ban, I'm using Docker c
 
 Traefik is running in a container on the Oracle Cloud instance, and all my other services are running in containers on my home server. This makes it easy to manage and update my services, as well as keep them isolated from each other.
 
-I've really fallen in love with Docker and containerization in general. It's made it so much easier to set up and manage my services, and I can't imagine going back to running things directly on the host.
-
-
-
+I've really fallen in love with Docker and containerization in general. It's made it so much easier to set up and manage my services, and It's hard to imagine going back to running things directly on the host.
 
 ## Current Setup and Future Plans
 
