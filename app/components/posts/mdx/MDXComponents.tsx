@@ -7,6 +7,7 @@ import * as StandardComponents from "@components/standard";
 import { ScrollTracker } from "./post-specific/this-site/ScrollTracker";
 import Image from "next/image";
 import { slugify } from "@lib/content/slug";
+import TimcamPageClient from "../../(extras) stuff/TimcamPageClient";
 
 function textFromNode(node: unknown): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -96,5 +97,6 @@ export const mdxComponents: MDXComponents = {
   Card: StandardComponents.Card,
   Socials: StandardComponents.Socials,
   Image,
+  TimcamPageClient,
 
 };

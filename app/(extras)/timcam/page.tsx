@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { absoluteUrl, siteMeta, siteUrl } from "@/app/lib/site";
 
-import TimcamPageClient from "./TimcamPageClient";
+import TimcamPageClient from "../../components/(extras) stuff/TimcamPageClient";
 
 const THIS_TITLE =
 	"How many people are in line at Tims right now? | Tim Hortons line at UBC Okanagan";
@@ -105,6 +105,9 @@ export default function TimcamPage() {
 						</Link>{" "}
 						and is intended for educational, non-commercial use.
 					</p>
+					Thank you to UBCO Engagement Services - UBC IT Okanagan for creating the timcam feed and allowing this project.
+					<br />
+					<br />
 					<p>
 						Documentation is available at{" "}
 						<Link
