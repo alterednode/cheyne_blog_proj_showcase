@@ -45,7 +45,7 @@ Here I'll go through the structure of how the project creates the API, roughly i
 
 ### Ingesting the Video Feed
 
-It was super simple to grab frames with OpenCV’s `VideoCapture` pointed at the `.m3u8` URL, and I was pulling frames in no time. Once I ran the API for more than a few minutes, though, I realized the feed would occasionally time out.
+It was super simple to grab frames with OpenCV’s `VideoCapture` pointed at the `.m3u8` URL, and I was pulling frames in in no time. Once I ran the API for more than a few minutes, though, I realized the feed would occasionally time out.
 
 I added error handling to catch this and attempt a reconnect if it looks like the feed has stopped working. At first, it treated normal gaps between HLS segments as a failure and reconnected unnecessarily (which messed with the pipeline even though the feed was fine). Extending the time threshold before declaring a failure and reconnecting seems to have fixed it.
 
@@ -63,9 +63,9 @@ I knew I'd be running this on my homelab, which boasts my old i7-6700 CPU and no
 
 However, I eventually noticed that I was lagging behind the live feed while testing on my laptop (also an Intel CPU) and missing a lot of people. That was a problem, since I wanted this to be as accurate and up-to-date as possible. I ended up implementing a few optimizations to speed up the pipeline, such as only processing every nth frame, cropping the feed before processing, and adding an (attempted) limiter on how many frames are processed per second while dropping excess frames.
 
-What helped the most, though, was making a configurable n-length queue of the most recently received frames, tossing the older ones, and pulling from the queue when I could process a new frame. This way, I could ensure I was processing recent frames and not falling behind, even if I “lost” intermediate frames.
+What helped the most though, was making a configurable n-length queue of the most recently received frames, tossing the older ones, and pulling from the queue when I could process a new frame. This way, I could ensure I was processing recent frames and not falling behind, even if I “lost” intermediate frames.
 
-Of course, then I realized YOLO26 was out, and that it was much faster and more efficient.
+Of course, then I realized YOLO26 was out, and it was much faster and more efficient, so I switched to that which helped a bunch.
 
 I think the biggest improvements were the cropping, the model switch, and the queue, which together got me much more accurate and up-to-date results.
 
