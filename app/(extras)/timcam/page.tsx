@@ -1,166 +1,139 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
-
-import { Card } from "@/app/components/standard/Card";
+import type { Metadata } from "next";
 import Link from "next/link";
 
-type TimcamCountEvent = {
-	camera: string;
-	roi_name: string;
-	roi: Array<[number, number]>;
-	count: number;
-	smoothed_count: number;
-	smoothing_type: string;
-	timestamp: number;
-	timestamp_iso: string;
-	sequence: number;
+import { absoluteUrl, siteMeta, siteUrl } from "@/app/lib/site";
+
+import TimcamPageClient from "./TimcamPageClient";
+
+const THIS_TITLE =
+	"How many people are in line at Tims right now? | Tim Hortons line at UBC Okanagan";
+const THIS_DESCRIPTION =
+	"Live estimate of how many people are currently in the Tim Hortons line at UBC Okanagan, streamed from the timcam API.";
+
+export const metadata: Metadata = {
+	title: THIS_TITLE,
+	description: THIS_DESCRIPTION,
+	keywords: [
+		"Timcam",
+		"Tims",
+		"Tim Hortons line",
+		"UBC Okanagan",
+		"live line size",
+		"people in line",
+		"timcam API",
+	],
+	alternates: {
+		canonical: "/timcam",
+	},
+	openGraph: {
+		type: "website",
+		url: "/timcam",
+		title: THIS_TITLE,
+		description: THIS_DESCRIPTION,
+		images: [
+			{
+				url: siteMeta.ogImage,
+				alt: `${siteMeta.name} logo`,
+			},
+		],
+	},
+	twitter: {
+		card: "summary",
+		title: THIS_TITLE,
+		description: THIS_DESCRIPTION,
+		images: [siteMeta.ogImage],
+	},
 };
 
-function formatSeconds(seconds: number) {
-	if (!Number.isFinite(seconds) || seconds < 0) return "—";
-	if (seconds < 1) return `${Math.round(seconds * 1000)}ms`;
-	if (seconds < 10) return `${seconds.toFixed(1)}s`;
-	if (seconds < 60) return `${Math.round(seconds)}s`;
-	const minutes = Math.floor(seconds / 60);
-	const remainingSeconds = Math.round(seconds % 60);
-	return `${minutes}m ${remainingSeconds}s`;
-}
-
 export default function TimcamPage() {
-	const sseUrl = "https://timcam-api.cheyne.dev/timcam_cropped/count/stream";
-
-	const [latest, setLatest] = useState<TimcamCountEvent | null>(null);
-	const [lastEventLocalMs, setLastEventLocalMs] = useState<number | null>(null);
-	const [nowMs, setNowMs] = useState(() => Date.now());
-
-	useEffect(() => {
-		const interval = window.setInterval(() => setNowMs(Date.now()), 250);
-		return () => window.clearInterval(interval);
-	}, []);
-
-	useEffect(() => {
-		let cancelled = false;
-		const es = new EventSource(sseUrl);
-
-		const handleData = (raw: string) => {
-			if (cancelled) return;
-			try {
-				const parsed = JSON.parse(raw) as TimcamCountEvent;
-				setLatest(parsed);
-				setLastEventLocalMs(Date.now());
-			} catch {
-				// Ignore malformed payloads.
-				// Wish I could setup something to notify myself about these because something has gone wrong with my server.
-			}
-		};
-
-		const onCount = (ev: MessageEvent<string>) => handleData(ev.data);
-		const onMessage = (ev: MessageEvent<string>) => handleData(ev.data);
-
-		es.addEventListener("count", onCount as EventListener);
-		es.onmessage = onMessage;
-
-		return () => {
-			cancelled = true;
-			es.removeEventListener("count", onCount as EventListener);
-			es.close();
-		};
-	}, [sseUrl]);
-
-	const countDisplay = latest ? String(latest.count) : "—";
-	const smoothedDisplay = latest ? latest.smoothed_count.toFixed(2) : "—";
-
-	const stalenessSeconds = useMemo(() => {
-		if (!latest) return NaN;
-
-		// Prefer server-provided timestamp (data age), fallback to local receive time.
-		if (Number.isFinite(latest.timestamp)) {
-			return Math.max(0, nowMs / 1000 - latest.timestamp);
-		}
-
-		if (lastEventLocalMs == null) return NaN;
-		return Math.max(0, (nowMs - lastEventLocalMs) / 1000);
-	}, [latest, lastEventLocalMs, nowMs]);
+	const pageJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		name: THIS_TITLE,
+		url: absoluteUrl("/timcam"),
+		description: THIS_DESCRIPTION,
+		isPartOf: {
+			"@type": "WebSite",
+			name: siteMeta.name,
+			url: siteUrl,
+		},
+		about: {
+			"@type": "Place",
+			name: "Tim Hortons at UBC Okanagan",
+		},
+	};
 
 	return (
 		<main className="min-h-screen bg-background text-foreground">
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
+			/>
 			<div className="mx-auto max-w-4xl px-4 py-10 space-y-8">
 				<header className="space-y-2">
 					<p className="text-xs font-bold uppercase text-muted-foreground">
-						Timcam API Viewer
+						Timcam Line Viewer
 					</p>
-					<h1 className="text-3xl font-semibold">Live Line Count</h1>
+					<h1 className="text-3xl font-semibold">
+						How many people are in line at Tims right now?
+					</h1>
+					<p className="max-w-2xl text-sm text-muted-foreground">
+						Live estimate of the Tim Hortons line at UBC Okanagan.
+					</p>
 				</header>
 
-				<Card className="p-6">
-					<div className="grid gap-6 sm:grid-cols-3">
-						<div className="space-y-2">
-							<p className="text-m font-bold uppercase text-muted-foreground">
-								Count
-							</p>
-							<p className="text-5xl font-semibold tabular-nums">{countDisplay}</p>
-							<p className="text-sm text-muted-foreground">
-								Raw count from the latest event.
-							</p>
-						</div>
+				<TimcamPageClient />
 
-						<div className="space-y-2">
-							<p className="text-m font-bold uppercase text-muted-foreground">
-								Smoothed Count
-							</p>
-							<p className="text-5xl font-semibold tabular-nums">
-								{smoothedDisplay}
-							</p>
-							<p className="text-sm text-muted-foreground">
-								Filtered count using a smoothing algorithm.
-							</p>
-						</div>
-
-						<div className="space-y-2">
-							<p className="text-m font-bold uppercase text-muted-foreground">
-								Staleness
-							</p>
-							<p className="text-5xl font-semibold tabular-nums">
-								{formatSeconds(stalenessSeconds)}
-							</p>
-							<p className="text-sm text-muted-foreground">
-								How long ago the latest data was processed. (up to 15s is normal)
-							</p>
-						</div>
-					</div>
-				</Card>
-
-				<p className="text-sm text-muted-foreground">
-					Data is streamed live from the Timcam API that I created, based on the video feed from the timcam: <Link href="https://ok.ubc.ca/current-students/" className="text-blue-500 hover:underline">
-						https://ok.ubc.ca/current-students
-					</Link>
-					.<br></br>The timcamAPI at <Link href="https://timcam-api.cheyne.dev/" className="text-blue-500 hover:underline">
-						https://timcam-api.cheyne.dev
-					</Link> is for  educational / non-commercial use only.
-					<br></br>
-					Thank you to UBCO IT / Engagement Services for the timcam feed and for not shooting this project down.
-					<br></br>
-					I plan on sprucing up this page some, and making a blog post about the timcam and the API at some point, but I wanted to get this up and running first.
-					<br></br>
-					<br></br>
-					Feel free to reach out to me if you have any questions or want to chat about the timcam or the API! <Link href="mailto:onyx@cheyne.dev" className="text-blue-500 hover:underline">
-						onyx@cheyne.dev
-					</Link>
-					<br></br>
-					<br></br>
-					<Link href="https://timcam-api.cheyne.dev/docs" className="text-blue-500 hover:underline">
-						API Documentation
-					</Link>
-					<br></br>
-					<Link href="https://timcam-api.cheyne.dev/timcam_cropped/count/stream" className="text-blue-500 hover:underline">
-						Stream Endpoint that this page connects to
-					</Link>
-
-				</p>
-
-
-
+				<div className="space-y-4 text-sm text-muted-foreground">
+					<p>
+						This page tracks the approximate size of the Tim Hortons line. The live values above come from a person detection system built on top of the public timcam feed.
+					</p>
+					<p>
+						The source video feed is provided through{" "}
+						<Link
+							href="https://ok.ubc.ca/current-students/"
+							className="text-blue-500 hover:underline"
+						>
+							UBC Okanagan student resources
+						</Link>
+						. The API powering this page lives at{" "}
+						<Link
+							href="https://timcam-api.cheyne.dev/"
+							className="text-blue-500 hover:underline"
+						>
+							timcam-api.cheyne.dev
+						</Link>{" "}
+						and is intended for educational, non-commercial use.
+					</p>
+					<p>
+						Documentation is available at{" "}
+						<Link
+							href="https://timcam-api.cheyne.dev/docs"
+							className="text-blue-500 hover:underline"
+						>
+							the Timcam API docs
+						</Link>
+						, and the raw SSE stream used by this page is exposed at{" "}
+						<Link
+							href="https://timcam-api.cheyne.dev/timcam_cropped/count/stream"
+							className="text-blue-500 hover:underline"
+						>
+							the stream endpoint
+						</Link>
+						.
+						For the current value, use the JSON snapshot endpoint: <Link href="https://timcam-api.cheyne.dev/timcam_cropped/count" className="text-blue-500 hover:underline"> timcam-api.cheyne.dev/timcam_cropped/count</Link>.
+					</p>
+					<p>
+						Questions or feedback:{" "}
+						<Link
+							href="mailto:onyx@cheyne.dev"
+							className="text-blue-500 hover:underline"
+						>
+							Onyx@Cheyne.dev
+						</Link>
+						.
+					</p>
+				</div>
 			</div>
 		</main>
 	);
