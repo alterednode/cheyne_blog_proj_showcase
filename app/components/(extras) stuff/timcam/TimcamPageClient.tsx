@@ -23,11 +23,13 @@ export default function TimcamPageClient() {
 	const [latest, setLatest] = useState<TimcamCountEvent | null>(null);
 	const [lastEventLocalMs, setLastEventLocalMs] = useState<number | null>(null);
 	const [nowMs, setNowMs] = useState(() => Date.now());
+	const [reportOpen, setReportOpen] = useState(false);
 
 	useEffect(() => {
+		if (reportOpen) return;
 		const interval = window.setInterval(() => setNowMs(Date.now()), 250);
 		return () => window.clearInterval(interval);
-	}, []);
+	}, [reportOpen]);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -35,6 +37,7 @@ export default function TimcamPageClient() {
 
 		const handleData = (raw: string) => {
 			if (cancelled) return;
+			if (reportOpen) return;
 			try {
 				const parsed = JSON.parse(raw) as TimcamCountEvent;
 				setLatest(parsed);
@@ -56,7 +59,7 @@ export default function TimcamPageClient() {
 			es.removeEventListener("count", onCount as EventListener);
 			es.close();
 		};
-	}, [sseUrl]);
+	}, [sseUrl, reportOpen]);
 
 	const countDisplay = latest ? String(latest.count) : "—";
 	const smoothedDisplay = latest ? latest.smoothed_count.toFixed(2) : "—";
@@ -115,7 +118,7 @@ export default function TimcamPageClient() {
 				</div>
 			</Card>
 
-			<TimcamInaccuracyReport latestEvent={latest} />
+			<TimcamInaccuracyReport latestEvent={latest} onOpenChange={setReportOpen} />
 		</div>
 	);
 }

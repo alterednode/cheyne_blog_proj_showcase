@@ -14,10 +14,14 @@ function cn(...parts: Array<string | undefined | false>) {
 
 export default function TimcamInaccuracyReport({
 	latestEvent,
+	onOpenChange,
 }: {
 	latestEvent: TimcamCountEvent | null;
+	onOpenChange?: (open: boolean) => void;
 }) {
 	const ingressUrl = "https://reporting.timcam-api.cheyne.dev/timcam/report";
+
+	const [frozenEvent, setFrozenEvent] = useState<TimcamCountEvent | null>(null);
 
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
@@ -28,7 +32,9 @@ export default function TimcamInaccuracyReport({
 		setSubmitOk(false);
 		setSubmitError(null);
 
-		if (!latestEvent) {
+		const eventToSubmit = frozenEvent ?? latestEvent;
+
+		if (!eventToSubmit) {
 			setSubmitError("No live data yet — wait for the first update, then submit.");
 			return;
 		}
@@ -61,7 +67,7 @@ export default function TimcamInaccuracyReport({
 					notes,
 					pageUrl: window.location.href,
 					submittedAtIso: new Date().toISOString(),
-					latestEvent,
+					latestEvent: eventToSubmit,
 					website,
 				}),
 			});
@@ -88,7 +94,18 @@ export default function TimcamInaccuracyReport({
 	}
 
 	return (
-		<details className="group">
+		<details
+			className="group"
+			onToggle={(e) => {
+				const open = (e.currentTarget as HTMLDetailsElement).open;
+				if (open) {
+					setFrozenEvent(latestEvent);
+				} else {
+					setFrozenEvent(null);
+				}
+				onOpenChange?.(open);
+			}}
+		>
 			<summary
 				className={cn(
 					"cursor-pointer select-none rounded-md px-2 py-2 text-sm font-semibold text-muted-foreground",
@@ -102,6 +119,8 @@ export default function TimcamInaccuracyReport({
 			<form onSubmit={onSubmit} className="mt-3 space-y-4 px-2">
 				<p className="text-sm text-muted-foreground">
 					This helps me see if the estimate is consistently off, and tune it.
+					By opening this up you have temporarily "frozen" the count display at the latest value, so you can submit a report based on that without worrying about it changing while you fill out the form.
+					Close this for it to keep updating with the live count.
 				</p>
 
 				<div className="grid gap-4 md:grid-cols-2">
