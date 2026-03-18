@@ -1,8 +1,8 @@
 ---
 title: How I Made My Timcam Line Tracker
-subtitle: How I made my Timcam line tracker, how I am using it, and future plans.
-summary: How I built a real-time line tracker for the Tim Hortons line using computer vision and FastAPI, containerized it on my homelab, put it on my website, and future plans.
-description: A detailed look at why Onyx Cheyne built a real-time line tracker for the Tim Hortons line using their Visual Counter API, the UBC Okanagan timcam feed, and putting it on their website.
+subtitle: How I made my Timcam line tracker, how I’m using it, and future plans.
+summary: How I built a real-time line tracker for the Tim Hortons line using computer vision and FastAPI, containerized it on my homelab, put it on my website, and what I’m planning next.
+description: A detailed look at why Onyx Cheyne built a real-time line tracker for the Tim Hortons line using their Visual Counter API, the UBC Okanagan timcam feed, and how it’s integrated into their website.
 hero: /content/posts/timcam/timcam_screenshot.png
 date: 2026-03-17
 tags:
@@ -21,39 +21,39 @@ type: project
 tocIntroHeader: How this started
 ---
 
-I attend UBC Okanagan, and we have a Tim Hortons on campus. However, the line can get quite long at times, and my friends and I wanted a way to check the line size without having to go to the university website and find the [Timcam feed](https://ok.ubc.ca/current-students/), which takes a bit, and we wanted a faster way to check at a glance.
+I attend UBC Okanagan, and we have a Tim Hortons on campus. The line can get quite long though, and my friends and I wanted a way to check it without having to dig through the university website to find the [Timcam feed](https://ok.ubc.ca/current-students/). We wanted something faster that we could check at a glance.
 
-I decided to dig into the website hosting the timcam feed, and found that the video feed was being sent as some format I'd never heard of with a .m3u8 extension. After some research, I found out that this was an HLS stream, and that it was essentially a playlist of video segments.
+I decided to dig into the website hosting the Timcam feed and found that the video was being served in a format I’d never heard of, with a `.m3u8` extension. After some research, I learned this was an HLS stream, basically just a playlist of video segments.
 
-From there I figured it wouldn't be too hard to set up a computer vision pipeline to detect the line size and serve it through an API, which I could then use on my website to display the current line size.
+From there, I figured it wouldn’t be too hard to set up a computer vision pipeline to estimate the line size and serve it through an API, which I could then use on my website to display the current count.
 
-I also figured that since I'd be consuming [their camera feed](https://www.castanet.net/news/Kelowna/102093/A-TimCam-has-been-set-up-at-UBCO), it would be a good idea to get the university's blessing, lest the project be taken down once it got popular. I reached out to UBCO IT, who were very supportive of the project and gave me the green light to use the feed for this purpose, with the requirement that I set terms for the API to be for educational / non-commercial use only.
+I also figured that since I’d be consuming [their camera feed](https://www.castanet.net/news/Kelowna/102093/A-TimCam-has-been-set-up-at-UBCO), it would be a good idea to get the university’s blessing—lest the project get taken down once it got popular. I reached out to UBCO IT; they were very supportive and gave me the green light to use the feed for this purpose, with the requirement that I set terms for the API to be for educational/non-commercial use only.
 
 Here is the live count, if you're curious:
 <TimcamPageClient />
-I can easily drop this in here because I am using MDX for my posts, check out [my post about this site](https://cheyne.dev/posts/this-site) if you want to learn more about that.
+I can drop this in here easily because I’m using MDX for my posts, check out [my post about this site](https://cheyne.dev/posts/this-site) if you want to learn more about that.
 
 ## The VisualCounterAPI
 
-I pretty quickly knew I'd be using Python for the computer vision part, and FastAPI for serving the API once I confirmed I could do Server-Sent Events (SSE) with it.
+I pretty quickly knew I’d be using Python for the computer vision part, and FastAPI for serving the API once I confirmed that FastAPI supports Server-Sent Events (SSE).
 
-The project pretty quickly expanded from just counting the timcam line, to being a general purpose computer vision API that can be used with many camera sources (at the moment giving each their own thread for processing), with their own endpoints for their count.
+The project quickly expanded from just counting the Timcam line to being a general-purpose computer vision API that can be used with many camera sources (at the moment, giving each its own processing thread), with endpoints for each camera’s count.
 
 Here I'll go through the structure of how the project creates the API, roughly in order of the pipeline steps.
 
 ### Ingesting the Video Feed
 
-It was super simple to grab frames with OpenCV's `VideoCapture` pointed at the `.m3u8` URL, and I was able to start pulling frames in no time. Once I set up the API for more than a few minutes though, I realized the feed would occasionally time out.
+It was super simple to grab frames with OpenCV’s `VideoCapture` pointed at the `.m3u8` URL, and I was pulling frames in no time. Once I ran the API for more than a few minutes, though, I realized the feed would occasionally time out.
 
-I added some error handling to catch this and attempt a reconnect if it looks like the feed has stopped working. I hit an issue at first where it would treat the normal gaps between HLS segments as a failure and reconnect unnecessarily (which messed with the pipeline even though the feed was fine). Extending the time threshold before declaring a failure + reconnecting seems to have fixed it.
+I added error handling to catch this and attempt a reconnect if it looks like the feed has stopped working. At first, it treated normal gaps between HLS segments as a failure and reconnected unnecessarily (which messed with the pipeline even though the feed was fine). Extending the time threshold before declaring a failure and reconnecting seems to have fixed it.
 
 ### Person Detection
 
 I'd previously used YOLOv8 when working on computer vision for autonomous drone landing with ARRC, and I found it very easy to use. I checked to see if it had built-in weights for person detection (it does), then set up a simple pipeline to pull the video feed, run it through the model, and count the number of people detected in each frame.
 
-Then came trying to determine how many people were actually in line, which is a bit more complicated than just counting the number of people in the frame, since there are often people walking around or sitting nearby, and people walking past the line often look like they're in the line. 
+Then came trying to determine how many people were actually in line, which is more complicated than just counting people in the frame. There are often people walking around or standing nearby, and people near the line can easily look like they’re in it to the model.
 
-I ended up setting up a Region Of Interest (ROI) system, where I specify a polygonal area in the frame using normalized coordinates from 0–1. I only count people whose detection falls inside that polygon (based on the center of their bounding box). This worked pretty well, and I was able to get a fairly accurate count of the line size most of the time.
+I ended up setting up a Region of Interest (ROI) system where I specify a polygonal area in the frame using normalized coordinates from 0-1. I only count people whose detections fall inside that polygon (based on the center of their bounding box). This worked pretty well, and I was able to get a fairly accurate count most of the time.
 
 #### Performance Optimizations
 
@@ -61,11 +61,11 @@ I knew I'd be running this on my homelab, which boasts my old i7-6700 CPU and no
 
 However, I eventually noticed that I was lagging behind the live feed while testing on my laptop (also an Intel CPU) and missing a lot of people. That was a problem, since I wanted this to be as accurate and up-to-date as possible. I ended up implementing a few optimizations to speed up the pipeline, such as only processing every nth frame, cropping the feed before processing, and adding an (attempted) limiter on how many frames are processed per second while dropping excess frames.
 
-What helped the most, though, was making a configurable n length queue of the most recently received frames, tossing the older ones, and pulling from the queue when I could process a new frame. This way I could ensure I was processing recent frames and not falling behind, even if I "lost" intermediate frames.
+What helped the most, though, was making a configurable n-length queue of the most recently received frames, tossing the older ones, and pulling from the queue when I could process a new frame. This way, I could ensure I was processing recent frames and not falling behind, even if I “lost” intermediate frames.
 
 Of course, then I realized YOLO26 was out, and that it was much faster and more efficient.
 
-I think the biggest improvements were the cropping, the model switch, and the queue, which together got me much more accurate and up-to-date.
+I think the biggest improvements were the cropping, the model switch, and the queue, which together got me much more accurate and up-to-date results.
 
 I could probably turn off the queueing on my server and still stay up to date with the feed now, but I would rather keep it super up to date than risk falling behind again, so I just left it in.
 
@@ -73,7 +73,7 @@ I could probably turn off the queueing on my server and still stay up to date wi
 
 Even with the faster model, the count can still be a bit jumpy, especially with the line doubling back on itself, people wearing black against the black windows of the Tims, and the low resolution of the camera feed.
 
-I made a modular smoothing system where I can implement, register, and swap betweeen different smoothing algorithms. I implemented a Time-Weighted Average (with some LLM assistance) and set that as the default. This helped a lot with the jumpiness and makes the count feel much more stable.
+I made a modular smoothing system where I can implement, register, and swap between different smoothing algorithms. I implemented a Time-Weighted Average (with some LLM assistance) and set that as the default. This helped a lot with the jumpiness and makes the count feel much more stable.
 
 I could add more, but the TWA seems to be doing a pretty good job, and I don't want to overcomplicate things for now.
 
@@ -115,15 +115,15 @@ Here is an example of the output when accessing the timcam count:
 
 I’m planning on adding a concise mode to reduce bandwidth usage for clients that just want the count, smoothed count, and timestamp, but for now this is what I’m working with.
 
-I've also added some support for API keys, and disabling the custom ROI endpoint, since I don't really want people hitting that with a lot of requests and causing performance issues, both of which are configurable in the config or env vars.
+I’ve also added support for API keys and for disabling the custom ROI query, since I don’t really want people hammering it with custom ROIs and causing performance issues. Both are configurable via the config file or environment variables.
 
 ### Configuration
 
-Who doesn't love a big ol YAML config file? 
+Who doesn’t love a big ol’ YAML config file?
 
 I wanted to make it easy to configure the API without having to change the code, so I set up a config file that can be used to specify things like the camera feed URL, the ROIs, the smoothing algorithm, and various other settings.
 
-I'll drop part of the config file that I'm using for the timcam-api here, but you can check out the repo if you want to see the full thing (and the code that reads and uses it).
+I’ll drop part of the config file I’m using for the Timcam API here, but you can check out the repo if you want to see the full thing (and the code that reads and uses it).
 
 ```yaml
 defaults:
@@ -141,7 +141,7 @@ cameras:
   timcam_cropped:
     source_url: "https://streamserve.ok.ubc.ca/LiveCams/timcam.stream_720p/playlist.m3u8"
     details: 
-      title: "timcam line counter based made with AlteredNode's VisualCounterAPI - for educational / non-commercial use only"
+      title: "timcam line counter made with AlteredNode's VisualCounterAPI - for educational / non-commercial use only"
     default_roi: "approx_line_area"
     processing:
       source_crop: [0.33, 0.22, 0.6, 0.53] # [x_min, y_min, x_max, y_max] in relative coordinates (origin top left)
@@ -159,44 +159,49 @@ cameras:
         - [0.58, 0.25]
 ```
 
-I've tested adding multiple cameras to the same API, and it seems to be working fine. That means I can easily add more cameras in the future if I want to track more lines (or other things), or turn this project into a managed SaaS for computer vision pipelines as a bigger showcase.
+I’ve tested adding multiple cameras to the same API, and it seems to be working fine. That means I can easily add more cameras in the future if I want to track more lines (or other things), or turn this project into a managed SaaS for computer vision pipelines as a bigger showcase.
 
 ## Deployment and Hosting
 
-I am hosting the API on my [homelab](https://www.cheyne.dev/posts/homelab), which is made from my old gutted desktop running Ubuntu Server.
+I’m hosting the API on my [homelab](https://www.cheyne.dev/posts/homelab), which is my old gutted desktop running Ubuntu Server.
 
-Rate limiting and security are a concern since this is running on my home network, so I have Traefik set up as a reverse proxy on an Oracle Cloud instance that routes traffic to my home server through Tailscale, which allows me to keep the API protected behind a VPN and only expose it to the internet through the Traefik instance, which can handle things like TLS termination, rate limiting, and other security measures.
+Rate limiting and security are a concern since this runs on my home network, so I have Traefik set up as a reverse proxy on an Oracle Cloud instance. It routes traffic to my home server through Tailscale, which lets me keep the API protected behind a VPN and only expose it to the internet through Traefik (which handles TLS termination, rate limiting, and other security measures).
 
-Additionally the API is running within a docker container, which adds an extra layer of isolation, while also being setup to easily update the config without having to rebuild the image, and making it easy to manage and deploy.
+Additionally, the API is running in a Docker container, which adds an extra layer of isolation. It’s also set up so I can update the config without rebuilding the image, which makes it easy to manage and deploy.
 
 ## The Frontend
 
-At the moment, I just have a simple React component which you saw near the start of this post that connects to the streaming endpoint of the API and displays the current line size. It's nothing fancy, but it gets the job done.
+At the moment, I just have a simple React component (which you saw near the start of this post) that connects to the streaming endpoint and displays the current line size. It’s nothing fancy, but it gets the job done.
 
-I do plan on improving the frontend in the future, making it so that each person viewing is not opening up their own stream connection to the API, and instead using a single connection and broadcasting the data to all viewers, which should reduce the load on the API and make it more efficient, but with the current number of viewers it's not really an issue, and I want to focus on other things for now.
+I do plan on improving the frontend in the future by making it so each viewer isn’t opening their own stream connection to the API. Instead, I’d use a single connection on the server side and broadcast the data to all viewers, which should reduce load and make things more efficient. With the current number of viewers it’s not really an issue, and I want to focus on other things for now.
 
 ## Future Plans
 
-### The reasonable ones
-It would be great to add an estimation of wait time based on the line size, and I'm thinking of adding something to the live feed that lets people enter how long it took for them to get through the line, and using that data to make a simple linear regression model to estimate wait times based on the line size, which could be a fun little project and add some extra value to the API.
+### The reasonable and feasible ones
+It would be great to add an estimate of wait time based on the line size. I’m thinking of adding something to the live feed that lets people enter how long it took them to get through the line, then using that data to fit a simple linear regression model to estimate wait times from line size. That could be a fun project and add some extra value.
 
-Though I'm unsure if that would fit within the scope of the VisualCounterAPI project, or I could make it support custom plugins or something that let people do some post-processing before sending the data out.
+I’m not sure if that would fit within the scope of VisualCounterAPI as-is; alternatively, I could add support for custom plugins (or similar) that do post-processing before sending data out.
 
-With that idea, I'd love to add something to let people tell me how accurate they found it, on some sort of sliding scale of accuracy with them entering the real # of people in line, which I could do something with.
+Related to that, I’d love to add a way for people to tell me how accurate they found it—maybe a simple “accuracy” slider plus the real number of people they saw in line. That could be useful feedback.
 
-Also, just to be explicit: I’m not doing any storage of images or any kind of identification — it’s purely an aggregate count within a small ROI.
+Also, just to be explicit: I’m not storing images or doing any kind of identification, it’s purely an aggregate count within a small ROI.
 
 I may also reach out to the university about doing a similar thing for the Nonis Field camera, which is a feed of the soccer field, and could be used to count how many people are on the field at any given time, which could be fun to track for the sports teams and stuff.
 
-I am not doing any storage of images, but I would love to keep track of the counts and the data over time, and make some sort of dashboard to visualize it, which would be a fun way to see the trends and patterns in the line size, and could be useful for the people to see when the busiest times are.
+Even without storing images, I’d love to keep track of the counts over time and make a dashboard to visualize it. That would be a fun way to see trends and patterns, and it could help people figure out when the busiest times are.
 
 I'd been planning on doing this for the courtyard, but with the cropping I needed to get more accuracy for the line, I've cut most of it out.
 
-### The less reasonable ones but also really cool
+### The less feasible / reasonable ones but also really cool
 
 It would be neat to use this API software to make some sort of managed SaaS for computer vision pipelines, where people could just plug in their camera feeds, set up some ROIs, and have it serve the data through an API without having to worry about the computer vision part at all, which could be a fun project and a good way to showcase the capabilities of the VisualCounterAPI.
 
 I did think about it enough to get concerned about the licensing/terms around using Ultralytics YOLO models in a commercial product. Before doing anything commercial with this, I’d want to re-read the relevant licenses/terms carefully (and probably get proper legal advice) rather than assume a particular business model makes it "in the clear".
 
+## Wrapping up
 
+This was a really fun project to work on, and I’m happy with how it turned out. It’s been a great way to learn more about computer vision, FastAPI, and building APIs in general, and I hope my fellow students find it useful.
 
+I’d love to keep this running post-graduation. If you’re a student in the future reading this and it’s down, reach out and I’ll probably put it back up! - Its most likely that I moved or something and forgot about it.
+
+If you want to check out the code, it’s all open source on my GitHub (linked at the top of the post). If you have any questions or suggestions, feel free to reach out with the various contacts on my homepage. Thanks for reading!
