@@ -175,6 +175,8 @@ Additionally, the API is running in a Docker container, which adds an extra laye
 
 At the moment, I just have a simple React component (which you saw near the start of this post) that connects to the streaming endpoint and displays the current line size. It’s nothing fancy, but it gets the job done.
 
+I also have a small form that lets people tell me how many people are in the line, with a tiny python service also running on my homelab with docker to just log these form responses to a jsonl file for now. I want to use this data to get feedback on the accuracy of the counts and maybe add some sort of accuracy metric in the future, or train a simple regression model to correct for the inaccuracies based on the line size or other factors.
+
 I do plan on improving the frontend in the future by making it so each viewer isn’t opening their own stream connection to the API. Instead, I’d use a single connection on the server side and broadcast the data to all viewers, which should reduce load and make things more efficient. With the current number of viewers it’s not really an issue, and I want to focus on other things for now.
 
 ## Future Plans
@@ -183,8 +185,6 @@ I do plan on improving the frontend in the future by making it so each viewer is
 It would be great to add an estimate of wait time based on the line size. I’m thinking of adding something to the live feed that lets people enter how long it took them to get through the line, then using that data to fit a simple linear regression model to estimate wait times from line size. That could be a fun project and add some extra value.
 
 I’m not sure if that would fit within the scope of VisualCounterAPI as-is; alternatively, I could add support for custom plugins (or similar) that do post-processing before sending data out.
-
-Related to that, I’d love to add a way for people to tell me how accurate they found it—maybe a simple “accuracy” slider plus the real number of people they saw in line. That could be useful feedback.
 
 Also, just to be explicit: I’m not storing images or doing any kind of identification, it’s purely an aggregate count within a small ROI.
 
