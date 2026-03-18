@@ -86,6 +86,10 @@ export default function TimcamPage() {
 
 				<div className="space-y-4 text-sm text-muted-foreground">
 					<p>
+						This is as accurate as I could make it, but the timcam feed is super low resolution and blurry.<br />
+						If the count is near 10+ it is also possible that people are being missed because the line is extending into the courtyard.
+					</p>
+					<p>
 						This page tracks the approximate size of the Tim Hortons line. The live values above come from a person detection system built on top of the public timcam feed.
 					</p>
 					<p>
