@@ -177,6 +177,9 @@ At the moment, I just have a simple React component (which you saw near the star
 
 I also have a small form that lets people tell me how many people are in the line, with a tiny python service also running on my homelab with docker to just log these form responses to a jsonl file for now. I want to use this data to get feedback on the accuracy of the counts and maybe add some sort of accuracy metric in the future, or train a simple regression model to correct for the inaccuracies based on the line size or other factors.
 
+The form is hidden in a dropdown and when people open it, it “freezes” the count display at the latest value so they can submit a report based on that without worrying about it changing while they fill out the form. Once they close the form, it goes back to updating with the live count.
+
+
 I do plan on improving the frontend in the future by making it so each viewer isn’t opening their own stream connection to the API. Instead, I’d use a single connection on the server side and broadcast the data to all viewers, which should reduce load and make things more efficient. With the current number of viewers it’s not really an issue, and I want to focus on other things for now.
 
 ## Future Plans
