@@ -27,7 +27,7 @@ I decided to dig into the website hosting the timcam feed, and found that the vi
 
 From there I figured it wouldn't be too hard to set up a computer vision pipeline to detect the line size and serve it through an API, which I could then use on my website to display the current line size.
 
-I also figured that since I'd be consuming [their camera feed](https://www.castanet.net/news/Kelowna/102093/A-TimCam-has-been-set-up-at-UBCO), it would be a good idea to get the universities blessing lest the project be taken down once it got popular. I reached out to UBCO IT, who were very supportive of the project and gave me the green light to use the feed for this purpose, with the requirement that I set terms for the API to be for educational / non-commercial use only.
+I also figured that since I'd be consuming [their camera feed](https://www.castanet.net/news/Kelowna/102093/A-TimCam-has-been-set-up-at-UBCO), it would be a good idea to get the university's blessing, lest the project be taken down once it got popular. I reached out to UBCO IT, who were very supportive of the project and gave me the green light to use the feed for this purpose, with the requirement that I set terms for the API to be for educational / non-commercial use only.
 
 Here is the live count, if you're curious:
 <TimcamPageClient />
@@ -35,7 +35,7 @@ I can easily drop this in here because I am using MDX for my posts, check out [m
 
 ## The VisualCounterAPI
 
-I pretty quickly knew I'd be using Python for the computer vision part, and FastAPI for serving the API once I looked up if I could do Server Sent Event streams with it.
+I pretty quickly knew I'd be using Python for the computer vision part, and FastAPI for serving the API once I confirmed I could do Server-Sent Events (SSE) with it.
 
 The project pretty quickly expanded from just counting the timcam line, to being a general purpose computer vision API that can be used with many camera sources (at the moment giving each their own thread for processing), with their own endpoints for their count.
 
@@ -43,27 +43,27 @@ Here I'll go through the structure of how the project creates the API, roughly i
 
 ### Ingesting the Video Feed
 
-It was super simple to just grab frames with OpenCV's VideoCapture pointed at the m3u8 URL, and I was able to start pulling frames in no time. Once I setup the api for the first time for more than a few minutes though, I realized that the feed would ocasionally time out.
+It was super simple to grab frames with OpenCV's `VideoCapture` pointed at the `.m3u8` URL, and I was able to start pulling frames in no time. Once I set up the API for more than a few minutes though, I realized the feed would occasionally time out.
 
-I added some error handling to try to catch this, and have it attempt to reconnect if it detects that the feed has stopped working, which actually had an issue at first where it would detect the feed's gaps between segments as a failure and attempt to reconnect, which mess with stuff since the feed was actually fine, so I just extended the time to wait before declaring a failure and reconnecting, and that seems to have fixed the issue.
+I added some error handling to catch this and attempt a reconnect if it looks like the feed has stopped working. I hit an issue at first where it would treat the normal gaps between HLS segments as a failure and reconnect unnecessarily (which messed with the pipeline even though the feed was fine). Extending the time threshold before declaring a failure + reconnecting seems to have fixed it.
 
 ### Person Detection
 
-I'd previously used YOLOv8 when working on computer vision autonomus drone landing with ARRC, and I found that it was very easy to use checked to see if they had built in weights for person detection, which they did. I set up a simple pipeline to pull the video feed, run it through the model, and count the number of people detected in each frame.
+I'd previously used YOLOv8 when working on computer vision for autonomous drone landing with ARRC, and I found it very easy to use. I checked to see if it had built-in weights for person detection (it does), then set up a simple pipeline to pull the video feed, run it through the model, and count the number of people detected in each frame.
 
 Then came trying to determine how many people were actually in line, which is a bit more complicated than just counting the number of people in the frame, since there are often people walking around or sitting nearby, and people walking past the line often look like they're in the line. 
 
-I ended up just setting up a "Region Of Interest" system, which I could use to specify a polygonal area in the frame using floats from 0-1 and only count people who were detected within that area, based on the centre of their bounding box. This worked pretty well, and I was able to get a pretty accurate count of the line size most of the time.
+I ended up setting up a Region Of Interest (ROI) system, where I specify a polygonal area in the frame using normalized coordinates from 0–1. I only count people whose detection falls inside that polygon (based on the center of their bounding box). This worked pretty well, and I was able to get a fairly accurate count of the line size most of the time.
 
 #### Performance Optimizations
 
 I knew I'd be running this on my homelab, which boasts my old i7-6700 CPU and no GPU, so I knew performance would likely be an issue, especially since I wanted to serve the data in real-time. To try and get ahead of this, before I did any optimization on my own, I found [OpenVINO](https://github.com/openvinotoolkit/openvino) which could be used to optimize the model for Intel CPU inference, and give me a speed boost without me having to actually use my brain.
 
-Howver, I eventually noticed that I was lagging behind the live feed by a bit while testing on my laptop (Also an Intel CPU) and missing a lot of people which was a problem since I wanted this to be as accurate and up-to-date as possible. I ended up setting up a few optimizations to try to speed up the pipeline, such as only processing every nth frame, cropping the feed before processing, and attempting to make a limiter on how many frames are processed each second and dropping the excess.
+However, I eventually noticed that I was lagging behind the live feed while testing on my laptop (also an Intel CPU) and missing a lot of people. That was a problem, since I wanted this to be as accurate and up-to-date as possible. I ended up implementing a few optimizations to speed up the pipeline, such as only processing every nth frame, cropping the feed before processing, and adding an (attempted) limiter on how many frames are processed per second while dropping excess frames.
 
-What helped the most though, was just making a configurable n length queue of the most recently recieved frames, tossing the older ones, and just fetching from the queue when an image was processed. This way I could ensure that I was always processing the most recent frames, and not falling behind, even if I "lost" data.
+What helped the most, though, was making a configurable n length queue of the most recently received frames, tossing the older ones, and pulling from the queue when I could process a new frame. This way I could ensure I was processing recent frames and not falling behind, even if I "lost" intermediate frames.
 
-Of course, then I realized YOLO26 was out, and that it was much much faster and more efficent.
+Of course, then I realized YOLO26 was out, and that it was much faster and more efficient.
 
 I think the biggest improvements were the cropping, the model switch, and the queue, which together got me much more accurate and up-to-date.
 
@@ -73,24 +73,25 @@ I could probably turn off the queueing on my server and still stay up to date wi
 
 Even with the faster model, the count can still be a bit jumpy, especially with the line doubling back on itself, people wearing black against the black windows of the Tims, and the low resolution of the camera feed.
 
-I made a modular smoothing system where I could make, register, and use different smoothing algorithms, got an LLM to make me a Time-Weighted Average, and set that as the default. This has helped a lot with the jumpiness, and makes the count much more stable and accurate.
+I made a modular smoothing system where I can implement, register, and swap betweeen different smoothing algorithms. I implemented a Time-Weighted Average (with some LLM assistance) and set that as the default. This helped a lot with the jumpiness and makes the count feel much more stable.
 
 I could add more, but the TWA seems to be doing a pretty good job, and I don't want to overcomplicate things for now.
 
 ### Serving the Data
 
-I'd already mentioned that I'm using FastAPI to serve the data, and that I wanted to use Server Sent Events to stream the data in real-time to the frontend. This ended up being pretty straightforward to set up, and I was able to get a stream of the line size up and running in no time.
+I'd already mentioned that I'm using FastAPI to serve the data, and that I wanted to use Server-Sent Events (SSE) to stream the data in real-time to the frontend. This ended up being pretty straightforward to set up, and I was able to get a stream of the line size up and running in no time.
 
-The api structure looks like this:
+The API structure looks like this:
 
 `GET /` - information about the cameras provided by this API<br />
 `GET /{camera_name}` - information about a specific camera, including available ROI names<br />
 `GET /{camera_name}/rois` - the coordinates of the ROIs for this camera<br />
 `GET /{camera_name}/count` - the count from the default ROI<br />
+`GET /{camera_name}/count/?roi_name` - counts from that preset ROI<br />
 `GET /{camera_name}/count?roi=0.3047,0.4514;0.3516,0.3333;0.5625,0.3333;0.5625,0.4514` - the count from a custom ROI specified by the query parameter<br />
-`GET /{camera_name}/count/stream` - a stream of the count from the default ROI, supports the same roi query parameter as the non-streaming endpoint<br />
+`GET /{camera_name}/count/stream` - a stream of the count from the default ROI; supports the same `roi` and `roi_name` query parameters as the non-streaming endpoint<br />
 
-we hold the results from the most recent processed frame in memory, so the non-streaming endpoints just return that, while the streaming endpoint keeps a connection open and sends the updated count whenever a new frame is processed.
+We hold the results from the most recently processed frame in memory, so the non-streaming endpoints just return that. The streaming endpoint keeps a connection open and sends updated counts whenever a new frame is processed.
 
 Here is an example of the output when accessing the timcam count:
 ```json
@@ -112,7 +113,7 @@ Here is an example of the output when accessing the timcam count:
 }
 ```
 
-I am planning on adding a concise mode to reduce bandwidth usage for the clients that just want the count, smoothed count and time, but for now this is what I'm working with.
+I’m planning on adding a concise mode to reduce bandwidth usage for clients that just want the count, smoothed count, and timestamp, but for now this is what I’m working with.
 
 I've also added some support for API keys, and disabling the custom ROI endpoint, since I don't really want people hitting that with a lot of requests and causing performance issues, both of which are configurable in the config or env vars.
 
@@ -122,48 +123,34 @@ Who doesn't love a big ol YAML config file?
 
 I wanted to make it easy to configure the API without having to change the code, so I set up a config file that can be used to specify things like the camera feed URL, the ROIs, the smoothing algorithm, and various other settings.
 
-I'll just dump the config file that I'm using for the timcam here, but you can check out the repo if you want to see the code that reads it and uses it.
+I'll drop part of the config file that I'm using for the timcam-api here, but you can check out the repo if you want to see the full thing (and the code that reads and uses it).
 
 ```yaml
-api:
-  api_key_mode: disabled
-  allow_custom_rois: false
-
 defaults:
   detector:
     type: "openvino_yolo"
     model_path: "models/yolo26s_openvino_model/yolo26s.xml"
-    device: "CPU"
-    model_size: 640
-    person_class_id: 0
     conf_threshold: 0.15
     nms_threshold: 0.6
-  processing:
-    scale: 1.0
   smoothing:
     type: "time_weighted_average"
     params:
       window_seconds: 5.0
 
 cameras:
-
   timcam_cropped:
     source_url: "https://streamserve.ok.ubc.ca/LiveCams/timcam.stream_720p/playlist.m3u8"
     details: 
-      title: "timcam line counter based made with AlteredNode's VisualCounterAPI"
-      terms: "for educational / non-commercial use only"
-      info: "for more info check out cheyne.dev/posts/timcam"
+      title: "timcam line counter based made with AlteredNode's VisualCounterAPI - for educational / non-commercial use only"
     default_roi: "approx_line_area"
     processing:
-      source_crop: [0.33, 0.22, 0.6, 0.53]
+      source_crop: [0.33, 0.22, 0.6, 0.53] # [x_min, y_min, x_max, y_max] in relative coordinates (origin top left)
       latest_frame_queue_size: 10
       read_failures_before_reconnect: 2
       reconnect_delay_seconds: 5.0
       ffmpeg_open_timeout_ms: 30000
       ffmpeg_read_timeout_ms: 60000
       every_n_frames: 1
-      max_processed_fps: null
-      show_preview: true
     rois:
       approx_line_area:
         - [0.38, 0.25]
@@ -172,7 +159,7 @@ cameras:
         - [0.58, 0.25]
 ```
 
-I've tested adding multiple cameras to the same API, and it seems to be working fine, so I can easily add more cameras in the future if I want to track more lines or other things, or turn this project into a managed SAAS for computer vision pipelines or something as a big showcase project.
+I've tested adding multiple cameras to the same API, and it seems to be working fine. That means I can easily add more cameras in the future if I want to track more lines (or other things), or turn this project into a managed SaaS for computer vision pipelines as a bigger showcase.
 
 ## Deployment and Hosting
 
@@ -195,7 +182,9 @@ It would be great to add an estimation of wait time based on the line size, and 
 
 Though I'm unsure if that would fit within the scope of the VisualCounterAPI project, or I could make it support custom plugins or something that let people do some post-processing before sending the data out.
 
-With that idea, I'd love to add something to let people tell me how accurate they found it, on some sort of sliding scale of accurracy with them entering the real # of people in line, which I could do something with.
+With that idea, I'd love to add something to let people tell me how accurate they found it, on some sort of sliding scale of accuracy with them entering the real # of people in line, which I could do something with.
+
+Also, just to be explicit: I’m not doing any storage of images or any kind of identification — it’s purely an aggregate count within a small ROI.
 
 I may also reach out to the university about doing a similar thing for the Nonis Field camera, which is a feed of the soccer field, and could be used to count how many people are on the field at any given time, which could be fun to track for the sports teams and stuff.
 
@@ -205,9 +194,9 @@ I'd been planning on doing this for the courtyard, but with the cropping I neede
 
 ### The less reasonable ones but also really cool
 
-It would be neat to use this API software to make some sort of managed SAAS for computer vision pipelines, where people could just plug in their camera feeds, set up some ROIs, and have it serve the data through an API without having to worry about the computer vision part at all, which could be a fun project and a good way to showcase the capabilities of the VisualCounterAPI.
+It would be neat to use this API software to make some sort of managed SaaS for computer vision pipelines, where people could just plug in their camera feeds, set up some ROIs, and have it serve the data through an API without having to worry about the computer vision part at all, which could be a fun project and a good way to showcase the capabilities of the VisualCounterAPI.
 
-I did think about it enough get concerned about the legality of using ultralytics' YOLO models in a commercial product, since it would require purchasing a commercial license for closed source codebases, but my understanding is that as long as I continue to leave VisualCounterAPI open source and provide managed hosting and ease of configuration tools, it would be in the clear
+I did think about it enough to get concerned about the licensing/terms around using Ultralytics YOLO models in a commercial product. Before doing anything commercial with this, I’d want to re-read the relevant licenses/terms carefully (and probably get proper legal advice) rather than assume a particular business model makes it "in the clear".
 
 
 
