@@ -17,7 +17,7 @@ export default function TimcamInaccuracyReport({
 }: {
 	latestEvent: TimcamCountEvent | null;
 }) {
-	const ingressUrl = "https://reporting.timcam-api.cheyne.dev";
+	const ingressUrl = "https://reporting.timcam-api.cheyne.dev/timcam/report";
 
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
