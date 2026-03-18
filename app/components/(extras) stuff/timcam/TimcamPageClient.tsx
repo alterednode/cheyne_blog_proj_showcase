@@ -4,17 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Card } from "@/app/components/standard/Card";
 
-type TimcamCountEvent = {
-	camera: string;
-	roi_name: string;
-	roi: Array<[number, number]>;
-	count: number;
-	smoothed_count: number;
-	smoothing_type: string;
-	timestamp: number;
-	timestamp_iso: string;
-	sequence: number;
-};
+import TimcamInaccuracyReport from "@/app/components/(extras) stuff/timcam/TimcamInaccuracyReport";
+import type { TimcamCountEvent } from "@/app/components/(extras) stuff/timcam/types";
 
 function formatSeconds(seconds: number) {
 	if (!Number.isFinite(seconds) || seconds < 0) return "—";
@@ -83,42 +74,48 @@ export default function TimcamPageClient() {
 	}, [latest, lastEventLocalMs, nowMs]);
 
 	return (
-		<Card className="p-6">
-			<div className="grid gap-6 sm:grid-cols-3">
-				<div className="space-y-2">
-					<p className="text-m font-bold uppercase text-muted-foreground">
-						People in Line
-					</p>
-					<p className="text-5xl font-semibold tabular-nums">{countDisplay}</p>
-					<p className="text-sm text-muted-foreground">
-						Estimated number of people in the line from the latest event.
-					</p>
-				</div>
+		<div className="space-y-6">
+			<Card className="p-6">
+				<div className="grid gap-6 sm:grid-cols-3">
+					<div className="space-y-2">
+						<p className="text-m font-bold uppercase text-muted-foreground">
+							People in Line
+						</p>
+						<p className="text-5xl font-semibold tabular-nums">
+							{countDisplay}
+						</p>
+						<p className="text-sm text-muted-foreground">
+							Estimated number of people in the line from the latest event.
+						</p>
+					</div>
 
-				<div className="space-y-2">
-					<p className="text-m font-bold uppercase text-muted-foreground">
-						Smoothed Estimate
-					</p>
-					<p className="text-5xl font-semibold tabular-nums">
-						{smoothedDisplay}
-					</p>
-					<p className="text-sm text-muted-foreground">
-						Stabilized estimate of people in line using a smoothing algorithm.
-					</p>
-				</div>
+					<div className="space-y-2">
+						<p className="text-m font-bold uppercase text-muted-foreground">
+							Smoothed Estimate
+						</p>
+						<p className="text-5xl font-semibold tabular-nums">
+							{smoothedDisplay}
+						</p>
+						<p className="text-sm text-muted-foreground">
+							Stabilized estimate of people in line using a smoothing algorithm.
+						</p>
+					</div>
 
-				<div className="space-y-2">
-					<p className="text-m font-bold uppercase text-muted-foreground">
-						Staleness
-					</p>
-					<p className="text-5xl font-semibold tabular-nums">
-						{formatSeconds(stalenessSeconds)}
-					</p>
-					<p className="text-sm text-muted-foreground">
-						How long ago the latest data was processed. (up to 15s is normal)
-					</p>
+					<div className="space-y-2">
+						<p className="text-m font-bold uppercase text-muted-foreground">
+							Staleness
+						</p>
+						<p className="text-5xl font-semibold tabular-nums">
+							{formatSeconds(stalenessSeconds)}
+						</p>
+						<p className="text-sm text-muted-foreground">
+							How long ago the latest data was processed. (up to 15s is normal)
+						</p>
+					</div>
 				</div>
-			</div>
-		</Card>
+			</Card>
+
+			<TimcamInaccuracyReport latestEvent={latest} />
+		</div>
 	);
 }

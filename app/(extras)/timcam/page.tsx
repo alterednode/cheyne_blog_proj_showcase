@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { absoluteUrl, siteMeta, siteUrl } from "@/app/lib/site";
 
-import TimcamPageClient from "../../components/(extras) stuff/TimcamPageClient";
+import TimcamPageClient from "../../components/(extras) stuff/timcam/TimcamPageClient";
 
 const THIS_TITLE =
 	"How many people are in line at Tims right now? | Tim Hortons line at UBC Okanagan";
