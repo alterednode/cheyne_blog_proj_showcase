@@ -173,7 +173,7 @@ I do plan on improving the frontend in the future by making it so each viewer is
 
 ## Deployment and Hosting
 
-I’m hosting the API on my [homelab](https://www.cheyne.dev/posts/homelab), which is my old gutted desktop running Ubuntu Server, and the frontend is tacked onto [this site](https://www.cheyne.dev/posts/this-site) which is hosted on Vercel. 
+I’m hosting the API on my [homelab](https://cheyne.dev/posts/homelab), which is my old gutted desktop running Ubuntu Server, and the frontend is tacked onto [this site](https://cheyne.dev/posts/this-site) which is hosted on Vercel. 
 
 Rate limiting and security are concerns since this runs on my home network, so I have Traefik set up as a reverse proxy on an Oracle Cloud instance. It routes traffic to my home server through Tailscale, which lets me keep the API protected behind a VPN and only expose it to the internet through Traefik (which handles TLS termination, rate limiting, and other security measures).
 
