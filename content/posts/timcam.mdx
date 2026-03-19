@@ -21,9 +21,7 @@ type: project
 tocIntroHeader: How this started
 ---
 
-**Note:** I would love to include screenshots of the timcam in this, I am waiting for the university to give me permission to use them since I forgot to ask for that originally but I wanted to get this post out since the project is already live and being used by students.
-
-I attend UBC Okanagan, and we have a Tim Hortons on campus. The line can get quite long though, and my friends and I wanted a way to check it without having to dig through the university website to find the [Timcam feed](https://ok.ubc.ca/current-students/). We wanted something faster that we could check at a glance.
+I attend UBC Okanagan, and we've got a Tim Hortons on campus. However, the line can get quite long, and my friends and I wanted a way to check it without having to dig through the university website to find the [Timcam feed](https://ok.ubc.ca/current-students/). We wanted something faster that we could check at a glance, without having to count people in line.
 
 I decided to dig into the website hosting the Timcam feed and found that the video was being served in a format I’d never heard of, with a `.m3u8` extension. After some research, I learned this was an HLS stream, basically just a playlist of video segments.
 
@@ -37,7 +35,7 @@ I can drop this in here easily because I’m using MDX for my posts, check out [
 
 ## The VisualCounterAPI
 
-I pretty quickly knew I’d be using Python for the computer vision part, and FastAPI for serving the API once I confirmed that FastAPI supports Server-Sent Events (SSE).
+Pretty quickly, I knew I’d be using Python for the computer vision part, and FastAPI for serving the API once I confirmed that FastAPI supports Server-Sent Events (SSE).
 
 The project quickly expanded from just counting the Timcam line to being a general-purpose computer vision API that can be used with many camera sources (at the moment, giving each its own processing thread), with endpoints for each camera’s count.
 
@@ -61,23 +59,23 @@ I ended up setting up a Region of Interest (ROI) system where I specify a polygo
 
 I knew I'd be running this on my homelab, which boasts my old i7-6700 CPU and no GPU, so I knew performance would likely be an issue, especially since I wanted to serve the data in real-time. To try and get ahead of this, before I did any optimization on my own, I found [OpenVINO](https://github.com/openvinotoolkit/openvino) which could be used to optimize the model for Intel CPU inference, and give me a speed boost without me having to actually use my brain.
 
-However, I eventually noticed that I was lagging behind the live feed while testing on my laptop (also an Intel CPU) and missing a lot of people. That was a problem, since I wanted this to be as accurate and up-to-date as possible. I ended up implementing a few optimizations to speed up the pipeline, such as only processing every nth frame, cropping the feed before processing, and adding an (attempted) limiter on how many frames are processed per second while dropping excess frames.
+However, I eventually noticed that I was lagging behind the live feed while testing on my laptop (also an Intel CPU), and missing a lot of people. That was a problem, since I wanted this to be as accurate and up-to-date as possible. I ended up implementing a few optimizations to speed up the pipeline, such as only processing every nth frame, cropping the feed before processing, and adding an (attempted) limiter on how many frames are processed per second while dropping excess frames.
 
 What helped the most though, was making a configurable n-length queue of the most recently received frames, tossing the older ones, and pulling from the queue when I could process a new frame. This way, I could ensure I was processing recent frames and not falling behind, even if I “lost” intermediate frames.
 
-Of course, then I realized YOLO26 was out, and it was much faster and more efficient, so I switched to that which helped a bunch.
+Of course, then I realized YOLO26 was out, and it was much faster and more efficient, so I switched to that, which helped a bunch.
 
 I think the biggest improvements were the cropping, the model switch, and the queue, which together got me much more accurate and up-to-date results.
 
-I could probably turn off the queueing on my server and still stay up to date with the feed now, but I would rather keep it super up to date than risk falling behind again, so I just left it in.
+I could probably turn off the queueing on my server and still stay up to date with the feed now, but I would rather keep it super up to date than risk falling behind again, so I left it in.
 
 ### Smoothing the Data
 
-Even with the faster model, the count can still be a bit jumpy, especially with the line doubling back on itself, people wearing black against the black windows of the Tims, and the low resolution of the camera feed.
+Even with the faster model, the count can still be a jumpy and inaccurate, especially with the line doubling back on itself, people wearing black against the black windows of the Tims, and the low resolution of the camera feed.
 
-I made a modular smoothing system where I can implement, register, and swap between different smoothing algorithms. I implemented a Time-Weighted Average (with some LLM assistance) and set that as the default. This helped a lot with the jumpiness and makes the count feel much more stable.
+I made a modular smoothing system where I can implement, register, and swap between different smoothing algorithms. I implemented a Time-Weighted Average (with some LLM assistance) and set that as the default. This helped a lot with the jumpiness, and makes the count feel much more stable.
 
-I could add more, but the TWA seems to be doing a pretty good job, and I don't want to overcomplicate things for now.
+I could add more, but the TWA seems to be doing a pretty good job, and I don't want to overcomplicate things.
 
 ### Serving the Data
 
@@ -115,7 +113,7 @@ Here is an example of the output when accessing the timcam count:
 }
 ```
 
-I’m planning on adding a concise mode to reduce bandwidth usage for clients that just want the count, smoothed count, and timestamp, but for now this is what I’m working with.
+I’m planning on adding a concise mode to reduce bandwidth usage for clients that just want the count, smoothed count, and timestamp.
 
 I’ve also added support for API keys and for disabling the custom ROI query, since I don’t really want people hammering it with custom ROIs and causing performance issues. Both are configurable via the config file or environment variables.
 
@@ -125,7 +123,7 @@ Who doesn’t love a big ol’ YAML config file?
 
 I wanted to make it easy to configure the API without having to change the code, so I set up a config file that can be used to specify things like the camera feed URL, the ROIs, the smoothing algorithm, and various other settings.
 
-I’ll drop part of the config file I’m using for the Timcam API here, but you can check out the repo if you want to see the full thing (and the code that reads and uses it).
+I’ll drop part of the config file I’m using for the Timcam API here, [click here for the full thing](https://github.com/alterednode/VisualCounterAPI/blob/b4a12d0bf04dd293233ebfa7a609db7e2131f039/config.yaml) 
 
 ```yaml
 defaults:
@@ -161,35 +159,56 @@ cameras:
         - [0.58, 0.25]
 ```
 
-I’ve tested adding multiple cameras to the same API, and it seems to be working fine. That means I can easily add more cameras in the future if I want to track more lines (or other things), or turn this project into a managed SaaS for computer vision pipelines as a bigger showcase.
-
-## Deployment and Hosting
-
-I’m hosting the API on my [homelab](https://www.cheyne.dev/posts/homelab), which is my old gutted desktop running Ubuntu Server.
-
-Rate limiting and security are a concern since this runs on my home network, so I have Traefik set up as a reverse proxy on an Oracle Cloud instance. It routes traffic to my home server through Tailscale, which lets me keep the API protected behind a VPN and only expose it to the internet through Traefik (which handles TLS termination, rate limiting, and other security measures).
-
-Additionally, the API is running in a Docker container, which adds an extra layer of isolation. It’s also set up so I can update the config without rebuilding the image, which makes it easy to manage and deploy.
+I’ve tested adding multiple cameras to the same API, and it seems to work well. That means I can easily add more cameras in the future if I want to track more lines (or other things), or turn this project into a managed SaaS for computer vision pipelines as a bigger showcase.
 
 ## The Frontend
 
-At the moment, I just have a simple React component (which you saw near the start of this post) that connects to the streaming endpoint and displays the current line size. It’s nothing fancy, but it gets the job done.
+At the moment, I just have a simple React component (which you saw near the start of this post) that connects to the streaming endpoint and displays the current line size, and gave it it's own dedicated page at [cheyne.dev/timcam](https://cheyne.dev/timcam) It’s nothing fancy, but it gets the job done.
 
-I also have a small form that lets people tell me how many people are in the line, with a tiny python service also running on my homelab with docker to just log these form responses to a jsonl file for now. I want to use this data to get feedback on the accuracy of the counts and maybe add some sort of accuracy metric in the future, or train a simple regression model to correct for the inaccuracies based on the line size or other factors.
+I also have a small form in it that lets people tell me how many people are in the line, with a tiny python service also running on my homelab with docker to just log these form responses to a jsonl file for now. I want to use this data to get feedback on the accuracy of the counts and maybe add some sort of accuracy metric in the future, or train a simple regression model to correct for the inaccuracies based on the line size or other factors.
 
 The form is hidden in a dropdown and when people open it, it “freezes” the count display at the latest value so they can submit a report based on that without worrying about it changing while they fill out the form. Once they close the form, it goes back to updating with the live count.
 
-
 I do plan on improving the frontend in the future by making it so each viewer isn’t opening their own stream connection to the API. Instead, I’d use a single connection on the server side and broadcast the data to all viewers, which should reduce load and make things more efficient. With the current number of viewers it’s not really an issue, and I want to focus on other things for now.
+
+## Deployment and Hosting
+
+I’m hosting the API on my [homelab](https://www.cheyne.dev/posts/homelab), which is my old gutted desktop running Ubuntu Server, and the frontend is tacked onto [this site](https://www.cheyne.dev/posts/this-site) which is hosted on Vercel. 
+
+Rate limiting and security are concerns since this runs on my home network, so I have Traefik set up as a reverse proxy on an Oracle Cloud instance. It routes traffic to my home server through Tailscale, which lets me keep the API protected behind a VPN and only expose it to the internet through Traefik (which handles TLS termination, rate limiting, and other security measures).
+
+Additionally, the API is running in a Docker container, which adds an extra layer of isolation. It’s also set up so I can update the config without rebuilding the image, which makes it easy to manage and deploy.
+
+## Other Stuff
+
+Before I wrap this up, here's a few other things that I think are worth mentioning:
+
+### Ease of use
+
+Nobody will use this if its not quicker and easier than just going to the timcam feed and taking a look, so making it quickly readable at a glance was a big focus for me.
+
+I've also been encouraging those I know to add the page to their home screen on their phones, so its just one tap to check the count before heading to Tims, which has been fun to see people using it and getting value out of it.
+
+### Trials and Tribulations
+
+This project has been pretty smooth overall, but there have been a few hiccups along the way.
+
+There were the performance issues I mentioned earlier, which were a bit of a headache to figure out and optimize. There were also some challenges with getting the feed to be stable and not time out, but the error handling and reconnect logic seems to have solved that.
+
+CORS popped its head up when I first forgot to add CORS, then forgot that my website redirects `cheyne.dev` to `www.cheyne.dev` (I've since changed `cheyne.dev` to be the primary) which lead requests from `www.cheyne.dev` to be blocked. I want it to be a public API, so I've since changed it to allow requests from any origin.
+
+YOLO26 appeared to not work at first, since it output its detections in a different format than YOLOv8, but that was a quick switch to fix.
 
 ## Future Plans
 
-### The reasonable and feasible ones
+### The reasonable ones
 It would be great to add an estimate of wait time based on the line size. I’m thinking of adding something to the live feed that lets people enter how long it took them to get through the line, then using that data to fit a simple linear regression model to estimate wait times from line size. That could be a fun project and add some extra value.
 
 I’m not sure if that would fit within the scope of VisualCounterAPI as-is; alternatively, I could add support for custom plugins (or similar) that do post-processing before sending data out.
 
 Also, just to be explicit: I’m not storing images or doing any kind of identification, it’s purely an aggregate count within a small ROI.
+
+Those features could be added to the software that runs the API, but they would be disabled for the Timcam to keep it in line with the university’s requirements and to avoid any privacy concerns.
 
 I may also reach out to the university about doing a similar thing for the Nonis Field camera, which is a feed of the soccer field, and could be used to count how many people are on the field at any given time, which could be fun to track for the sports teams and stuff.
 
@@ -197,7 +216,7 @@ Even without storing images, I’d love to keep track of the counts over time an
 
 I'd been planning on doing this for the courtyard, but with the cropping I needed to get more accuracy for the line, I've cut most of it out.
 
-### The less feasible / reasonable ones but also really cool
+### The less reasonable ones but also really cool
 
 It would be neat to use this API software to make some sort of managed SaaS for computer vision pipelines, where people could just plug in their camera feeds, set up some ROIs, and have it serve the data through an API without having to worry about the computer vision part at all, which could be a fun project and a good way to showcase the capabilities of the VisualCounterAPI.
 
@@ -210,3 +229,5 @@ This was a really fun project to work on, and I’m happy with how it turned out
 I’d love to keep this running post-graduation. If you’re a student in the future reading this and it’s down, reach out and I’ll probably put it back up! - Its most likely that I moved or something and forgot about it.
 
 If you want to check out the code, it’s all open source on my GitHub (linked at the top of the post). If you have any questions or suggestions, feel free to reach out with the various contacts on my homepage. Thanks for reading!
+
+**Note:** I would love to include screenshots of the timcam in this, as of now I am waiting for the university to give me permission to use some. 
