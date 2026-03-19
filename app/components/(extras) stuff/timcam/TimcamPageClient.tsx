@@ -145,7 +145,7 @@ export default function TimcamPageClient() {
 
 				<details className="mt-6">
 					<summary className="cursor-pointer text-xs font-semibold uppercase text-muted-foreground">
-						Extras
+						Show Recent Max Counts
 					</summary>
 					<p className="mt-3 text-sm text-muted-foreground">
 						These max values may be more accurate at reflecting how long the line actually is, since the raw count can fluctuate a lot. It also may just show you an overestimate, I've added it for fun.
