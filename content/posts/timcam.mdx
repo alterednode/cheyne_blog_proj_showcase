@@ -25,6 +25,13 @@ I attend UBC Okanagan, and we've got a Tim Hortons on campus. However, the line 
 
 I decided to dig into the website hosting the Timcam feed and found that the video was being served in a format I’d never heard of, with a `.m3u8` extension. After some research, I learned this was an HLS stream, basically just a playlist of video segments.
 
+<Image 
+  title="A frame from the timcam feed, in full original quality"
+  src="/content/posts/timcam/timcam frame.png" 
+  alt="A frame from the timcam feed, showing the courtyard and the line" 
+  width="1280" height="720" 
+/>
+
 From there, I figured it wouldn’t be too hard to set up a computer vision pipeline to estimate the line size and serve it through an API, which I could then use on my website to display the current count.
 
 I also figured that since I’d be consuming [their camera feed](https://www.castanet.net/news/Kelowna/102093/A-TimCam-has-been-set-up-at-UBCO), it would be a good idea to get the university’s blessing—lest the project get taken down once it got popular. I reached out to UBCO IT; they were very supportive and gave me the green light to use the feed for this purpose, with the requirement that I set terms for the API to be for educational/non-commercial use only.
@@ -43,7 +50,7 @@ Here I'll go through the structure of how the project creates the API, roughly i
 
 ### Ingesting the Video Feed
 
-It was super simple to grab frames with OpenCV’s `VideoCapture` pointed at the `.m3u8` URL, and I was pulling frames in in no time. Once I ran the API for more than a few minutes, though, I realized the feed would occasionally time out.
+It was super simple to grab frames with OpenCV’s `VideoCapture` pointed at the `.m3u8` URL, and I was pulling frames in in no time. Once I ran the API for more than a few minutes though, I realized the feed would occasionally time out.
 
 I added error handling to catch this and attempt a reconnect if it looks like the feed has stopped working. At first, it treated normal gaps between HLS segments as a failure and reconnected unnecessarily (which messed with the pipeline even though the feed was fine). Extending the time threshold before declaring a failure and reconnecting seems to have fixed it.
 
@@ -68,6 +75,14 @@ Of course, then I realized YOLO26 was out, and it was much faster and more effic
 I think the biggest improvements were the cropping, the model switch, and the queue, which together got me much more accurate and up-to-date results.
 
 I could probably turn off the queueing on my server and still stay up to date with the feed now, but I would rather keep it super up to date than risk falling behind again, so I left it in.
+
+Here's a picture from the feed with the Cropping area outlined in blue, and the ROI outlined in yellow. 
+<Image 
+  title="The line area ROI drawn on top of the timcam feed"
+  src="/content/posts/timcam/Timcam person detection no people preview.png" 
+  alt="A frame from the timcam feed, with the line area ROI drawn on top as a yellow polygon outline" 
+  width="1280" height="720"
+/>
 
 ### Smoothing the Data
 

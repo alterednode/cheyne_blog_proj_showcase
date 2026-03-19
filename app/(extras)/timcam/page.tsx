@@ -93,7 +93,12 @@ export default function TimcamPage() {
 						This page tracks the approximate size of the Tim Hortons line. The live values above come from a person detection system built on top of the public timcam feed.
 					</p>
 					<p>
-						The source video feed is provided through{" "}
+						If you're interested in how it works, I have a post about the project which you can read <Link href="/posts/timcam" className="text-blue-500 hover:underline">here</Link>.
+					</p>
+					<p>Thank you to UBCO Engagement Services - UBC IT Okanagan for creating the timcam feed and allowing this project.
+					</p>
+					<p>
+						The source video feed is also avalible on the university's page - {" "}
 						<Link
 							href="https://ok.ubc.ca/current-students/"
 							className="text-blue-500 hover:underline"
@@ -109,9 +114,6 @@ export default function TimcamPage() {
 						</Link>{" "}
 						and is intended for educational, non-commercial use.
 					</p>
-					Thank you to UBCO Engagement Services - UBC IT Okanagan for creating the timcam feed and allowing this project.
-					<br />
-					<br />
 					<p>
 						Documentation is available at{" "}
 						<Link
