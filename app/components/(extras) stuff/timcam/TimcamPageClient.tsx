@@ -153,7 +153,7 @@ export default function TimcamPageClient() {
 					<div className="mt-4 grid gap-6 sm:grid-cols-3">
 						<div className="space-y-2">
 							<p className="text-sm font-semibold uppercase text-muted-foreground">
-								Max Count (Last {windowSize})
+								Max Count (Last {windowSize} Updates)
 							</p>
 							<p className="text-lg font-bold  tabular-nums">{recentMaxCountDisplay}</p>
 							<p className="text-xs text-muted-foreground">
@@ -163,7 +163,7 @@ export default function TimcamPageClient() {
 
 						<div className="space-y-2">
 							<p className="text-sm font-semibold uppercase text-muted-foreground">
-								Max Smoothed (Last {windowSize})
+								Max Smoothed (Last {windowSize} Updates)
 							</p>
 							<p className="text-lg font-bold  tabular-nums">{recentMaxSmoothedDisplay}</p>
 							<p className="text-xs text-muted-foreground">
