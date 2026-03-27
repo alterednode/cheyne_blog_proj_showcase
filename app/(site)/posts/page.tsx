@@ -57,9 +57,7 @@ export default function PostsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
-      <h1 className="text-3xl font-bold mb-2 bg-primary bg-clip-text text-transparent">
-        {THIS_TITLE}
-      </h1>
+      <h1 className="mb-2 text-3xl font-bold">{THIS_TITLE}</h1>
       <p className="mb-8 text-sm text-muted-foreground">
         Project write-ups and blog posts.
       </p>

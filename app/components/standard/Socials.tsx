@@ -98,7 +98,7 @@ export default function Socials({
         const isExternal = external || (!isMailto && /^https?:\/\//.test(href));
 
         const colorClasses =
-          "rounded-md border-2 border-primary bg-primary/70 text-foreground transition-colors hover:bg-accent/90 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+          "border-2 rounded-sm text-foreground transition-colors hover:border-primary hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
         return (
           <li key={platform}>

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { getFeaturedPosts, getRecentPosts, } from "@lib/content/query";
+import { getFeaturedPosts } from "@lib/content/query";
 import Socials from "@/app/components/standard/Socials";
 import { DEFAULT_SOCIAL_LINKS } from "@/app/components/standard/Socials";
 import { Card } from "@/app/components/standard/Card";
 import { PostGrid } from "@components/posts/PostGrid";
-import InProgress from "../components/standard/InProgress";
 import { CWrenchIconWithBackground } from "../components/custom-icons/c-wrench";
 import { siteMeta, siteUrl } from "@/app/lib/site";
 
@@ -38,8 +37,6 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const featuredPosts = getFeaturedPosts();
-  const recentBlogPosts = getRecentPosts(3, "blog");
-  const recentProjectPosts = getRecentPosts(3, "project");
   const sameAsLinks = Object.values(DEFAULT_SOCIAL_LINKS).filter(
     (link): link is string => Boolean(link) && /^https?:\/\//.test(link)
   );
@@ -73,9 +70,9 @@ export default function Home() {
       </InProgress>
       */}
 
-      <div className="mx-auto max-w-6xl px-4 py-10 space-y-12">
-        <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
-          <Card className="p-6">
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        <section className="grid gap-12 lg:grid-cols-[minmax(0,320px)_1fr]">
+          <Card className="py-6">
             <div className="flex items-center gap-4">
               <CWrenchIconWithBackground
                 className="text-muted-foreground relative overflow-hidden w-30"
@@ -87,7 +84,7 @@ export default function Home() {
                 <p className="text-xs uppercase tracking-[0.3em] font-bold text-muted-foreground">
                   Developer
                 </p>
-                <h1 className="text-2xl font-semibold text-primary">Onyx Cheyne</h1>
+                <h1 className="text-3xl font-semibold">Onyx Cheyne</h1>
                 <p className="text-sm text-muted-foreground">
                   <span>Kelowna, BC</span>
                 </p>
@@ -106,23 +103,27 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Accent callout */}
-            <div className="mt-6 rounded-lg border border-accent/35 bg-accent/10 p-4 space-y-2">
-              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">
-                Reach out!
+            <div className="mt-8 border-t border-border pt-4 space-y-3">
+              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-muted-foreground">
+                Reach out
               </p>
               <Socials display="both" className="flex-wrap" />
             </div>
           </Card>
 
 
-          <Card className="p-6 min-h-full overflow-y-auto no-scrollbar">
+          <div className="py-0 min-h-full overflow-y-auto no-scrollbar">
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-semibold">Featured posts</h2>
+              </div>
+            </div>
             <PostGrid
               posts={featuredPosts}
               showHeroImage
               emptyMessage="I forgot to feature any posts!!!!."
             />
-          </Card>
+          </div>
         </section>
 
         {/* Hiding this whole thing until content is ready

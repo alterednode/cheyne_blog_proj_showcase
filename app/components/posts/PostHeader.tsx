@@ -107,7 +107,7 @@ export function PostHeader({ post }: PostHeaderProps) {
 
       {hero ? (
         <div className="mt-8">
-          <div className="group relative aspect-video overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <div className="relative aspect-video overflow-hidden border border-border bg-card">
             <Image
               src={hero}
               alt={title}
@@ -115,7 +115,6 @@ export function PostHeader({ post }: PostHeaderProps) {
               className="object-cover"
               priority
             />
-            <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-background/30 via-transparent to-transparent" />
           </div>
         </div>
       ) : null}
@@ -255,8 +254,8 @@ function ActionLink({
   variant: "primary" | "secondary";
 }) {
   const variants: Record<"primary" | "secondary", string> = {
-    primary: "border-primary/30 bg-primary text-primary-foreground hover:bg-primary/90",
-    secondary: "border-border bg-muted text-foreground hover:bg-muted",
+    primary: "border-primary text-foreground hover:bg-primary/10",
+    secondary: "border-border text-foreground hover:bg-muted/60",
   };
 
   return (
@@ -265,7 +264,7 @@ function ActionLink({
       target="_blank"
       rel="noopener noreferrer"
       className={[
-        "group inline-flex items-center gap-2 rounded-md border px-4 py-2 text-left transition-colors",
+        "group inline-flex items-center gap-2 border px-4 py-2 text-left transition-colors",
         focusRing,
         variants[variant],
       ].join(" ")}

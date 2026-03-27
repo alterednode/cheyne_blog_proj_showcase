@@ -7,7 +7,7 @@ export interface CardProps {
 
 export function Card({ children, className }: CardProps) {
   const baseClassName =
-    "rounded-2xl border-2 border-border/80 bg-card hover:bg-card text-card-foreground shadow-lg shadow-accent/5";
+    "border-t-2 border-border bg-transparent text-card-foreground";
 
   return (
     <div className={[baseClassName, className].filter(Boolean).join(" ")}>
