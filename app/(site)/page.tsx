@@ -75,7 +75,7 @@ export default function Home() {
 
       <div className="mx-auto max-w-6xl px-4 py-10 space-y-12">
         <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
-          <Card className="p-6">
+          <div className="p-6">
             <div className="flex items-center gap-4">
               <CWrenchIconWithBackground
                 className="text-muted-foreground relative overflow-hidden w-30"
@@ -113,16 +113,16 @@ export default function Home() {
               </p>
               <Socials display="both" className="flex-wrap" />
             </div>
-          </Card>
+          </div>
 
 
-          <Card className="p-6 min-h-full overflow-y-auto no-scrollbar">
+          {/* <Card className="p-6 min-h-full overflow-y-auto no-scrollbar"> */}
             <PostGrid
               posts={featuredPosts}
               showHeroImage
               emptyMessage="I forgot to feature any posts!!!!."
             />
-          </Card>
+          {/* </Card> */}
         </section>
 
         {/* Hiding this whole thing until content is ready
