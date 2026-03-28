@@ -120,14 +120,15 @@ export default function Home() {
             </div>
           </div>
 
-
-          <div className="min-h-full overflow-y-auto no-scrollbar">
-            <h2 className="text-3xl font-semibold mb-6">Featured Posts</h2>
-            <PostGrid
-              posts={featuredPosts}
-              showHeroImage
-              emptyMessage="I forgot to feature any posts!!!!."
-            />
+          <div className="relative">  {/* grid cell — contributes 0 height since child is absolute */}
+            <div className="h-full lg:inset-0 lg:absolute overflow-y-auto no-scrollbar">
+              <h2 className="text-3xl font-semibold mb-6">Featured Posts</h2>
+              <PostGrid
+                posts={featuredPosts}
+                showHeroImage
+                emptyMessage="I forgot to feature any posts!!!!."
+              />
+            </div>
           </div>
         </section>
 
@@ -146,24 +147,24 @@ export default function Home() {
             <br />
             I find I really like working on the inner workings of systems, working with relational databases, optimizing and debugging code, but I do enjoy making things look nice and polished when I can, and really apprciate when others make good UX.
           </p>
-            <p className="mt-4 text-sm leading-relaxed text-foreground">
-              Outside of coding, I enjoy spending time outdoors, skiing in the tree runs at Big White and Silverstar, though I can't get up to the mountains as much as I would like these days. Which partially led to me picking up bouldering this year. I also love camping and backpacking, and I hope to explore more of the okanagan this summer. 
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-foreground">
-              I also play trombone! I started in elementary school and played through high school, eventually becoming one of the staff members of the <Link className="text-primary" href="https://www.allcityband.org/">Seattle All-City Marching band</Link>, and I continue to play with the <Link className="text-primary" href="https://www.kelownacityband.com/">Kelowna City Concert Band</Link>. It&apos;s a great way to relax and have fun, and I really enjoy the social aspect of playing music with others.
-            </p>
+          <p className="mt-4 text-sm leading-relaxed text-foreground">
+            Outside of coding, I enjoy spending time outdoors, skiing in the tree runs at Big White and Silverstar, though I can't get up to the mountains as much as I would like these days. Though this did lead to me picking up bouldering this year which I've been enjoying. I want to get out camping, backpacking, and biking more this summerand explore more of the Okanagan.
+          </p>
+          <p className="mt-4 text-sm leading-relaxed text-foreground">
+            I also play trombone! I started in elementary school and played through high school, eventually becoming one of the staff members of the <Link className="text-primary" href="https://www.allcityband.org/">Seattle All-City Marching band</Link>, and I continue to play with the <Link className="text-primary" href="https://www.kelownacityband.com/">Kelowna City Concert Band</Link>. It&apos;s a great way to relax and have fun, and I really enjoy the social aspect of playing music with others.
+          </p>
         </div>
-        
+
         <div className="p-2">
           <div className="flex flex-wrap gap-6 justify-center">
-            
+
             <figure className="flex flex-col items-center">
               <Image
                 src="/IMG_3834.JPG"
                 alt="Onyx wearing a 'Band Mom!' Hat"
                 className="rounded-lg shadow-md"
-                width={116*1.5}
-                height={154*1.5}
+                width={116 * 1.5}
+                height={154 * 1.5}
               />
               <figcaption className="mt-3 text-sm text-muted-foreground text-center">
                 A gift from my section!
@@ -175,8 +176,8 @@ export default function Home() {
                 src="/IMG_5478-jpg.jpg"
                 alt="Headshot of Onyx Cheyne"
                 className="rounded-lg shadow-md"
-                width={201*1.5 }
-                height={201*1.5}
+                width={201 * 1.5}
+                height={201 * 1.5}
               />
               <figcaption className="mt-3 text-sm text-muted-foreground text-center">
                 Revelstoke Mountain
@@ -187,8 +188,8 @@ export default function Home() {
                 src="/ACB_20240807-Trombones-Baritones.jpg"
                 alt="Onyx with their section of trombones and baritones"
                 className="rounded-lg shadow-md"
-                width={304*1.5}
-                height={205*1.5}
+                width={304 * 1.5}
+                height={205 * 1.5}
               />
               <figcaption className="mt-3 text-sm text-muted-foreground text-center">
                 The Bones and Tones from my time as ACB staff, I miss these guys!
