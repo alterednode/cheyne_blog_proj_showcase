@@ -101,14 +101,17 @@ export default function Home() {
               <p>
                 I like learning new technologies and improving my skills, and I&apos;m documenting my journey here.
               </p>
-              <p>
+              {/* <p>
                 Feel free to contact me if you&apos;d like to connect!
+              </p> */}
+              <p>
+                I&apos;m currently looking for co-op or internship opportunities for Summer 2026, so if you have or know of any, please reach out!
               </p>
             </div>
 
             {/* Accent callout */}
             <div className="mt-6 rounded-lg border border-accent/35 bg-accent/10 p-4 space-y-2">
-              <p className="text-xs uppercase tracking-[0.2em] font-semibold text-foreground">
+              <p className="text-sm uppercase tracking-[0.1em] font-semibold text-foreground">
                 Reach out!
               </p>
               <Socials display="both" className="flex-wrap" />
@@ -116,25 +119,33 @@ export default function Home() {
           </div>
 
 
-          {/* <Card className="p-6 min-h-full overflow-y-auto no-scrollbar"> */}
+          <div className="min-h-full overflow-y-auto no-scrollbar">
+            <h2 className="text-3xl font-semibold mb-6">Featured Posts</h2>
             <PostGrid
               posts={featuredPosts}
               showHeroImage
               emptyMessage="I forgot to feature any posts!!!!."
             />
-          {/* </Card> */}
+          </div>
         </section>
 
-        {/* Hiding this whole thing until content is ready
-        <Card className="p-8">
+
+       
+      </div>
+      
+      <div className="mx-auto max-w-6xl px-4 py-10 space-y-12">
+              {/* Hiding this whole thing until content is ready */}
+        <div className="p-6">
           <h3 className="text-lg font-semibold">About Me</h3>
           <p className="mt-4 text-sm leading-relaxed text-foreground">
-            I am a computer science student at the University of British Columbia&apos;s Okanagan campus, currently in my third year.
-            I like to build things, whether that&apos;s full-stack 
+            I&apos;m a computer science student at the University of British Columbia&apos;s Okanagan campus, wrapping up my third year.
+            <br />
+            I have a wide range of interests, but I&apos;m particularly passionate about software development, game development, and hardware projects. I love learning new technologies and improving my skills, and I&apos;m documenting my journey here.
+            <br />
+            I find I really like working on the inner workings of systems, , but I do enjoy making things look nice and polished when I can, and really apprciate good UX.
           </p>
-        </Card>
-        */}
-      </div>
+        </div>
+        </div>
     </div>
   );
 }

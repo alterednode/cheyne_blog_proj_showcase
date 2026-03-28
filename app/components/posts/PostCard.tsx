@@ -12,7 +12,7 @@ export function PostCard({ post, showHeroImage = false }: PostCardProps) {
   const heroSrc = post.hero;
 
   return (
-    <article className="group overflow-hidden rounded-lg border-2 border-border/80 bg-linear-to-br from-background via-card to-muted p-6 text-card-foreground shadow-lg shadow-accent/5 transition-colors hover:border-primary hover:shadow-primary/30 ">
+    <article className="group overflow-hidden rounded-lg border-2 border-border/80 bg-card p-6 text-card-foreground shadow-lg shadow-accent/5 transition-colors hover:border-primary hover:shadow-primary/30 ">
       <Link href={`/posts/${slug}`} className="block">
         {showHeroImage && heroSrc ? (
           <div className="relative -mx-4 -mt-4 mb-4 aspect-video w-[calc(100%+2rem)] overflow-hidden border-b-2 border-border/60 rounded-sm bg-muted">
@@ -25,23 +25,26 @@ export function PostCard({ post, showHeroImage = false }: PostCardProps) {
             />
           </div>
         ) : null}
-        <h2 className="text-xl font-semibold mb-2 transition-colors group-hover:text-primary">
-          {title}
-        </h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-xl font-semibold transition-colors group-hover:text-primary">
+            {title}
+          </h2>
+
+          <time
+            dateTime={date}
+            className="whitespace-nowrap text-sm font-medium text-muted-foreground"
+          >
+            {new Date(date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
+        </div>
         {subtitle ? (
-          <p className="text-sm font-medium text-muted-foreground">{subtitle}</p> 
+          <h3 className="mt-2 text-sm font-medium text-muted-foreground">{subtitle}</h3>
         ) : null}
         <p className="mt-3 line-clamp-2 text-sm text-foreground">{summary}</p>
-        <time
-          dateTime={date}
-          className="mt-4 inline-block text-sm font-medium text-muted-foreground"
-        >
-          {new Date(date).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </time>
       </Link>
     </article>
   );
