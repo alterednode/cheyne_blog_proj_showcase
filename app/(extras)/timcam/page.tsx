@@ -77,9 +77,14 @@ export default function TimcamPage() {
 					<h1 className="text-3xl font-semibold">
 						How many people are in line at Tims right now?
 					</h1>
+					<div className="flex gap-4">
 					<p className="max-w-2xl text-sm text-muted-foreground">
 						Live estimate of the Tim Hortons line at UBC Okanagan.
 					</p>
+					<Link href="https://maps.app.goo.gl/kcDxiTVt2LhyM6H9A" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-sm">
+						See the operating hours on Google Maps
+					</Link>
+					</div>
 				</header>
 
 				<TimcamPageClient />
