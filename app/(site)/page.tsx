@@ -86,7 +86,7 @@ export default function Home() {
 
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] font-bold text-muted-foreground">
-                  Developer
+                  Software Developer
                 </p>
                 <h1 className="text-2xl font-semibold text-primary">Onyx Cheyne</h1>
                 <p className="text-sm text-muted-foreground">

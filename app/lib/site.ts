@@ -27,7 +27,7 @@ export const siteMeta = {
     "blog",
   ],
   icon: "/c-wrench/tiny no bkg.png",
-  ogImage: "/c-wrench/full no bkg.png",
+  ogImage: "/updated-homepage-screenshot.png",
 } as const;
 
 export function absoluteUrl(path: string = "/"): string {
