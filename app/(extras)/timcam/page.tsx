@@ -89,64 +89,49 @@ export default function TimcamPage() {
 
 				<TimcamPageClient />
 
-				<div className="space-y-4 text-sm text-foreground">
-					<p>
-						This is as accurate as I could make it, but the timcam feed is super low resolution and blurry.<br />
-						If the count is near 10+ it is also possible that people are being missed because the line is extending into the courtyard.
-					</p>
-					<p>
-						This page tracks the approximate size of the Tim Hortons line. The live values above come from a person detection system built on top of the public timcam feed.
-					</p>
-					<p>
-						If you're interested in how it works, I have a post about the project which you can read <Link href="/posts/timcam" className="text-blue-500 hover:underline">here</Link>.
-					</p>
-					<p>Thank you to UBCO Engagement Services - UBC IT Okanagan for creating the timcam feed and allowing this project.
-					</p>
-					<p>
-						The source video feed is also avalible on the university's page - {" "}
-						<Link
-							href="https://ok.ubc.ca/current-students/"
-							className="text-blue-500 hover:underline"
-						>
-							UBC Okanagan student resources
-						</Link>
-						. The API powering this page lives at{" "}
-						<Link
-							href="https://timcam-api.cheyne.dev/"
-							className="text-blue-500 hover:underline"
-						>
-							timcam-api.cheyne.dev
-						</Link>{" "}
-						and is intended for educational, non-commercial use.
-					</p>
-					<p>
-						Documentation is available at{" "}
-						<Link
-							href="https://timcam-api.cheyne.dev/docs"
-							className="text-blue-500 hover:underline"
-						>
-							the Timcam API docs
-						</Link>
-						, and the raw SSE stream used by this page is exposed at{" "}
-						<Link
-							href="https://timcam-api.cheyne.dev/timcam_cropped/count/stream"
-							className="text-blue-500 hover:underline"
-						>
-							the stream endpoint
-						</Link>
-						.
-						For the current value, use the JSON snapshot endpoint: <Link href="https://timcam-api.cheyne.dev/timcam_cropped/count" className="text-blue-500 hover:underline"> timcam-api.cheyne.dev/timcam_cropped/count</Link>.
-					</p>
-					<p>
-						Questions or feedback:{" "}
-						<Link
-							href="mailto:onyx@cheyne.dev"
-							className="text-blue-500 hover:underline"
-						>
-							Onyx@Cheyne.dev
-						</Link>
-						.
-					</p>
+				<div className="space-y-6 text-sm text-foreground">
+					<div>
+						<h2 className="text-lg font-semibold mb-2">About this</h2>
+						<p>
+							This page uses a person detection system built on the public timcam feed to estimate the line size in real time. The feed is low resolution and blurry, so accuracy isn't perfect. Also, when the count reaches 10+, people at the back of the line or extending into the courtyard may be missed.
+						</p>
+						<p className="mt-2">
+							Want to know how it works? Check out my <Link href="/posts/timcam" className="text-blue-500 hover:underline">detailed post</Link> about the project.
+						</p>
+					</div>
+
+					<div>
+						<h2 className="text-lg font-semibold mb-2">API & resources</h2>
+						<p>
+							The Timcam API which powers this page and is available at{" "}
+							<Link
+								href="https://timcam-api.cheyne.dev/"
+								className="text-blue-500 hover:underline"
+							>
+								timcam-api.cheyne.dev
+							</Link>{" "}
+							is for educational, non-commercial use. The source video feed is also available on{" "}
+							<Link
+								href="https://ok.ubc.ca/current-students/"
+								className="text-blue-500 hover:underline"
+							>
+								UBC Okanagan's student resources page
+							</Link>
+							.
+						</p>
+						<p className="mt-2">
+							For integration, check out the <Link href="https://timcam-api.cheyne.dev/docs" className="text-blue-500 hover:underline">API documentation</Link>, the <Link href="https://timcam-api.cheyne.dev/timcam_cropped/count/stream" className="text-blue-500 hover:underline">live SSE stream</Link>, or the <Link href="https://timcam-api.cheyne.dev/timcam_cropped/count" className="text-blue-500 hover:underline">JSON snapshot endpoint</Link>.
+						</p>
+					</div>
+
+					<div>
+						<p className="text-xs text-muted-foreground">
+							Thanks to UBCO Engagement Services and UBC IT Okanagan for creating and supporting the timcam feed.
+						</p>
+						<p className="text-xs text-muted-foreground mt-1">
+							Questions or feedback? <Link href="mailto:onyx@cheyne.dev" className="text-blue-500 hover:underline">Email me</Link> at onyx@cheyne.dev.
+						</p>
+					</div>
 				</div>
 			</div>
 		</main>
