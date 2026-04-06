@@ -20,7 +20,7 @@ export function PostCard({ post, showHeroImage = false }: PostCardProps) {
               src={heroSrc}
               alt={title}
               fill
-              sizes="(max-width: 768px) 100vw, 768px"
+              sizes="(max-width: 768px) calc(100vw - 2rem), (max-width: 1280px) calc((100vw - 3rem) / 2), 22rem"
               className="object-cover"
             />
           </div>
