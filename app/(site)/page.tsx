@@ -81,6 +81,7 @@ export default function Home() {
                 className="h-48 w-48 shrink-0 lg:h-48 lg:w-48 xl:h-64 xl:w-64 xl:self-center 2xl:h-72 2xl:w-72"
                 bgStrokeColor="color-mix(in oklab, var(--secondary) 50%, var(--background) 50%)"
                 imageScale={0.88}
+                priority
               />
 
               <div>

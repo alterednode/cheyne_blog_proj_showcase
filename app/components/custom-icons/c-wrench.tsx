@@ -1,9 +1,11 @@
+import Image from "next/image";
 import * as React from "react";
 
 const WRENCH_VIEW_BOX = "0 0 920 920";
 const SVG_XMLNS = "http://www.w3.org/2000/svg";
 const HEX_BACKGROUND_PATH =
   "M247.5,91.939l425,0l212.5,368.061l-212.5,368.061l-425,0l-212.5,-368.061l212.5,-368.061Z";
+const HEX_CLIP_PATH = "polygon(26.9% 10%, 73.1% 10%, 96.2% 50%, 73.1% 90%, 26.9% 90%, 3.8% 50%)";
 const WRENCH_PATH =
   "M679.724,423.249c6.964,1.087 13.933,-1.92 17.919,-7.733c3.986,-5.813 4.28,-13.398 0.756,-19.502c-32.355,-56.04 -94.393,-163.494 -94.393,-163.494c-3.92,-6.79 -11.165,-10.973 -19.005,-10.973l-250,0c-7.84,-0 -15.085,4.183 -19.005,10.973l-96.286,166.773c-2.298,3.98 -6.545,6.432 -11.14,6.432l-87.036,-0c-4.596,-0 -8.843,-2.452 -11.14,-6.432c-2.298,-3.98 -2.298,-8.884 -0,-12.864l144.545,-250.36c5.582,-9.669 15.899,-15.625 27.063,-15.625l356,0c11.165,-0 21.481,5.956 27.063,15.625l178,308.305c5.582,9.669 5.582,21.581 -0,31.25l-178,308.305c-5.582,9.669 -15.899,15.625 -27.063,15.625l-356,0c-11.165,0 -21.481,-5.956 -27.063,-15.625l-144.545,-250.36c-2.298,-3.98 -2.298,-8.884 0,-12.864c2.298,-3.98 6.545,-6.432 11.14,-6.432l87.036,0c4.596,0 8.843,2.452 11.14,6.432l96.286,166.773c3.92,6.79 11.165,10.973 19.005,10.973l250,0c7.84,0 15.085,-4.183 19.005,-10.973c0,0 62.039,-107.454 94.393,-163.494c3.524,-6.104 3.23,-13.689 -0.756,-19.502c-3.986,-5.813 -10.955,-8.821 -17.919,-7.733c-29.718,4.64 -68.354,10.673 -82.372,12.862c-3.4,0.531 -6.377,2.572 -8.098,5.552c-10.119,17.526 -44.996,77.935 -44.996,77.935c-2.294,3.973 -6.533,6.42 -11.12,6.42l-146.277,-0c-4.587,-0 -8.826,-2.447 -11.12,-6.42l-73.138,-126.679c-2.294,-3.973 -2.294,-8.868 -0,-12.84l73.138,-126.679c2.294,-3.973 6.533,-6.42 11.12,-6.42l146.277,0c4.587,0 8.826,2.447 11.12,6.42c-0,0 34.877,60.409 44.996,77.935c1.721,2.98 4.698,5.021 8.098,5.552c14.018,2.189 52.655,8.222 82.372,12.862Z";
 
@@ -79,54 +81,85 @@ export function CWrenchIconWithBackground({
   );
 }
 
-export type CHexImageFrameProps = React.SVGProps<SVGSVGElement> & {
+export type CHexImageFrameProps = React.HTMLAttributes<HTMLDivElement> & {
+  alt?: string;
   title?: string;
   href: string;
   bgStrokeColor?: string;
   bgStrokeWidth?: number;
+  bgColor?: string;
   imageScale?: number;
-  imagePreserveAspectRatio?: string;
+  imagePosition?: string;
+  imageSizes?: string;
+  priority?: boolean;
 };
 
 export function CHexImageFrame({
+  alt,
   title,
   href,
   bgStrokeColor = "currentColor",
   bgStrokeWidth = 40,
+  bgColor = "transparent",
   imageScale = 1,
-  imagePreserveAspectRatio = "xMidYMid slice",
+  imagePosition = "center",
+  imageSizes = "(max-width: 640px) 9rem, (max-width: 1024px) 12rem, (max-width: 1280px) 16rem, 18rem",
+  priority = false,
+  className,
+  style,
   ...props
 }: CHexImageFrameProps) {
-  const clipPathId = React.useId();
   const clampedImageScale = Math.max(imageScale, 0.01);
-  const imageInset = (920 - 920 * clampedImageScale) / 2;
 
   return (
-    <BaseIcon title={title} {...props}>
-      <defs>
-        <clipPath id={clipPathId}>
-          <path d={HEX_BACKGROUND_PATH} />
-        </clipPath>
-      </defs>
+    <div
+      className={`relative aspect-square ${className ?? ""}`.trim()}
+      style={style}
+      title={title}
+      {...props}
+    >
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{
+          clipPath: HEX_CLIP_PATH,
+          backgroundColor: bgColor,
+        }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: `scale(${clampedImageScale})`,
+            transformOrigin: "center",
+          }}
+        >
+          <Image
+            src={href}
+            alt={alt ?? title ?? ""}
+            fill
+            sizes={imageSizes}
+            priority={priority}
+            className="select-none"
+            style={{
+              objectFit: "cover",
+              objectPosition: imagePosition,
+            }}
+          />
+        </div>
+      </div>
 
-      <image
-        href={href}
-        x={imageInset}
-        y={imageInset}
-        width={920 * clampedImageScale}
-        height={920 * clampedImageScale}
-        preserveAspectRatio={imagePreserveAspectRatio}
-        clipPath={`url(#${clipPathId})`}
-      />
-
-      <path
-        d={HEX_BACKGROUND_PATH}
-        fill="none"
-        stroke={bgStrokeColor}
-        strokeWidth={bgStrokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </BaseIcon>
+      <BaseIcon
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      >
+        <path
+          d={HEX_BACKGROUND_PATH}
+          fill="none"
+          stroke={bgStrokeColor}
+          strokeWidth={bgStrokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </BaseIcon>
+    </div>
   );
 }
