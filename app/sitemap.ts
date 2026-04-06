@@ -19,12 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl("/timcam"),
       changeFrequency: "hourly",
       priority: 0.8,
-    },
-    {
-      url: absoluteUrl("/rss.xml"),
-      changeFrequency: "weekly",
-      priority: 0.3,
-    },
+    }
   ];
 
   const postRoutes: MetadataRoute.Sitemap = getPublishedPosts().map((post) => ({
