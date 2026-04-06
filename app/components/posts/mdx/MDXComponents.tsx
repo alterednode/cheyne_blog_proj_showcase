@@ -6,6 +6,7 @@ import { MDXMeter, MDXMeterPlayground } from "./post-specific/this-site/MDXPropD
 import * as StandardComponents from "@components/standard";
 import { ScrollTracker } from "./post-specific/this-site/ScrollTracker";
 import Image from "next/image";
+import Link from "next/link";
 import { slugify } from "@lib/content/slug";
 import TimcamPageClient from "../../(extras) stuff/timcam/TimcamPageClient";
 
@@ -38,6 +39,20 @@ function LinkedHeading(
         {children}
       </StandardComponents.SmoothScrollLink>
     </Tag>
+  );
+}
+
+function StyledLink({ href, children, ...props }: ComponentPropsWithoutRef<typeof Link>) {
+  return (
+    <Link
+      href={href}
+      className="text-accent hover:text-primary transition-all hover:scale-50"
+      target={typeof href === "string" && href.startsWith("http") ? "_blank" : undefined}
+      rel={typeof href === "string" && href.startsWith("http") ? "noopener noreferrer" : undefined}
+      {...props}
+    >
+      {children}
+    </Link>
   );
 }
 
@@ -97,6 +112,7 @@ export const mdxComponents: MDXComponents = {
   Card: StandardComponents.Card,
   Socials: StandardComponents.Socials,
   Image,
+  Link: StyledLink,
   TimcamPageClient,
 
 };

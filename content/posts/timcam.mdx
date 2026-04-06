@@ -21,7 +21,7 @@ type: project
 tocIntroHeader: How this started
 ---
 
-I attend UBC Okanagan, and we've got a Tim Hortons on campus. However, the line can get quite long, and my friends and I wanted a way to check it without having to dig through the university website to find the [Timcam feed](https://ok.ubc.ca/current-students/). We wanted something faster that we could check at a glance, without having to count people in line.
+I attend UBC Okanagan, and we've got a Tim Hortons on campus. However, the line can get quite long, and my friends and I wanted a way to check it without having to dig through the university website to find the <Link href="https://ok.ubc.ca/current-students/">Timcam feed</Link>. We wanted something faster that we could check at a glance, without having to count people in line.
 
 I decided to dig into the website hosting the Timcam feed and found that the video was being served in a format I’d never heard of, with a `.m3u8` extension. After some research, I learned this was an HLS stream, basically just a playlist of video segments.
 
@@ -34,11 +34,13 @@ I decided to dig into the website hosting the Timcam feed and found that the vid
 
 From there, I figured it wouldn’t be too hard to set up a computer vision pipeline to estimate the line size and serve it through an API, which I could then use on my website to display the current count.
 
-I also figured that since I’d be consuming [their camera feed](https://www.castanet.net/news/Kelowna/102093/A-TimCam-has-been-set-up-at-UBCO), it would be a good idea to get the university’s blessing—lest the project get taken down once it got popular. I reached out to UBCO IT; they were very supportive and gave me the green light to use the feed for this purpose, with the requirement that I set terms for the API to be for educational/non-commercial use only.
+I also figured that since I'd be consuming <Link href="https://www.castanet.net/news/Kelowna/102093/A-TimCam-has-been-set-up-at-UBCO">their camera feed</Link>, it would be a good idea to get the university's blessing—lest the project get taken down once it got popular. I reached out to UBCO IT; they were very supportive and gave me the green light to use the feed for this purpose, with the requirement that I set terms for the API to be for educational/non-commercial use only.
 
 Here is the live count, if you're curious:
+
 <TimcamPageClient />
-I can drop this in here easily because I’m using MDX for my posts, check out [my post about this site](https://cheyne.dev/posts/this-site) if you want to learn more about that.
+
+I can drop this in here easily because I'm using MDX for my posts, check out <Link href="https://cheyne.dev/posts/this-site">my post about this site</Link> if you want to learn more about that.
 
 ## The VisualCounterAPI
 
@@ -64,7 +66,7 @@ I ended up setting up a Region of Interest (ROI) system where I specify a polygo
 
 #### Performance Optimizations
 
-I knew I'd be running this on my homelab, which boasts my old i7-6700 CPU and no GPU, so I knew performance would likely be an issue, especially since I wanted to serve the data in real-time. To try and get ahead of this, before I did any optimization on my own, I found [OpenVINO](https://github.com/openvinotoolkit/openvino) which could be used to optimize the model for Intel CPU inference, and give me a speed boost without me having to actually use my brain.
+I knew I'd be running this on my homelab, which boasts my old i7-6700 CPU and no GPU, so I knew performance would likely be an issue, especially since I wanted to serve the data in real-time. To try and get ahead of this, before I did any optimization on my own, I found <Link href="https://github.com/openvinotoolkit/openvino">OpenVINO</Link> which could be used to optimize the model for Intel CPU inference, and give me a speed boost without me having to actually use my brain.
 
 However, I eventually noticed that I was lagging behind the live feed while testing on my laptop (also an Intel CPU), and missing a lot of people. That was a problem, since I wanted this to be as accurate and up-to-date as possible. I ended up implementing a few optimizations to speed up the pipeline, such as only processing every nth frame, cropping the feed before processing, and adding an (attempted) limiter on how many frames are processed per second while dropping excess frames.
 
@@ -138,7 +140,7 @@ Who doesn’t love a big ol’ YAML config file?
 
 I wanted to make it easy to configure the API without having to change the code, so I set up a config file that can be used to specify things like the camera feed URL, the ROIs, the smoothing algorithm, and various other settings.
 
-I’ll drop part of the config file I’m using for the Timcam API here, [click here for the full thing](https://github.com/alterednode/VisualCounterAPI/blob/b4a12d0bf04dd293233ebfa7a609db7e2131f039/config.yaml) 
+I'll drop part of the config file I'm using for the Timcam API here, <Link href="https://github.com/alterednode/VisualCounterAPI/blob/b4a12d0bf04dd293233ebfa7a609db7e2131f039/config.yaml">click here for the full thing</Link>
 
 ```yaml
 defaults:
@@ -178,7 +180,7 @@ I’ve tested adding multiple cameras to the same API, and it seems to work well
 
 ## The Frontend
 
-At the moment, I just have a simple React component (which you saw near the start of this post) that connects to the streaming endpoint and displays the current line size, and gave it it's own dedicated page at [cheyne.dev/timcam](https://cheyne.dev/timcam) It’s nothing fancy, but it gets the job done.
+At the moment, I just have a simple React component (which you saw near the start of this post) that connects to the streaming endpoint and displays the current line size, and gave it it's own dedicated page at <Link href="https://cheyne.dev/timcam">cheyne.dev/timcam</Link> It's nothing fancy, but it gets the job done.
 
 I also have a small form in it that lets people tell me how many people are in the line, with a tiny python service also running on my homelab with docker to just log these form responses to a jsonl file for now. I want to use this data to get feedback on the accuracy of the counts and maybe add some sort of accuracy metric in the future, or train a simple regression model to correct for the inaccuracies based on the line size or other factors.
 
@@ -188,7 +190,7 @@ I do plan on improving the frontend in the future by making it so each viewer is
 
 ## Deployment and Hosting
 
-I’m hosting the API on my [homelab](https://cheyne.dev/posts/homelab), which is my old gutted desktop running Ubuntu Server, and the frontend is tacked onto [this site](https://cheyne.dev/posts/this-site) which is hosted on Vercel. 
+I'm hosting the API on my <Link href="https://cheyne.dev/posts/homelab">homelab</Link>, which is my old gutted desktop running Ubuntu Server, and the frontend is tacked onto <Link href="https://cheyne.dev/posts/this-site">this site</Link> which is hosted on Vercel.
 
 Rate limiting and security are concerns since this runs on my home network, so I have Traefik set up as a reverse proxy on an Oracle Cloud instance. It routes traffic to my home server through Tailscale, which lets me keep the API protected behind a VPN and only expose it to the internet through Traefik (which handles TLS termination, rate limiting, and other security measures).
 

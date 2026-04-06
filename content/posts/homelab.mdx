@@ -52,25 +52,25 @@ Nonetheless, after about an hour of fighting with it, I managed to get the boot 
 
 Second things second, I needed a wired internet connection. Thankfully, my apartment is wired for Ethernet, but every cable was unlabeled, and we had more wall jacks than cables at the router, so I had to do some testing to figure out which cable went where.
 
-I set up SSH (with keys, no insecure passwords here!), connected from my laptop, and started configuring things. I wanted to set up Traefik as a reverse proxy to route traffic to different services, and logged into my Telus router to configure port forwarding.
+I set up SSH (with keys, no insecure passwords here!), connected from my laptop, and started configuring things. I wanted to set up <Link href="https://traefik.io/">Traefik</Link> as a reverse proxy to route traffic to different services, and logged into my Telus router to configure port forwarding.
 
 After an hour of trying to figure out why I couldn't access the server from outside my network, messing about with the router firewall, DNS, and more, I discovered that Telus had us behind CGNAT, and that port forwarding wouldn't work no matter what I did on the router.
 
 ### A Brief Look at Cloudflare Tunnels
 
-I considered using Cloudflare Tunnels to work around this, but ultimately decided against it. I planned to host a few game servers, and running those through Cloudflare Tunnels would not work without even more complicated setups—such as requiring my friends to install mods just to connect, even for something like Minecraft.
+I considered using <Link href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/">Cloudflare Tunnels</Link> to work around this, but ultimately decided against it. I planned to host a few game servers, and running those through Cloudflare Tunnels would not work without even more complicated setups—such as requiring my friends to install mods just to connect, even for something like Minecraft.
 
 ## Oracle Cloud to the Rescue
 
-A while ago, I discovered Oracle Cloud's free tier, and the massive amount of resources they provide for free if you use their ARM instances - 4 vCPUs, 24 GB of RAM, and 200 GB of block storage.
+A while ago, I discovered <Link href="https://www.oracle.com/cloud/free/">Oracle Cloud's free tier</Link>'s always free ARM compute instances with an impressive 4 vCPUs, 24 GB of RAM, and 200 GB of block storage.
 
 It works quite well for running small Minecraft servers, but I figured I could also use it as an entry point for my home server. I removed my existing instance that was hosting a few Minecraft servers and created a new ARM instance, then set up Tailscale and Traefik on it.
 
 ### Reverse Proxy
 
-I'd seen a lot of things about NGINX reverse proxies, but I wanted to try something a bit different, so I went with Traefik instead after seeing people discuss it in self-hosting Reddit threads and forum posts.
+I'd seen a lot of things about <Link href="https://nginx.org/">NGINX</Link> reverse proxies, but I wanted to try something a bit different, so I went with <Link href="https://traefik.io/">Traefik</Link> instead after seeing people discuss it in self-hosting Reddit threads and forum posts.
 
-What I found neat about it is that I just need two pretty small configuration files to get it up and running, it can automatically obtain and renew SSL certificates from Let's Encrypt once I set up DNS records in Cloudflare, and it can automatically discover new services on the same machine and route traffic to them without needing to restart the proxy.
+What I found neat about it is that I just need two pretty small configuration files to get it up and running, it can automatically obtain and renew SSL certificates from <Link href="https://letsencrypt.org/">Let's Encrypt</Link> once I set up DNS records in Cloudflare, and it can automatically discover new services on the same machine and route traffic to them without needing to restart the proxy.
 
 For services on the home server I just need to tell Traefik to route traffic to the Tailscale IP address of the home server, and it takes care of the rest. Here's an example of how I could set it up to route traffic to a whoami service running on my home server:
 
@@ -103,7 +103,7 @@ http:
 
 ### Tailscale
 
-Tailscale is a mesh VPN that allows me to directly connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server with Tailscale based on hostnames, and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
+<Link href="https://tailscale.com/">Tailscale</Link> is a mesh VPN that allows me to directly connect to my home server from the Oracle Cloud instance without needing to open any ports on my router. From there, I configured Traefik to route traffic to my home server with Tailscale based on hostnames, and set up DNS records in Cloudflare pointing to the Oracle Cloud instance.
 
 I also use it for ssh-ing into my home server when I need to manage it, and for accessing any services that I choose not to route through Traefik.
 
@@ -112,7 +112,7 @@ I also use it for ssh-ing into my home server when I need to manage it, and for 
 
 I'm fairly security-conscious, and I wanted to make sure my homelab was secure, especially since I was exposing some services to the internet.
 
-To start, the Oracle Cloud instance is running iptables to only allow incoming connections for SSH and the ports I have assigned for various services. To add an extra layer of security to the SSH port, I have fail2ban set up to block any IPs that have too many failed login attempts.
+To start, the Oracle Cloud instance is running iptables to only allow incoming connections for SSH and the ports I have assigned for various services. To add an extra layer of security to the SSH port, I have <Link href="https://www.fail2ban.org/">fail2ban</Link> set up to block any IPs that have too many failed login attempts.
 
 On the home server I'm using the default Ubuntu firewall (ufw) to block all incoming connections except for assigned service ports and LAN traffic.
 
@@ -132,10 +132,11 @@ Currently, I'm running a few services on my home server, all in Docker container
 
 - A Minecraft server for me and my friends
 - WordPress for hosting an in-development site for a community centre
+- The Timcam Live Line Count api backend
 - My personal website, which I am working on migrating from Vercel to my own server for fun and learning purposes
 
 In the future, I plan to add a few more services, such as:
 - A file server for storing and sharing files between my devices once hard drives become slightly more affordable
-- Plex or Jellyfin for media streaming
-- Pterodactyl for game server management to easily manage multiple game servers and allow my friends to manage their own servers without needing access to the entire server
+- <Link href="https://www.plex.tv/">Plex</Link> or <Link href="https://jellyfin.org/">Jellyfin</Link> for media streaming
+- <Link href="https://pterodactyl.io/">Pterodactyl</Link> for game server management to easily manage multiple game servers and allow my friends to manage their own servers without needing access to the entire server
 
