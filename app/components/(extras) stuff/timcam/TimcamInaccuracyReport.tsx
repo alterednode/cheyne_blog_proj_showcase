@@ -108,19 +108,30 @@ export default function TimcamInaccuracyReport({
 		>
 			<summary
 				className={cn(
-					"cursor-pointer select-none rounded-md px-2 py-2 text-sm font-semibold text-muted-foreground",
-					"hover:bg-muted hover:text-foreground",
+					"inline-flex items-center justify-center gap-2 cursor-pointer rounded-md px-3 py-2 text-sm font-semibold text-primary-foreground transition-colors",
+					"bg-primary hover:bg-primary/90",
 					focusRing
 				)}
 			>
-				Report an inaccuracy
+				<svg
+					className="w-4 h-4 transition-transform duration-200 group-open:rotate-90 flex-shrink-0"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+				>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={2}
+						d="M9 5l7 7-7 7"
+					/>
+				</svg>
+				<span>Feedback</span>
 			</summary>
 
 			<form onSubmit={onSubmit} className="mt-3 space-y-4 px-2">
 				<p className="text-sm text-muted-foreground">
-					This helps me see if the estimate is consistently off, and tune it.
-					By opening this up you have temporarily "frozen" the count display at the latest value, so you can submit a report based on that without worrying about it changing while you fill out the form.
-					Close this for it to keep updating with the live count.
+					This helps tune the estimate. Opening freezes the count so you can report without it changing. Close to resume live updates.
 				</p>
 
 				<div className="grid gap-4 md:grid-cols-2">
@@ -130,7 +141,7 @@ export default function TimcamInaccuracyReport({
 							type="number"
 							name="reportedCount"
 							inputMode="numeric"
-							min={0}
+							min={-1}
 							max={200}
 							required
 							disabled={submitting}
@@ -180,9 +191,9 @@ export default function TimcamInaccuracyReport({
 							focusRing
 						)}
 					>
-						{submitting ? "Submitting…" : "Submit report"}
+						{submitting ? "Sending…" : "Send"}
 					</button>
-					<p className="text-xs text-muted-foreground">Accuracy feedback only.</p>
+					<p className="text-xs text-muted-foreground">Accuracy feedback only please! Email me for anything else: onyx@cheyne.dev</p>
 				</div>
 			</form>
 		</details>
