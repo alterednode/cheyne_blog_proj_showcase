@@ -112,6 +112,7 @@ export function PostHeader({ post }: PostHeaderProps) {
               src={hero}
               alt={title}
               fill
+              sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) calc(100vw - 4rem), 56rem"
               className="object-cover"
               priority
             />
