@@ -69,7 +69,7 @@ export default function TimcamPage() {
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(pageJsonLd) }}
 			/>
-			<div className="mx-auto max-w-4xl px-4 py-10 space-y-8">
+			<div className="mx-auto max-w-4xl px-4 py-4 space-y-8">
 				<header className="space-y-2">
 					<p className="text-xs font-bold uppercase text-muted-foreground">
 						Timcam Line Viewer
