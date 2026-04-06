@@ -77,7 +77,7 @@ export default function Home() {
             <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left xl:flex-col xl:items-start xl:text-left xl:gap-5">
               <CHexImageFrame
                 href="/skiing-headshot-square.png"
-                title="Headshot of Onyx Cheyne"
+                title="Selfie headshot of Onyx Cheyne Wearing Ski Gear on the mountain"
                 className="h-48 w-48 shrink-0 lg:h-48 lg:w-48 xl:h-64 xl:w-64 xl:self-center 2xl:h-72 2xl:w-72"
                 bgStrokeColor="color-mix(in oklab, var(--secondary) 50%, var(--background) 50%)"
                 imageScale={0.88}
