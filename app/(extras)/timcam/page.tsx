@@ -103,14 +103,14 @@ export default function TimcamPage() {
 					<div>
 						<h2 className="text-lg font-semibold mb-2">API & resources</h2>
 						<p>
-							The Timcam API which powers this page and is available at{" "}
+							The Timcam API I created to power this page is publicly available at{" "}
 							<Link
 								href="https://timcam-api.cheyne.dev/"
 								className="text-blue-500 hover:underline"
 							>
 								timcam-api.cheyne.dev
 							</Link>{" "}
-							is for educational, non-commercial use. The source video feed is also available on{" "}
+							and is for educational, non-commercial use. The source video feed is also available on{" "}
 							<Link
 								href="https://ok.ubc.ca/current-students/"
 								className="text-blue-500 hover:underline"
