@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { getFeaturedPosts, getRecentPosts, } from "@lib/content/query";
+import { getFeaturedPosts } from "@lib/content/query";
 import Socials from "@/app/components/standard/Socials";
 import { DEFAULT_SOCIAL_LINKS } from "@/app/components/standard/Socials";
-import { Card } from "@/app/components/standard/Card";
 import { PostGrid } from "@components/posts/PostGrid";
-import InProgress from "../components/standard/InProgress";
-import { CWrenchIconWithBackground } from "../components/custom-icons/c-wrench";
+import { CHexImageFrame } from "../components/custom-icons/c-wrench";
 import { siteMeta, siteUrl } from "@/app/lib/site";
 import Link from "next/link";
 import Image from "next/image";
@@ -40,8 +38,6 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const featuredPosts = getFeaturedPosts();
-  const recentBlogPosts = getRecentPosts(3, "blog");
-  const recentProjectPosts = getRecentPosts(3, "project");
   const sameAsLinks = Object.values(DEFAULT_SOCIAL_LINKS).filter(
     (link): link is string => Boolean(link) && /^https?:\/\//.test(link)
   );
@@ -76,13 +72,15 @@ export default function Home() {
       */}
 
       <div className="mx-auto max-w-6xl px-4 py-10 space-y-12">
-        <section className="grid gap-8 lg:grid-cols-[minmax(0,320px)_1fr]">
+        <section className="grid gap-8 xl:grid-cols-[minmax(0,420px)_1fr] 2xl:grid-cols-[minmax(0,480px)_1fr]">
           <div className="p-6">
-            <div className="flex items-center gap-4">
-              <CWrenchIconWithBackground
-                className="text-muted-foreground relative overflow-hidden w-30"
-                bgColor="var(--background)"
-                bgStrokeColor="var(--background)"
+            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left xl:flex-col xl:items-start xl:text-left xl:gap-5">
+              <CHexImageFrame
+                href="/skiing-headshot-square.png"
+                title="Headshot of Onyx Cheyne"
+                className="h-48 w-48 shrink-0 lg:h-48 lg:w-48 xl:h-64 xl:w-64 xl:self-center 2xl:h-72 2xl:w-72"
+                bgStrokeColor="color-mix(in oklab, var(--secondary) 50%, var(--background) 50%)"
+                imageScale={0.88}
               />
 
               <div>
@@ -147,7 +145,7 @@ export default function Home() {
             I find I really like working on the inner workings of systems, working with relational databases, optimizing and debugging code, but I do enjoy making things look nice and polished when I can, and really apprciate when others make good UX.
           </p>
             <p className="mt-4 text-sm leading-relaxed text-foreground">
-              Outside of coding, I enjoy spending time outdoors, skiing in the tree runs at Big White and Silverstar, though I can't get up to the mountains as much as I would like these days. Which partially led to me picking up bouldering this year. I also love camping and backpacking, and I hope to explore more of the okanagan this summer. 
+              Outside of coding, I enjoy spending time outdoors, skiing in the tree runs at Big White and Silverstar, though I can&apos;t get up to the mountains as much as I would like these days. Which partially led to me picking up bouldering this year. I also love camping and backpacking, and I hope to explore more of the okanagan this summer. 
             </p>
             <p className="mt-4 text-sm leading-relaxed text-foreground">
               I also play trombone! I started in elementary school and played through high school, eventually becoming one of the staff members of the <Link className="text-primary" href="https://www.allcityband.org/">Seattle All-City Marching band</Link>, and I continue to play with the <Link className="text-primary" href="https://www.kelownacityband.com/">Kelowna City Concert Band</Link>. It&apos;s a great way to relax and have fun, and I really enjoy the social aspect of playing music with others.

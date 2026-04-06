@@ -21,18 +21,24 @@ export default function SiteHeader() {
         </Link>
 
         <nav className="flex gap-4 text-md font-bold">
-          <a
+          <Link
             href="/"
             className="text-md text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             Home
-          </a>
-          <a
+          </Link>
+          <Link
+            href="/timcam"
+            className="text-md text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+          >
+            Timcam
+          </Link>
+          <Link
             href="/posts"
             className="text-md text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             Posts
-          </a>
+          </Link>
         </nav>
       </div>
       
