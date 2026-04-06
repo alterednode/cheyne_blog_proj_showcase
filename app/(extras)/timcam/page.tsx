@@ -89,7 +89,7 @@ export default function TimcamPage() {
 
 				<TimcamPageClient />
 
-				<div className="space-y-4 text-sm text-muted-foreground">
+				<div className="space-y-4 text-sm text-foreground">
 					<p>
 						This is as accurate as I could make it, but the timcam feed is super low resolution and blurry.<br />
 						If the count is near 10+ it is also possible that people are being missed because the line is extending into the courtyard.
