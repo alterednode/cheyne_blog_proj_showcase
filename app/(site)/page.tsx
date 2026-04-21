@@ -105,9 +105,9 @@ export default function Home() {
               {/* <p>
                 Feel free to contact me if you&apos;d like to connect!
               </p> */}
-              <p className="font-semibold">
+              {/* <p className="font-semibold">
                 I&apos;m currently looking for co-op or internship opportunities for Summer 2026, so if you have or know of any, please reach out!
-              </p>
+              </p> */}
             </div>
 
             {/* Accent callout */}
