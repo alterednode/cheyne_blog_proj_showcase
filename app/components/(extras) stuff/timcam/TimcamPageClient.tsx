@@ -104,13 +104,7 @@ export default function TimcamPageClient() {
 
 	return (
 		<div className="space-y-6">
-			<div className="space-y-1">
-				<h1 className="text-2xl font-bold text-red-500">Offline For Maintinance</h1>
-				<p className="text-sm text-muted-foreground">
-					I am assembling a new desk, and the server that I do the Timcam processing on is under the desk, so it will be offline.
-				</p>
-			</div>
-			{/* <Card className="p-6">
+			<Card className="p-6">
 				<div className="grid gap-6 sm:grid-cols-3">
 					<div className="space-y-2">
 						<p className="text-m font-bold uppercase text-muted-foreground">
@@ -204,9 +198,9 @@ export default function TimcamPageClient() {
 						</div>
 					</div>
 				</details>
-			</Card> */}
+			</Card>
 
-			{/* <TimcamInaccuracyReport latestEvent={latest} onOpenChange={setReportOpen} /> */}
+			<TimcamInaccuracyReport latestEvent={latest} onOpenChange={setReportOpen} />
 		</div>
 	);
 }
