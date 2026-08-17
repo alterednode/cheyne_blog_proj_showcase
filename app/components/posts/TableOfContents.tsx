@@ -1,0 +1,182 @@
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import type { Heading } from "@/app/lib/content/schema";
+import { SmoothScrollLink } from "@components/standard";
+
+interface TableOfContentsProps {
+  headings: Heading[];
+}
+
+export function TableOfContents({ headings }: TableOfContentsProps) {
+  const [activeId, setActiveId] = useState<string>("");
+  const navRef = useRef<HTMLUListElement | null>(null);
+  const [indicator, setIndicator] = useState<{
+    top: number;
+    height: number;
+    visible: boolean;
+  }>({ top: 0, height: 0, visible: false });
+
+  useEffect(() => {
+    const updateActiveId = () => {
+      const headingElements = headings
+        .map((heading) => ({
+          id: heading.id,
+          element: document.getElementById(heading.id),
+        }))
+        .filter((h) => h.element !== null);
+
+      if (headingElements.length === 0) return;
+
+      const windowHeight = window.innerHeight;
+      const midpoint = windowHeight / 2;
+
+      /*
+      Special cases for first and last headings
+      Sometimes the first or last headings are too small to ever be the closest to the midpoint,
+      so we forcibly select them if they are visible near the top or bottom of the page.
+
+      I think this is better Ux in the majority of situations, so im doing it.                  */
+      if (FirstIfIntroElementVisible(headingElements)) {
+        setActiveId(headingElements[0].id);
+        return;
+      }
+
+      if (LastIfFooterVisible(windowHeight, headingElements)) {
+        setActiveId(headingElements[headingElements.length - 1].id);
+        return;
+      }
+
+      // Find the heading whose midpoint has most recently crossed the viewport midpoint
+      // (heading midpoint is above the viewport midpoint)
+      let nextActiveId = headingElements[0]?.id || "";
+      let closestDistance = Infinity;
+
+      for (const { id, element } of headingElements) {
+        if (!element) continue;
+        const rect = element.getBoundingClientRect();
+        const headingMidpoint = rect.top + rect.height / 2;
+
+        // Only consider headings that have passed the viewport midpoint
+        if (headingMidpoint <= midpoint) {
+          const distance = midpoint - headingMidpoint;
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            nextActiveId = id;
+          }
+        }
+      }
+
+      setActiveId(nextActiveId);
+    };
+
+    // Update on scroll
+    window.addEventListener("scroll", updateActiveId, { passive: true });
+    // Initial update
+    updateActiveId();
+
+    return () => window.removeEventListener("scroll", updateActiveId);
+  }, [headings]);
+
+
+  function FirstIfIntroElementVisible(headingElements: { id: string; element: HTMLElement | null; }[]) {
+    if (headingElements.length === 0) return false;
+    const first = headingElements[0];
+    if (!first.element) return false;
+
+    // Treat zero-height invisible anchors (sentinels) as visible if they
+    // intersect the viewport or lie slightly above it (small tolerance).
+    const rect = first.element.getBoundingClientRect();
+    const tolerance = 8; // px — allows slight negative offsets like -mt-8
+    const windowHeight = window.innerHeight;
+
+    // Inclusive bounds: treat exact-boundary cases as visible
+    const firstVisible = rect.top <= windowHeight && rect.bottom >= -tolerance;
+    return firstVisible;
+  }
+
+
+  function LastIfFooterVisible(
+    windowHeight: number,
+    headingElements: { id: string; element: HTMLElement | null }[]
+  ): boolean {
+    if (headingElements.length === 0) return false;
+
+    // If user is at (or very near) the bottom of the page, return true
+    const scrollY = window.scrollY || window.pageYOffset;
+    const docHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    // compute footer height if present (fall back to 5px)
+    const footer = document.querySelector("footer");
+    const spacingFromBottom = footer ? footer.getBoundingClientRect().height : 5;
+
+    if (windowHeight + scrollY >= docHeight - spacingFromBottom) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Position the single indicator to the active TOC link
+  useEffect(() => {
+    const updateIndicator = () => {
+      const nav = navRef.current;
+      if (!nav || !activeId) {
+        setIndicator((s) => ({ ...s, visible: false }));
+        return;
+      }
+
+      const link = nav.querySelector<HTMLAnchorElement>(`a[href="#${activeId}"]`);
+      if (!link) {
+        setIndicator((s) => ({ ...s, visible: false }));
+        return;
+      }
+
+      const navRect = nav.getBoundingClientRect();
+      const rect = link.getBoundingClientRect();
+      setIndicator({ top: rect.top - navRect.top, height: rect.height, visible: true });
+    };
+
+    updateIndicator();
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [activeId, headings]);
+
+  return (
+    <nav className="relative pl-4">
+      <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-foreground">
+        In This Post
+      </h2>
+      <ul ref={navRef} className="space-y-2 text-md text-foreground relative">
+        {/* single sliding indicator */}
+        <span
+          aria-hidden
+          style={{
+            top: indicator.visible ? `${indicator.top}px` : undefined,
+            height: indicator.visible ? `${indicator.height}px` : undefined,
+            transform: "translateX(-0.5rem)",
+          }}
+          className={`pointer-events-none absolute left-0 w-0.5 bg-primary transition-all duration-300 ease-out 
+            ${indicator.visible ? "opacity-100" : "opacity-0"
+            }`}
+        />
+
+        {headings.map((heading) => (
+          <li key={heading.id}>
+            <SmoothScrollLink
+              href={`#${heading.id}`}
+              className={`block transition-colors duration-200 ease-out hover:text-foreground relative 
+                ${activeId === heading.id
+                  ? "text-primary font-semibold"
+                  : "text-shadow-muted-foreground"
+                }`}
+            >
+              <span style={{ display: "inline-block", marginLeft: `${(heading.level - 2) * 1}rem` }}>
+                {heading.text}
+              </span>
+            </SmoothScrollLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
